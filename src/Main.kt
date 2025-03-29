@@ -30,8 +30,7 @@ class Player{
     fun stop(){
         clip?.close()
     }}
-var musicajaja = mutableListOf<String>()
-var musicagabriel = mutableListOf<String>()
+
 var comidas = arrayOf(comida("Pizza",10),comida("Estrognofe com feijão", 10), comida("Hamburguer",10),comida("Chocolate", 20), comida("Coxinha",20), comida("Maçã",30), comida("Pera", 30), comida("Arroz e Feijão", 40), comida("Salada",50),
     comida("Estrogonofe", 100), comida("Ovo mole", 100)
 )
@@ -158,7 +157,7 @@ val palaInfancia = arrayOf(
     "desenhar na calçada com giz",
     "brincar de carrinho",
     "fazer guerra de travesseiros",
-    "comer doce escondido",
+    "sonhar que comeu doce escondido",
     "pular em poças de água",
     "brincar de casinha",
     "fazer coleção de pedras",
@@ -218,7 +217,7 @@ val palaInfancia = arrayOf(
     "brincar de caça ao tesouro",
     "espiar os vizinhos",
     "fazer brincadeiras com água",
-    "comer sorvete até doer a barriga",
+    "sonhar que comeu sorvete até doer a barriga",
     "desenhar no corpo com caneta",
     "fazer festinha do pijama",
     "criar fantasia com roupas velhas",
@@ -345,16 +344,16 @@ var palaAcoMorte = arrayOf("comendo miojo",
     "comendo tapioca quente","caindo da escada")
 var palaAco = arrayOf("andar de lancha","ficar em casa", "nadar",
     "andar","andar de bicicleta","jogar videogame",
-    "comer estrogonfe com feijão","comer ovo mole","acordar cedo",
+    "sonhar que comeu estrogonfe com feijão","sonhar que comeu ovo mole","acordar cedo",
     "assistir South Park", "assistir Game Of Thrones", "assistir Pingu",
-    "assistir TV", "assistir Shaun: O carneiro", "comer comida",
+    "assistir TV", "assistir Shaun: O carneiro", "sonhar que comeu comida",
     "ver o Cristiano Ronaldo", "assistir Hermes e Renato",
     "assistir a melhor série já feita... Ben 10",
     "jogar Stuart Little 3 de PS2", "ver o jogo do Corinthins",
     "ver o jogo do Palmeiras", "ver o jogo de Palmeiras X Corinthians",
     "assistir vídeos de gatos", "ver você jogando esse jogo",
     "ver você não fazendo absolutamente nada","assistir Demon Slayer",
-    "comer no McDonald","assistir à aula do Jailson aka JaJa da careca lustrada","assistir à aula do Jailson",
+    "sonhar que comeu no McDonald","assistir à aula do Jailson aka JaJa da careca lustrada","assistir à aula do Jailson",
     "assistir à aula do Gabriel", "assistir à aula do Gabriel aka GOAT", "assistir à aula da Aurora",
     "assistir à Fórmula 1", "escutar funk","escutar K-pop",
     "assistir Dorama","assistir um filme de terror",
@@ -366,38 +365,38 @@ var palaAco = arrayOf("andar de lancha","ficar em casa", "nadar",
     "escutar um Nerdcast","escutar um Experiência Podcast",
     "escutar o Gustavo Guanabara falando que o Acre não existe em uma leitura de e-mails no Nerdcast",
     "assistir BBB","jogar futebol","dirigir um carro","fazer golpes",
-    "dançar","ir à praia", "comer no Burguer King", "comer no OutBack",
+    "dançar","ir à praia", "sonhar que comeu no Burguer King", "sonhar que comeu no OutBack",
     "cair de boca no rango","participar do Proa", "resolver um Sudoku",
     "jogar Xadrez","dormir cedo","acordar cedo",
-    "não fazer nada o dia inteiro","ler um livro","comer pastel na feira",
+    "não fazer nada o dia inteiro","ler um livro","sonhar que comeu pastel na feira",
     "assistir um compilado de dribles do Neymar de moicano no Santos ",
     "jogar Pókemon no Nintendo DS","jogar no Nintendo 3DS",
     "ver memes por alguns minutos e perceber que já se passaram dias",
     "assistir Senhor dos Anéis","assistir Hobbit","ir ao parque",
     "assistir uma live na Twitch", "tomar café sem açucar",
-    "comer brigadeiro de panela","ver o pôr do sol","peidar no elevador mas ninguém estava lá",
+    "sonhar que comeu brigadeiro de panela","ver o pôr do sol","peidar no elevador mas ninguém estava lá",
     "peidar no elevador mas o elevador estava cheio", "assistir Evangelion",
     "assistir Cowboy Bebop","assistir Ghost in the Shell","assistir Viagem de Chiriro",
     "assistir O Castelo Animado","assistir Corra","assistir algo inteligente, não entender nada mas finger que entendeu",
     "ir na terapia","ser diagnosticado como louco na terapia","assistir One Piece",
-    "escutar sertanejo universitário","ficar olhando os lugares que nunca vai visitar no Google Earth","comer pipoca de cinema",
+    "escutar sertanejo universitário","ficar olhando os lugares que nunca vai visitar no Google Earth","sonhar que comeu pipoca de cinema",
     "assistir Dragon Ball Z","assistir Naruto","jogar Among Us","assistir Tik Tok até que a morte nos separe",
     "ver memes do infiel Ney","gastar todo meu dinheiro no tigrinho","ganhar dinheiro no cassino",
-    "escutar MPB","dançar em casa sozinho","dormir comendo chocolate","beber café frio","escutar rock dos anos 80","comer coxinha","comer sushi","comer cachorro quente",
+    "escutar MPB","dançar em casa sozinho","dormir comendo chocolate","beber café frio","escutar rock dos anos 80","sonhar que comeu coxinha","sonhar que comeu sushi","sonhar que comeu cachorro quente",
     "assistir um show ao vivo","assistir um show ao vivo... pelo YouTube","fazer um bolo","destruir um bolo sem querer","fingir que está dormindo para não dar o lugar para uma senhora",
     "cagar no mato","mijar na parede de casa","cagar na praia","mijar no mar","fazer cocô no mar",
     "xingar no trânsito","ser uma boa pessoa","ser uma má pessoa","jogar Super Mario 64 DS","escutar MPBosta","assistir Ben 10","assistir Ben 10: Força Alienígena","assistir Ben 10: Supremacia Alienígena","assistir Ben 10 Ominiverse",
-    "coçar a bundar","atacar a geladeira de manhã","assistir Bob Esponja","assistir Phineas e Ferb","assistir Incrível Mundo de Gumball","assistir Hora de Aventura","assitir Apenas um Show","comer pastel de vento","comer pudim de pote",
-    "comer bolo de caneca", "colocar um ovo no microondas e vê-lo explodir","jogar Mario Kart Wii","assistir Avartar: O último Mestre do Ar","assistir Avatar: A Lenda de Korra","comer pizza fria de manhã","comer pizza de mussarela","comer pizza de baiacatu",
-    "comer pizza de atum","ver o instagram até constatar que sou feio","ver o instagram até não saber se sou ou é o Cristiano Ronaldo pensando","ver o instagram até confundir meu nome com o do Neymar","assistir Harry Potter", "jogar freefire","jogar counter-strike","jogar League of Legends","jogar DOTA","assistir masterchef e achar que fazia melhor",
+    "coçar a bundar","atacar a geladeira de manhã","assistir Bob Esponja","assistir Phineas e Ferb","assistir Incrível Mundo de Gumball","assistir Hora de Aventura","assitir Apenas um Show","sonhar que comeu pastel de vento","sonhar que comeu pudim de pote",
+    "sonhar que comeu bolo de caneca", "colocar um ovo no microondas e vê-lo explodir","jogar Mario Kart Wii","assistir Avartar: O último Mestre do Ar","assistir Avatar: A Lenda de Korra","sonhar que comeu pizza fria de manhã","sonhar que comeu pizza de mussarela","sonhar que comeu pizza de baiacatu",
+    "sonhar que comeu pizza de atum","ver o instagram até constatar que sou feio","ver o instagram até não saber se sou ou é o Cristiano Ronaldo pensando","ver o instagram até confundir meu nome com o do Neymar","assistir Harry Potter", "jogar freefire","jogar counter-strike","jogar League of Legends","jogar DOTA","assistir masterchef e achar que fazia melhor",
     "escutar pagode","escutar Tati Quebra Barraco","escutar zeca pagodinho","assistir Todo Mundo Odeia o Chris","assistir Eu, a Patroa e as Crianças","tomar banho frio",
-    "assistir Toy Story","assistir matrix e se sentir o The Choosen","comer algodão doce","jogar Bomberman e si explodir","jogar Candy Crush","jogar Subway Surfers",
+    "assistir Toy Story","assistir matrix e se sentir o The Choosen","sonhar que comeu algodão doce","jogar Bomberman e si explodir","jogar Candy Crush","jogar Subway Surfers",
     "jogar Tetris","jogar Sonic Mania","jogar Cuphead","assistir Jumanji","assistir Velozes e Furiosos","fazer rachas","bater o carro em um racha",
     "assistir Piratas do Caribe","visitar xique-xique na Bahia","participar do GGB (Grupo Gay da Bahia)","visitar a França","visitar Portugal","visitar o Japão",
     "visitar a Inglaterra","visitar o Caribe","visitar a Itália","visitar o Vaticano","visitar Israel","visitar a Palestina","jogar Pac-Man e culpar os fantasmas","jogar Pac-Man",
     "assistir X-Men:Evolution","assistir o clipe do Michael Jackson e rir com o \"Michael, Michael, eles não ligam pra gente\"","jogar GTA San Andreas e só andar de bicicleta",
-    "jogar Donkey Kong e perder todas as vidas","assistir Madagascar","comer milho assado","tentar fazer flexão","assistir Era do Gelo","comer bolo de chocolate com café","comer churrasco e exagerar na farofa","escutar rádio FM e torcer pra tocar algo bom",
-    "escutar reggae","jogar Street Fighter","comer tapioca com manteiga","jogar Resident Evil e gritar com os zumbis","jogar Animal Crossing","comer lasanha requentada","assistir Up: Altas Aventuras","comer esfirra","tentar aprender receita no TikTok e falhar","comer esfirra de carne","comer esfirra de queijo","comer esfirra",
+    "jogar Donkey Kong e perder todas as vidas","assistir Madagascar","sonhar que comeu milho assado","tentar fazer flexão","assistir Era do Gelo","sonhar que comeu bolo de chocolate com café","sonhar que comeu churrasco e exagerar na farofa","escutar rádio FM e torcer pra tocar algo bom",
+    "escutar reggae","jogar Street Fighter","sonhar que comeu tapioca com manteiga","jogar Resident Evil e gritar com os zumbis","jogar Animal Crossing","sonhar que comeu lasanha requentada","assistir Up: Altas Aventuras","comer esfirra","tentar aprender receita no TikTok e falhar","comer esfirra de carne","comer esfirra de queijo","comer esfirra",
     "jogar Super Smash Bros","assistir Kung Fu Panda","assistir Shreak","assistir Shreak 2","assistir Shreak: Felizes para Sempre","escutar trilha sonora de filme no banho","assistir Procurando Nemo e querer ser um peixe","jogar Portal")
 var palamal = arrayOf("não gostou de","odiou","não curtiu", "detestou")
 var dia = 0
@@ -415,11 +414,12 @@ data class comida (val nome : String,var qualidade: Int)
 
 class tamo(tamanho : Boolean, colorido : Boolean) {
     var tamanho = tamanho; var colorido = colorido;var periododoano = 0; var estação = estações[periododoano]; var evento = "Normal"
-    var es = 30; var dinheiro = 0; var dinhero = 999
+    var es = 30; var dinheiro = 0; var dinhero = 0
     var p = "\\ ^ / ".repeat(es)+"\n"+"< O > ".repeat(es)+"\n"+"/ v \\ ".repeat(es)
     var v = " | ".repeat(es)+"\n"+"- O - ".repeat(es)+"\n"+" | ".repeat(es)
     var o = " | ".repeat(es)+"\n"+"/|\\ ".repeat(es)+"\n"+ "\\|/ ".repeat(es)
     var i = "o o ".repeat(es)+ "\n" + " o ".repeat(es) + "\n" +"o ".repeat(es)
+    var mapadecomida = false; var rastreadordecomida = false
     inner class gochi(){
         var pasta1normal: String? = null; var pasta2feliz: String? = null; var pasta3nervoso : String?= null; var pasta4dormindo: String? = null; var pasta5hibernando :String? = null; var pasta6romantico : String? = null
         var identificador = Random.nextInt(1000); var rivalnome = ""; var rivalidentificador = 0
@@ -428,7 +428,8 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
         var idade = 0; var nome = "";var rival = ""; var rivalidade = false; var customintesidade: String = ""; var desenho = false; var Pais = "Desconhecido"; var custominten = false
         var frases = mutableListOf<String>(); var chancedeengravidar = 0; var intros = mutableListOf<String>() ; var intro = ""; var doente = false; var remedio = false
         var janela : janela? = null; var carinho = false ;var iniciardoença = 0; var danodoenca = 0;var danoconstante = false;var videojogo = false;var convideojogo = 0
-        var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false; var acordomorte = false
+        var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false; var acordomorte = false; var doencacontagiosa = false; var doencagenetica = false; var filhos  = mutableListOf<String>()
+        var condoenca = 0
         fun doente() {
             if (iniciardoença == 0){
                 println("$nome ficou doente")
@@ -449,7 +450,9 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
                     var nãofunciona = idade*2
                     if (cura > nãofunciona){
                         println("$nome foi curado")
-                        doente = false
+                        condoenca--
+                        if(condoenca ==0){
+                        doente = false}
                         iniciardoença = 0
                     }else if (cura == danodoenca){
                         println("A doença de $nome piorou")
@@ -458,6 +461,7 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
                     }else{
                         println("$nome continua doente")
                     }}
+                iniciardoença ++
             }
         }
         fun acao (){
@@ -503,7 +507,7 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
 
         }
         fun romance(){
-            var numeroaleatorio = 0
+            var numeroaleatorio : Int
             if (estado == estados[5]){
                 numeroaleatorio = Random.nextInt(1,(seed+1*1.5).toInt())
             }else{
@@ -522,8 +526,14 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
                         var filho = gochi()
                         if (filho.gch == gch || parceira!!.gch == filho.gch){
                             println("$nome e ${parceira!!.nome} tiveram um filho")
+                            filhos.add(filho.nome)
+                            parceira!!.filhos.add(filho.nome)
                             bfe += 10
-                            filho.Pais = "$nome e ${parceira!!.nome}"}else{
+                            filho.Pais = "$nome e ${parceira!!.nome}"
+                        if(parceira!!.doencagenetica||doencagenetica){
+                            filho.doencagenetica = true
+                        }
+                        }else{
                             filho.idade = Random.nextInt(0,5)
                             println("$nome e ${parceira!!.nome} adotaram uma criança")
                             bfe += 10
@@ -532,42 +542,48 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
                     }}
             }
         }
-        fun rivalidade(){
-            for (x in famili)
+        fun rivalidade() {
+            var index = 0
+            while (index in 0 until famili.size) {
+                var x = famili.get(index)
+                index++
+                if (x != this) {
+                    if (rival == null) {
 
-                if(x != this){
-                    if (rival == null){
-
-                        if(seed == x.seed){
+                        if (seed == x.seed) {
                             rival = x.gch
                             rivalidade = true
                             x.rivalidade = true
                             rivalseed = x.seed
                             rivalnome = x.nome
                             rivalidentificador = x.identificador
-                        }}else if (!rivalidade){
-                        if ( x.gch == rival ){
+                        }
+                    } else if (!rivalidade) {
+                        if (x.gch == rival) {
                             rivalidade = true
                             x.rivalidade = true
                             rivalseed = x.seed
                             rivalnome = x.nome
                             rivalidentificador = x.identificador
-                        }else if(x.seed == rivalseed && rival == x.gch && rivalnome == x.nome && x.identificador == rivalidentificador){
-                            var numeroaleatorio = Random.nextInt(0,101)
-                            var numeroataque = Random.nextInt(1,seed+1)
-                            if(numeroaleatorio < numeroataque){
+                        } else if (x.seed == rivalseed && rival == x.gch && rivalnome == x.nome && x.identificador == rivalidentificador) {
+                            var numeroaleatorio = Random.nextInt(0, 101)
+                            var numeroataque = Random.nextInt(1, seed + 1)
+                            if (numeroaleatorio < numeroataque) {
                                 x.bv -= 10
                                 println("O $nome bateu no ${x.nome}")
-                            }else if (numeroaleatorio == 100){
+                            } else if (numeroaleatorio == 100) {
                                 famili.remove(x)
                                 println("O $nome matou o ${x.nome}")
 
                             }
                         }
-                    }}
+                    }
+                }
 
 
+            }
         }
+
         //var estados = arrayOf("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
         fun emotroca(){
             println(estado)
@@ -590,7 +606,7 @@ if(estado == estados[0]){
                     janela!!.mdg(pasta4dormindo!!)}else{
                 }
             }else if (estado == estados[4]){
-                if (pasta5hibernando != null){
+                if (pasta5hibernando != null && bf > 50){
                     janela!!.mdg(pasta5hibernando!!)}else{
                 }
             }else if (estado == estados[5]){
@@ -631,6 +647,7 @@ if(estado == estados[0]){
                 var numeroaleatorion = Random.nextInt(0,musicasJailson.size)
                 tocador.mudar(musicasJailson[numeroaleatorion])
                 vivo = false
+                janela!!.mdg("./Assets/finaJailson/1/1.png")
                 println("O $nome fugiu para casa do JaJa. Depois de anos juntos, a máscara da mentira foi quebrada e sua face foi beijada pela verdade, nos últimos minutos de vida, ele disse: 'O Jaílson é muito melhor que o Gabriel e ele é o melhor professor do Pr... de todos os Senacs':" +
                         "\nAqui é o JaJa, o dono da caneta, Chego pesado, te deixo na treta. Sua lista da pureza não é nada, Só fachada, tua moral tá quebrada.\n" +
                         "\n" +
@@ -689,7 +706,7 @@ if(estado == estados[0]){
 
 
 
-            var caminho = gochistama[3]
+            var caminho = gochistama[Random.nextInt(0,gochistama.size-bloqueio)]
             var caminhotamas = File(caminho).listFiles()
 
             caminhotamas.forEach { pasta ->
@@ -749,7 +766,8 @@ if(estado == estados[0]){
                                     if (palavra == null) {
                                         palavra = ""
                                     }
-                                    palavra+= x}
+                                    palavra+= x
+                                }
                             }else if (x == '=' || chamadobol == false) {
                                 chamadobol = false
                                 if (x.isDigit() && !palavrabol) {
@@ -841,7 +859,9 @@ if(estado == estados[0]){
             bf = f - ((f * proba).toFloat() * (seed / 100).toFloat()).toInt()
             bfe = fe - ((fe * proba).toFloat() * (seed / 100).toFloat()).toInt()
             bs = s - ((s * proba).toFloat() * (seed / 100).toFloat()).toInt()
-
+if(diaadia%10 == 0){
+    doencagenetica = true
+}
 
             numeroemo = (seed/10)
             if (numeroemo == 0){
@@ -857,8 +877,6 @@ if(estado == estados[0]){
             colorido = if(numeroaleatorio == 100) !colorido else colorido
             var intensidadealea = if (custominten) 10 else Random.nextInt(1,10)
             var emoinicio = pasta1normal
-
-
             if(pasta1normal != null){
                 emoinicio = pasta1normal
             }else if (pasta2feliz != null){
@@ -872,7 +890,6 @@ if(estado == estados[0]){
             }else if (pasta6romantico != null){
                 emoinicio = pasta6romantico
             }
-
             janela = janela(tamanho,colorido,desenho,emoinicio!!,ap,intensidadealea,customintesidade!!)
             println("Escreva o nome do TamaGochi") // colocar em um Jlabel
             nome = readln()
@@ -997,18 +1014,48 @@ if(estado == estados[0]){
                 morreu()
                 return
             }
-
-            if (!doente || seed in 1..multiplasdoenças && !vacina) {
+if(vacina){
+    doente = false
+    condoenca = 0
+    doencacontagiosa = false
+}
+            if (!vacina) {
                 var saude = Random.nextInt(1, 101)
-                if (idade < 4 && saude in 1..10) {
+                if (idade < 4 && saude in 1..10 ) {
                     doente = true
-                    doente()
+                    condoenca++
                 } else if (idade < 14 && saude in 1..20) {
+                    condoenca++
                     doente = true
-                    doente()
                 } else if (idade >= 14 && saude in 1..40) {
+                    condoenca++
                     doente = true
-                    doente()
+                }
+            }
+            if(seed in 1..multiplasdoenças && doente){
+                condoenca ++
+                if(!doencacontagiosa && Random.nextInt(1,11) ==  1){
+                    doencacontagiosa = true
+                }
+            }
+            if(doente){
+             for (doenca in 1..condoenca){
+                 doente()
+             }
+                if(iniciardoença == 0 && Random.nextInt(1,11) ==  1){
+                    doencacontagiosa = true
+                }
+            }
+            if(doencacontagiosa && famili.size > 1){
+                var index = 0
+                while (index < famili.size){
+                    var ficardoente = Random.nextInt(1,11)
+                    if(!famili.get(index).equals(this)&& ficardoente in 1..3){
+
+                            famili.get(index).condoenca++
+                            famili.get(index).doente = true
+                            famili.get(index).doencacontagiosa = true
+                    }
                 }
             }
 
@@ -1051,6 +1098,17 @@ if(luto){
     danofelicidade()
     luto = false
 }
+            var sorte = Random.nextInt(1,101)
+            if(sorte in 1..10){
+                println("O(a) gochi $nome encontrou ")
+                dinhero++
+            }else if(sorte == 1 || sorte == 100){
+                println("O(a) gochi $nome concontrou muito dinheiro")
+                dinhero += 3
+            }
+            if(doencagenetica){
+                bv -= Random.nextInt(0,6)
+            }
             if (bv <= 0){
                 morreu()
             }else if (bv > v){
@@ -1064,7 +1122,6 @@ if(luto){
             }
             if (comer == 3){
                 morreu()
-                return
             }
             if (bf > f) {
                 bf = f
@@ -1074,7 +1131,6 @@ if(luto){
             }else{
                 diatriste++
             }
-            println("8")
             acao()
             idade++
             janela!!.title = "Nome: $nome | Idade: $idade | Vida: $bv | Fome: $bf"
@@ -1188,6 +1244,13 @@ if(luto){
             multiplicador =2.0
         }
         var numeroaleatorio = diaadia
+        var numeroAletorioParaoMapa = Random.nextInt(10,21)
+        if(rastreadordecomida){
+            numeroaleatorio = Random.nextInt(79,101)
+        }
+        if(mapadecomida && diaadia + numeroAletorioParaoMapa <=100){
+            numeroaleatorio +=20
+        }
         var indice = comidas.size -2
         var comida : comida
         if (numeroaleatorio in 1..40){
@@ -1242,7 +1305,7 @@ if(luto){
 
             tocador.mudar(musicasJogo[1])
             when (resp) {
-                "7" -> {g!!.estado = estados[1]; g!!.emotroca() }
+                "7" -> {g!!.estado=estados[1];g!!.emotroca();g!!.janela!!.mudarestiloexterno() }
                 "6" -> {passaardia(); tocador.mudar(musicasJogo[1])}
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
                 "4" -> {darcomida();tocador.mudar(musicasJogo[1])}
@@ -1268,20 +1331,38 @@ if(luto){
             }
         }}
     fun brincadeira(){
+        println("-".repeat(80))
+        estoque.forEachIndexed { index, comida ->
+            println("${index + 1} - ${comida.nome}")
+        }
+        println("0 - Sair")
+        println("Escolha um gochi para dar carinho")
+        var r = readln()
+        while(r.toIntOrNull() !in 0..famili.size){
+            println("Escolha um gochi,somente números da lista")
+            r = readln()
+        }
+        if(r.toInt() > 0){
+        famili.get(r.toInt() - 1).brincadeira()}else{
+            return
+        }
+        if(diaadia in 1..10){
+            return
+        }
 
     }
     fun loja(){
         println("-".repeat(80))
 println("Dinheiro: $dinheiro")
-        println("1"+" ".repeat(35)+"Videojogo - deixa o Gochi dependente (não foge) e deixa ele feliz, mas tem consequências - 5")
-        println("2"+" ".repeat(35)+"Remédio - cura qualquer doença comum até a velhice - 5")
-        println("3"+" ".repeat(35)+"Vacina - Protege o Gochi até a velhice contra doenças - 15")
-        println("4"+" ".repeat(35)+"Acariciador automático - brinca com o gochi automaticamente - 15")
-        println("5"+" ".repeat(35)+"Bolo de prestígio - restaura toda a vida, fome e felicidade - 10")
-        println("6"+" ".repeat(35)+"Boneco - Diminui o dano de felicidade - 10")
-        println("7"+" ".repeat(35)+"Acordo com a  morte - Seu Gochi não toma mais dano, mas haverá consequências - 20")
-        println("8"+" ".repeat(35) + "Mapa de comida - Faz você ter mais chance de conseguir comidas melhores - 15")
-        println("9"+" ".repeat(35)+"Rastreador de comida - Faz você conseguir só as melhores comidas - 30")
+        println("1"+" ".repeat(35)+"Videojogo - deixa o Gochi dependente (não foge) e deixa ele feliz, mas tem consequências   5")
+        println("2"+" ".repeat(35)+"Remédio - cura qualquer doença comum até a velhice                                         5")
+        println("3"+" ".repeat(35)+"Vacina - Protege o Gochi até a velhice contra doenças                                     15")
+        println("4"+" ".repeat(35)+"Acariciador automático - brinca com o gochi automaticamente                               15")
+        println("5"+" ".repeat(35)+"Bolo de prestígio - restaura toda a vida, fome e felicidade                               10")
+        println("6"+" ".repeat(35)+"Boneco - Diminui o dano de felicidade                                                     10")
+        println("7"+" ".repeat(35)+"Acordo com a  morte - Seu Gochi não toma mais dano, mas haverá consequências              20")
+        println("8"+" ".repeat(35)+"Mapa de comida - Faz você ter mais chance de conseguir comidas melhores                   15")
+        println("9"+" ".repeat(35)+"Rastreador de comida - Faz você conseguir só as melhores comidas                          30")
         println("0"+" ".repeat(35)+"Sair")
         var resp = readln()
         while(resp.toIntOrNull() !in 0..9){
@@ -1302,9 +1383,10 @@ if(resp == "1"&& dinhero - 5 >= 0){
     }
     if(r.toInt() >= 1){
     index = r.toInt() -1
-    famili.get(index).videojogo = true; famili.get(index).convideojogo = 0}else{
+    famili.get(index).videojogo = true; famili.get(index).convideojogo = 0}else if (r.toInt() == 0){
         return
     }
+    dinhero -= 5
 }else if (resp == "2" && dinhero - 5 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
@@ -1317,11 +1399,17 @@ if(resp == "1"&& dinhero - 5 >= 0){
         println("Escolha um gochi para dar o remédio,somente números da lista")
         r = readln()
     }
-    if(r.toInt() >= 1){
+    if(r.toInt() >= 1  && !famili.get(r.toInt()-1).remedio){
         index = r.toInt() -1
-        famili.get(index).remedio = true }else{
+        famili.get(index).remedio = true
+        dinhero -= 5
+    }else if (r.toInt() == 0){
         return
+    }else{
+        println("Você já comprou o acariciador para o gochi")
+loja()
     }
+
 }else if (resp == "3" && dinhero - 15 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
@@ -1334,10 +1422,15 @@ if(resp == "1"&& dinhero - 5 >= 0){
         println("Escolha um gochi para dar a vacina,somente números da lista")
         r = readln()
     }
-    if(r.toInt() >= 1){
+    if(r.toInt() >= 1  && !famili.get(r.toInt()-1).vacina){
         index = r.toInt() -1
-        famili.get(index).vacina = true }else{
+        famili.get(index).vacina = true
+        dinhero -= 15
+    }else if (r.toInt() == 0){
         return
+    }else{
+        println("Você já deu a vacina para o gochi")
+        loja()
     }
 }else if (resp == "4" && dinhero - 15 >= 0){
     var index = 0
@@ -1351,11 +1444,17 @@ if(resp == "1"&& dinhero - 5 >= 0){
         println("Escolha um gochi para dar o acariciador automatico,somente números da lista")
         r = readln()
     }
-    if(r.toInt() >= 1){
+    if(r.toInt() >= 1  && !famili.get(r.toInt()-1).acariciador){
         index = r.toInt() -1
-        famili.get(index).remedio = true }else{
+        famili.get(index).acariciador = true
+        dinhero -= 15
+    }else if (r.toInt() == 0){
         return
+    }else{
+        println("Você já comprou o acariciador para o gochi")
+        loja()
     }
+
 }else if (resp == "5" && dinhero - 10 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
@@ -1368,10 +1467,15 @@ if(resp == "1"&& dinhero - 5 >= 0){
         println("Escolha um gochi para dar o bolo de prestigio,somente números da lista")
         r = readln()
     }
-    if(r.toInt() >= 1){
+    if(r.toInt() >= 1  && !famili.get(r.toInt()-1).bolodeprestigio){
         index = r.toInt() -1
-        famili.get(index).bolodeprestigio = true }else{
+        famili.get(index).bolodeprestigio = true
+        dinhero -= 10
+    }else if (r.toInt() == 0){
         return
+    }else{
+        println("Você já deu um bolo de prestígio para o gochi")
+        loja()
     }
 }else if (resp == "6" && dinhero - 10 >= 0){
     var index = 0
@@ -1385,13 +1489,18 @@ if(resp == "1"&& dinhero - 5 >= 0){
         println("Escolha um gochi para dar o brinquedo,somente números da lista")
         r = readln()
     }
-    if(r.toInt() >= 1){
+    if(r.toInt() >= 1  && famili.get(r.toInt()-1).brinquedo == false){
         index = r.toInt() -1
-        famili.get(index).brinquedo = true }else{
+        famili.get(index).brinquedo = true
+        dinhero -= 10
+    }else if (r.toInt() == 0){
         return
+    }else{
+        println("O gochi já tem um brinquedo")
+    loja()
     }
 }else if (resp == "7" && dinhero - 20 >= 0){
-    var index = 0
+    var index : Int
     famili.forEachIndexed { index, gochi ->
         println("${index+1} - ${gochi.nome}")
     }
@@ -1402,13 +1511,31 @@ if(resp == "1"&& dinhero - 5 >= 0){
         println("Escolha um gochi para fazer um acordo com a morte,somente números da lista")
         r = readln()
     }
-    if(r.toInt() >= 1){
+    if(r.toInt() >= 1 && famili.get(r.toInt()-1).acordomorte == false){
         index = r.toInt() -1
-        famili.get(index).acordomorte = true }else{
-        return
+        famili.get(index).acordomorte = true
+        dinhero -= 20
+    }else if (r.toInt() == 0){
+     return
+    }else{
+        println("O gochi já fez um acordo com a morte")
+        loja()
+    }
+}else if (resp == "8" && dinhero - 15 >= 0) {
+    if(!mapadecomida){
+    println("Você comprou o mapa de comida")
+    mapadecomida = true
+    dinhero -= 15}else{
+        println("Você já tem o mapa de comida")
+    }
+}else if (resp == "9" && dinhero - 30 >= 0) {
+    if(!rastreadordecomida){
+   println("Você comprou o rastreador de comida")
+    rastreadordecomida = true
+    dinhero -= 30}else{
+        println("Você já tem o rastreador de comida")
     }
 }
-
     }
     fun estoque(){
         println("-".repeat(80))

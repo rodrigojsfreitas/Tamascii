@@ -1,5 +1,6 @@
 package Jogo
 
+import tama
 import javax.swing.*
 import java.awt.*
 import java.awt.image.BufferedImage
@@ -46,12 +47,15 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
         add(txt)
         SwingUtilities.invokeAndWait{
             txt.text = frameascii[0]
-            txt.revalidate()
             pack()
             size = Dimension(size.width -20,size.height -15)
 
+
         }
-        txt.minimumSize = Dimension(8000,8000)
+        if(col){
+        mdtc(frameascii)}else{
+            mdt(frameascii)
+        }
         if(!processo!!.isAlive){
             processo?.start()
         }
@@ -123,7 +127,6 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
         if (init){
             init = false
         this.remove(iniciar)}
-        iniciar = null
         txt.isVisible = true
         tamanho()
     }
@@ -142,6 +145,7 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         txt.font = if (tonho) Font("Monospaced", Font.PLAIN, 10) else Font("Monospaced", Font.PLAIN, 8)
         layout = GridBagLayout()
+        txt.minimumSize = Dimension(8000, 8000)
         size = if (tonho) {
             Dimension(530, 640)
         } else {
@@ -152,13 +156,25 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
 
 
     }
+    var pasta: BufferedImage = BufferedImage(80,80,10)
+    fun mudarestiloexterno(){
+        mudar = false
+        processo?.join()
+        var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
+        frameascii = mudarestilo[numeroaletaroio].frames
+        cores = mudarestilo[numeroaletaroio].cores
+        mudar = true
+        if(col){
+        mdtc(frameascii)}else{
+            mdt(frameascii)
+        }
+    }
 
     fun mudarestilo() {
+
         var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
-        SwingUtilities.invokeAndWait() {
             frameascii = mudarestilo[numeroaletaroio].frames
             cores = mudarestilo[numeroaletaroio].cores
-        }
     }
 
     fun giff(t: Boolean = tonho, c: Boolean = col, d: Boolean = deses, g: String = gif, i: Int = intensi) {
@@ -167,12 +183,11 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
         frameascii = mutableListOf()
         var image = File(g)
         var listimage = image.listFiles().filter { it.isDirectory }
-
         isResizable = false
         listimage.forEach { pastas ->
             var listadeimagem = pastas.listFiles()
             listadeimagem.forEach { image ->
-
+var iniciar = false
                 if (image.extension == "gif") {
                     var inp = ImageIO.createImageInputStream(image)
                     var read: ImageReader = ImageIO.getImageReadersByFormatName("gif").next()
@@ -181,7 +196,9 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
                     val frameCount = read.getNumImages(true)
                     for (x in 0 until frameCount) {
                         val frame: BufferedImage = read.read(x)
-
+                        if(iniciar) {
+                            pasta = frame
+                        }
                         var a = if (t == false) 25/* janela pequena*/ else 40 // Janela Grande
                         //l = 70 // janela pequena
                         var l = if (t == false ) 70 /* janela pequena*/ else 80// Janela Grande
@@ -266,6 +283,9 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
 
                 } else if (image.extension == "jpg" || image.extension == "png" || image.extension == "jpeg") {
                     var frame: BufferedImage = ImageIO.read(image)
+                    if(iniciar) {
+                        pasta = frame
+                    }
                     var a = if (t == false) 20/* janela pequena*/ else 40 // Janela Grande
                     //l = 70 // janela pequena
                     var l = if (t == false) 40 /* janela pequena*/ else 80 // Janela Grande
@@ -358,11 +378,6 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
 
         }
         mudarestilo()
-        if (c) {
-            mdtc(frameascii)
-        } else {
-            mdt(frameascii)
-        }
 
 
     }
@@ -483,8 +498,8 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
     fun continuarascii():StyledDocument{
         var docu= DefaultStyledDocument()
 
-        frameascii.forEachIndexed { i, F ->
-            F.forEachIndexed { index, t ->
+        frameascii.forEachIndexed { i, Fram: String ->
+            Fram.forEachIndexed { index, t ->
 
                 val atributos = SimpleAttributeSet().apply {
                     StyleConstants.setForeground(
@@ -588,10 +603,10 @@ mudar = false
         terminar()
 
     }
-    fun icon(image : String = frameascii[0],largura: Int = 20,altura:Int =5, corse : Boolean =false): String {
+    fun icon(image : BufferedImage = pasta,largura: Int = 20,altura:Int =5, corse : Boolean =false): String {
         var i = intensi
 
-        var image: BufferedImage = ImageIO.read(File(image))
+        var image = image
         var reals = BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB)
         var greals: Graphics2D = reals.createGraphics()
         greals.drawImage(image, 0, 0, largura, altura, null)
