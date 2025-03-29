@@ -428,7 +428,7 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
         var idade = 0; var nome = "";var rival = ""; var rivalidade = false; var customintesidade: String = ""; var desenho = false; var Pais = "Desconhecido"; var custominten = false
         var frases = mutableListOf<String>(); var chancedeengravidar = 0; var intros = mutableListOf<String>() ; var intro = ""; var doente = false; var remedio = false
         var janela : janela? = null; var carinho = false ;var iniciardoença = 0; var danodoenca = 0;var danoconstante = false;var videojogo = false;var convideojogo = 0
-        var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false
+        var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false; var acordomorte = false
         fun doente() {
             if (iniciardoença == 0){
                 println("$nome ficou doente")
@@ -942,7 +942,8 @@ if(estado == estados[0]){
                 multiplicadorDano = 1.0
             }
             var danoreal = dano * multiplicadorDano
-            bv-= (danoreal - (danoreal*(((bf+bfe)/2)/100))).toInt()
+            if(!acordomorte){
+            bv-= (danoreal - (danoreal*(((bf+bfe)/2)/100))).toInt()}
         }
         fun danofelicidade(){
             var multiplicadorDanodefelicidade = 1.0
@@ -974,7 +975,9 @@ if(estado == estados[0]){
                         bfe-= ((afinidade * danoreal*0.5 + (danoreal - danoreal*(bf/100)))/3).toInt()}
                 }else{
                     if(idade < 14){
-                    bfe-= ((danoreal*0.5 + (danoreal - danoreal*(bf/100)))/2).toInt()}else
+                    bfe-= ((danoreal*0.5 + (danoreal - danoreal*(bf/100)))/2).toInt()}else{
+                        bfe-= ((danoreal*0.5 + (danoreal - danoreal*(bf/100)))/1.5).toInt()
+                    }
                 }
 
             }else{
@@ -1033,8 +1036,21 @@ if(estado == estados[0]){
                 morreu()
                 return
             }
-            println('7')
-
+            if(acordomorte){
+                var index = 0
+                while (index < famili.size){
+                    if(!famili.get(index).equals(this)){
+                    var morto = Random.nextBoolean()
+                    if(morto){
+                        println("O(a) ${famili.get(index).nome} morreu de maneira estranha")
+                        famili.get(index).morreu()
+                    }
+                }}
+            }
+if(luto){
+    danofelicidade()
+    luto = false
+}
             if (bv <= 0){
                 morreu()
             }else if (bv > v){
@@ -1256,17 +1272,17 @@ if(estado == estados[0]){
     }
     fun loja(){
         println("-".repeat(80))
-
-        println("1"+" ".repeat(35)+"Videojogo - deixa o Gochi dependente (não foge) e deixa ele feliz, mas tem consequências"+" ".repeat(35)+"5")
-        println("2"+" ".repeat(35)+"Remédio - cura qualquer doença comum até a velhice"+" ".repeat(35)+"5")
-        println("3"+" ".repeat(35)+"Vacina - Protege o Gochi até a velhice contra doenças"+" ".repeat(35)+"15")
-        println("4"+" ".repeat(35)+"Acariciador automático - brinca com o gochi automaticamente"+" ".repeat(35)+"15")
-        println("5"+" ".repeat(35)+"Bolo de prestígio - restaura toda a vida, fome e felicidade"+" ".repeat(35)+"10")
-        println("6".repeat(35)+"Boneco - Diminui o dano de felicidade"+" ".repeat(35)+"10")
-        println("7".repeat(35)+"Acordo com a  morte - Seu Gochi não toma mais dano, mas haverá consequências"+" ".repeat(35)+"20")
-        println("8".repeat(35) + "Mapa de comida - Faz você ter mais chance de conseguir comidas melhores"+" ".repeat(35)+"15")
-        println("9".repeat(35)+"Rastreador de comida - Faz você conseguir só as melhores comidas"+" ".repeat(35)+"30")
-        println("0".repeat(35)+"Sair")
+println("Dinheiro: $dinheiro")
+        println("1"+" ".repeat(35)+"Videojogo - deixa o Gochi dependente (não foge) e deixa ele feliz, mas tem consequências - 5")
+        println("2"+" ".repeat(35)+"Remédio - cura qualquer doença comum até a velhice - 5")
+        println("3"+" ".repeat(35)+"Vacina - Protege o Gochi até a velhice contra doenças - 15")
+        println("4"+" ".repeat(35)+"Acariciador automático - brinca com o gochi automaticamente - 15")
+        println("5"+" ".repeat(35)+"Bolo de prestígio - restaura toda a vida, fome e felicidade - 10")
+        println("6"+" ".repeat(35)+"Boneco - Diminui o dano de felicidade - 10")
+        println("7"+" ".repeat(35)+"Acordo com a  morte - Seu Gochi não toma mais dano, mas haverá consequências - 20")
+        println("8"+" ".repeat(35) + "Mapa de comida - Faz você ter mais chance de conseguir comidas melhores - 15")
+        println("9"+" ".repeat(35)+"Rastreador de comida - Faz você conseguir só as melhores comidas - 30")
+        println("0"+" ".repeat(35)+"Sair")
         var resp = readln()
         while(resp.toIntOrNull() !in 0..9){
             println("Escreva um número dentro da lista")
@@ -1357,7 +1373,7 @@ if(resp == "1"&& dinhero - 5 >= 0){
         famili.get(index).bolodeprestigio = true }else{
         return
     }
-}else if (resp == "6" && dinhero - 15 >= 0){
+}else if (resp == "6" && dinhero - 10 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
         println("${index+1} - ${gochi.nome}")
@@ -1374,21 +1390,21 @@ if(resp == "1"&& dinhero - 5 >= 0){
         famili.get(index).brinquedo = true }else{
         return
     }
-}else if (resp == "7" && dinhero - 15 >= 0){
+}else if (resp == "7" && dinhero - 20 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
         println("${index+1} - ${gochi.nome}")
     }
     println("0 - Sair")
-    println("Escolha um gochi para dar a Vacina")
+    println("Escolha um gochi para fazer um acordo com a morte")
     var r = readln()
     while(r.toIntOrNull() !in 0..famili.size){
-        println("Escolha um gochi para dar o videojogo,somente números da lista")
+        println("Escolha um gochi para fazer um acordo com a morte,somente números da lista")
         r = readln()
     }
     if(r.toInt() >= 1){
         index = r.toInt() -1
-        famili.get(index).remedio = true }else{
+        famili.get(index).acordomorte = true }else{
         return
     }
 }
