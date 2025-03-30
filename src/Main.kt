@@ -485,7 +485,7 @@ var diaadia = Random.nextInt(1,101)
 var regi = mutableListOf<tama>()
 var famili = mutableListOf<tamo.gochi>()
 data class atributos(val variavel : String ,val valor : String)
-data class tama(val Nome: String, val idade: Int, val frase : String,val anomorte:Int = 0, val anonasci: Int, val icon : String, val Vivo :Boolean, var causadamorte: String? = "Morte morrida",val parceira: String = "não teve",val Pais:String = "Não sabe", var filho: MutableList<String>? = null,var analisedavida : String = "Teve uma vida feliz" )
+data class tama(val Nome: String, val idade: Int, val frase : String,val anomorte:Int? = 0, val anonasci: Int, val icon : String, val Vivo :Boolean, var causadamorte: String? = "Morte morrida",val parceira: String? = "não teve",val Pais:String? = "Não sabe", var filho: MutableList<String>? = null,var analisedavida : String = "Teve uma vida feliz", var fugir : Boolean )
 data class comida (val nome : String,var qualidade: Int)
 
 class tamo(tamanho : Boolean, colorido : Boolean) {
@@ -495,7 +495,7 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
     var v = " | ".repeat(es)+"\n"+"- O - ".repeat(es)+"\n"+" | ".repeat(es)
     var o = " | ".repeat(es)+"\n"+"/|\\ ".repeat(es)+"\n"+ "\\|/ ".repeat(es)
     var i = "o o ".repeat(es)+ "\n" + " o ".repeat(es) + "\n" +"o ".repeat(es)
-    var introestação = mutableListOf<String>(v,o,i,p)
+    var introestação = mutableListOf<String>(v,o,i,p);var intro = ""
     var mapadecomida = false; var rastreadordecomida = false
     fun eventospecial(){// colocar no tama
         if (estação == "Inverno" || estação == "Verão"){
@@ -510,24 +510,25 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
     }
     fun tempo(){
 if(periododoano < introestação.size){
-    estação[periododoano]
-    introestação[periododoano]
+   estação =  estações[periododoano]
+    intro = introestação[periododoano]
     periododoano++
 }else{
     periododoano = 0
-    estação[periododoano]
-    introestação[periododoano]
+    estação =  estações[periododoano]
+    intro = introestação[periododoano]
 }
     }
     inner class gochi(){
         var pasta1normal: String? = null; var pasta2feliz: String? = null; var pasta3nervoso : String?= null; var pasta4dormindo: String? = null; var pasta5hibernando :String? = null; var pasta6romantico : String? = null
         var identificador = Random.nextInt(1000); var rivalnome = ""; var rivalidentificador = 0
-        var v = 100; var f = 100; var fe = 100; var s = 100;var gch = "";var anonasci = 0; var seed = 0;var vivo = true;var numeroemo : Int? = null;var estado = "Feliz"; var anomorte = dia
+        var v = 100; var f = 100; var fe = 100; var s = 100;var gch = "";var anonasci = 0; var seed = 0;var vivo = true;var numeroemo : Int? = null;var estado = "Feliz"; var anomorte : Int? = null
         var bv = v; var bf = f; var bfe = fe; var bs = s;var parceira : gochi? = null; var luto : Boolean = false; var ativo = true; var probageral = 0.3; var rivalseed = 0; var nomeparceira = ""
         var idade = 0; var nome = "";var rival = ""; var rivalidade = false; var customintesidade: String = ""; var desenho = false; var Pais = "Desconhecido"; var custominten = false
         var frases = mutableListOf<String>(); var chancedeengravidar = 0; var intros = mutableListOf<String>() ; var intro = ""; var doente = false; var remedio = false
         var janela : janela? = null; var carinho = false ;var iniciardoença = 0; var danodoenca = 0;var danoconstante = false;var videojogo = false;var convideojogo = 0
         var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false; var acordomorte = false; var doencacontagiosa = false; var doencagenetica = false; var filhos  = mutableListOf<String>()
+        var fugiu = false
         var condoenca = 0; var idparceira = 0; var idpais = mutableListOf<Int>(); var idfilho = mutableListOf<Int>()
         fun doente() {
             if (iniciardoença == 0){
@@ -724,7 +725,9 @@ if(estado == estados[0]){
             }
             emotroca()
         }
+        var analisedavida : String? = null
         fun fugir(){
+            fugiu = true
             var fugir = Random.nextInt(0,101)
             if (fugir == 0){
                 tocador.mudar(musicasJogo[9])
@@ -755,6 +758,7 @@ if(estado == estados[0]){
                         "Já era, acabou, o JaJa te detonou, Com cada verso, o palco inteiro ecoou. Gabs, meu chapa, tá na hora de aceitar, No código e no flow, você não vai me alcançar.\n" +
                         "\n" +
                         "Eu sou o Jailson, o mestre da codificação, Te deixo perdido, sem direção. Enquanto eu brilho, você só apaga, Na batalha, meu nome é quem se propaga.")
+                analisedavida = "O(a) $nome teve uma vida de revelações"
                 readln()
 
             }else if ( fugir <= 50){
@@ -762,7 +766,7 @@ if(estado == estados[0]){
                 println("O $nome fugiu para casa do Gabs. Ele teve uma vida feliz e saudável")
                 readln()
 
-
+analisedavida = "Teve uma vida feliz"
             }else if (fugir == 100){
                 var numeroaleatorion = Random.nextInt(0,musicasGabriel.size)
                 tocador.mudar(musicasGabriel[numeroaleatorion])
@@ -797,16 +801,33 @@ if(estado == estados[0]){
                         "Enquanto o Gabs comanda, a vitória é garantida. \n" +
                         "Respeita o Gabs, que aqui é só talento, \n" +
                         "Tropa do Gabs, ninguém pode deter. ")
+                analisedavida = "O(a) $nome teve uma vida boa demais feliz"
+
                 readln()
             }else{
                 tocador.mudar(musicasJogo[6])
                 println("O $nome fugiu para casa do JaJa. Ele viveu uma vida triste e miserável")
                 readln()
-
+analisedavida = "O(a) $nome teve uma vida triste"
             }
+            if(analisedavida == null){
+                if(diafeliz > diatriste){
+                    analisedavida = if(diafeliz > diatriste) "O(a) $nome teve uma vida feliz" else "O(a) $nome teve uma vida triste"
+                }
+            }
+            println(analisedavida)
             famili.remove(this)
             var frase = frases[Random.nextInt(0,frases.size)]
-            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte))
+            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte, parceira?.nome ,Pais,filhos,analisedavida!!,fugiu))
+            var index = 0
+            while(index < famili.size){
+                var tama = famili.get(index)
+                tama.luto = true
+                if(tama.pasta3nervoso != null){
+                    tama.estado = estados[2]
+                    emotroca()
+                }
+            }
         }
         init {
 
@@ -1048,12 +1069,20 @@ if(diaadia%10 == 0){
                 println(causadamorte)
 
             }
-            var analisedavida = if(diafeliz > diatriste) "O(a) $nome teve uma vida feliz" else "O(a) $nome teve uma vida triste"
+            analisedavida = if(diafeliz > diatriste) "O(a) $nome teve uma vida feliz" else "O(a) $nome teve uma vida triste"
             var frase = frases[Random.nextInt(0,frases.size)]
             println(analisedavida)
             anomorte = dia
-
-            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte))
+            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte,parceira?.nome,Pais,filhos,analisedavida!!,fugiu))
+            var index = 0
+            while(index < famili.size){
+                var tama = famili.get(index)
+                tama.luto = true
+                if(tama.pasta3nervoso != null){
+                    tama.estado = estados[2]
+                    emotroca()
+                }
+            }
         }
         fun acaofamilia(){
             var index = 0
@@ -1161,9 +1190,9 @@ if(diaadia%10 == 0){
                 danoFelicidade *= 1.5
                 multiplicadorDanodefelicidade += 0.5
             }
-            if (evento == "Natal" && famili.size == 1){
+            if (evento == eventos[1] || evento == eventos[2] && famili.size == 1){
                 multiplicadorDanodefelicidade +=0.5
-            }else if (evento == "Natal" && famili.size > 1){
+            }else if (evento == eventos[1] || evento == eventos[2] && famili.size > 1){
                 multiplicadorDanodefelicidade -=0.5
             }
             var danoreal = danoFelicidade * multiplicadorDanodefelicidade
@@ -1288,7 +1317,7 @@ if(luto){
                 println("O(a) gochi $nome encontrou ")
                 dinhero++
             }else if(sorte == 1 || sorte == 100){
-                println("O(a) gochi $nome concontrou muito dinheiro")
+                println("O(a) gochi $nome encontrou muito dinheiro")
                 dinhero += 3
             }
             if(doencagenetica){
@@ -1317,6 +1346,7 @@ if(luto){
                 diatriste++
             }
             acao()
+            janela!!.mudarestiloexterno()
             if(diaadia == seed){
                 println("Hoje é o aniversário do(a) $nome")
                 bfe += 10
@@ -1483,9 +1513,11 @@ if(luto){
     }
 
     fun menu() {
+        println(intro)
+        tocador.mudar(musicasJogo[periododoano+2])
         println("-".repeat(40)+"Menu"+"-".repeat(40))
         if(!acao){
-            println("1"+" ".repeat(35)+"Pescar")
+            println("1"+" ".repeat(35)+"Procurar comida")
             println("2"+" ".repeat(35)+"Estoque")
             println("3"+" ".repeat(35)+"Brincadeira")
             println("4"+" ".repeat(35)+"Dar comida")
@@ -1496,9 +1528,7 @@ if(luto){
 
             var resp = readln()
 
-            tocador.mudar(musicasJogo[1])
             when (resp) {
-                "7" -> {g!!.estado=estados[1];g!!.emotroca();g!!.janela!!.mudarestiloexterno() }
                 "6" -> {passaardia(); tocador.mudar(musicasJogo[1])}
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
                 "4" -> {darcomida();tocador.mudar(musicasJogo[1])}
@@ -1741,13 +1771,17 @@ loja()
 
     fun passaardia(){
         var index = 0
-        println("-".repeat(80))
+        println("-".repeat(85))
         while(index < famili.size){
             famili.get(index).passardia()
             index++
         }
         dia++
         diaadia = Random.nextInt(1,100)
+        if(dia % 4 == 0){
+            tempo()
+        }
+eventospecial()
     }
 
 
