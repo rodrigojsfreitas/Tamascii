@@ -10,6 +10,82 @@ var pastamusicaJailson = File("./Assets/Músicas/Jailson/").listFiles().filter {
 var musicasGabriel = mutableListOf<String>()
 var musicasJailson = mutableListOf<String>()
 var musicasJogo = mutableListOf<String>()
+var  interaçãodeutudoerrado = arrayOf("A e B não querem fazer nada","A e B não querem se falar agora","A e B querem ficar longe um do outro")
+var interaçãonegativairmãoirmã = arrayOf(
+    "B limpou o quarto que divide com A sem reclamar, mas A bagunçou de novo.",
+    "B arrumou o controle remoto que A deixou bagunçado, mas A desarrumou outra vez.",
+    "B gravou um programa que A queria assistir, mas A deletou sem ver.",
+    "B levou o lixo para fora antes que A precisasse pedir, mas A nem notou.",)
+var interaçãopositivairmãoirmã = arrayOf(
+    "B limpou o quarto que divide com A sem reclamar.",
+    "B arrumou o controle remoto que A deixou bagunçado.",
+    "B gravou um programa que A queria assistir.",
+    "B levou o lixo para fora antes que A precisasse pedir.")
+var interaçãonegativafilhosfilhos = arrayOf("A quis passar a tarde desenhando com B, mas B não se interessou.",
+    "A tentou ler uma história bem legal para B antes de dormir, mas B não quis ouvir.",
+    "A se ofereceu para ajudar B a montar aquele quebra-cabeça enorme, mas B recusou.",
+    "A quis levar B para um passeio no parque hoje, mas B preferiu ficar em casa.",
+    "A convidou B para jogar videogame juntos, mas B não quis e eles não se divertiram.",
+    "A tentou ensinar B a fazer um bolo delicioso na cozinha, mas B não quis aprender.",
+    "A chamou B para assistir a um filme juntos, mas B não quis e eles não riram.",
+    "A sugeriu ir com B comprar um presente especial para o amigo, mas B não quis ir.",
+    "A quis brincar de esconde-esconde com B no quintal, mas B não aceitou.")
+var interaçãonegativapaisfilhos = arrayOf("A não quis passar a tarde desenhando com B, embora B quisesse.",
+    "A não leu uma história bem legal para B antes de dormir, apesar de B pedir.",
+    "A não ajudou B a montar aquele quebra-cabeça enorme, mesmo B querendo ajuda.",
+    "A não levou B para um passeio no parque hoje, apesar do desejo de B.",
+    "A não jogou videogame com B, e eles não se divertiram, embora B quisesse.",
+    "A não ensinou B a fazer um bolo delicioso na cozinha, mesmo com B interessado.",
+    "A não assistiu a um filme com B, e eles não riram, apesar de B sugerir.",
+    "A não foi com B comprar um presente especial para o amigo, embora B quisesse ir.",
+    "A não brincou de esconde-esconde com B no quintal, apesar de B insistir.")
+var interaçãopositivafilhos = arrayOf("A passou a tarde desenhando com B.",
+    "A leu uma história bem legal para B antes de dormir.",
+    "A ajudou B a montar aquele quebra-cabeça enorme.",
+    "A levou B para um passeio no parque hoje.",
+    "A e B jogaram videogame juntos e se divertiram muito.",
+    "A ensinou B a fazer um bolo delicioso na cozinha.",
+    "A assistiu a um filme com B e eles riram bastante.",
+    "A foi com B comprar um presente especial para o amigo.",
+    "A brincou de esconde-esconde com B no quintal.")
+var interaçãopositivapais = arrayOf("B e A assistiram ao nascer do sol no fim de semana.","B discutiu com A sobre o melhor time de futebol.",
+    "B jogou bola com A no quintal por horas.",
+    "B e A construíram uma casa de brinquedo juntos.",
+    "B assistiu ao jogo favorito de A na TV com ele.",
+    "B ajudou A a consertar o carro na garagem.",
+    "B foi com A pescar no lago no fim de semana.",
+    "B correu com A no parque para treinar.")
+var interaçãonegativafilhospais = arrayOf("B não quis assistir ao nascer do sol no fim de semana com A, embora A quisesse.",
+    "B se recusou a discutir com A sobre o melhor time de futebol, mesmo A insistindo.",
+    "B não jogou bola com A no quintal por horas, apesar de A querer.",
+    "B não ajudou A a construir uma casa de brinquedo juntos, embora A tivesse pedido.",
+    "B não assistiu ao jogo favorito de A na TV com ele, mesmo A convidando.",
+    "B não foi com A pescar no lago no fim de semana, embora A quisesse companhia.",
+    "B não correu com A no parque para treinar, apesar de A sugerir.")
+var interaçãonegativapaispais = arrayOf("B quis assistir ao nascer do sol no fim de semana com A, mas A não se interessou.",
+    "B tentou discutir com A sobre o melhor time de futebol, mas A não quis conversar.",
+    "B chamou A para jogar bola no quintal por horas, mas A recusou.",
+    "B sugeriu que ele e A construíssem uma casa de brinquedo juntos, mas A não quis.",
+    "B convidou A para assistir ao seu jogo favorito na TV, mas A não aceitou.",
+    "B pediu ajuda a A para consertar o carro na garagem, mas A não quis ajudar.",
+    "B insistiu para ir com A pescar no lago no fim de semana, mas A recusou.",
+    "B propôs que ele e A fizessem um churrasco bem animado, mas A não topou.",
+    "B perguntou a A como resolver um dever difícil, mas A não quis explicar.",
+    "B chamou A para correr no parque para treinar, mas A não quis ir.")
+var interaçãopositivaparceiraparceiro = arrayOf(
+    "B deixou um bilhete carinhoso para A encontrar.",
+    "B escolheu uma playlist romântica para tocar à noite com A.",
+    "B comprou um presente surpresa para A.",
+    "B planejou uma caminhada ao ar livre para A aproveitar.",
+    "B ajustou o travesseiro de A para ele dormir melhor.",
+    "B pediu a A para dançarem juntos na sala.",
+    "B pediu a A para dançarem juntos na sala, mas A recusou.")
+var interaçãonegativaparceiroparceira = arrayOf(
+    "B deixou um bilhete carinhoso para A encontrar, mas A ignorou.",
+    "B escolheu uma playlist romântica para tocar à noite, mas A desligou o som.",
+    "B comprou um presente surpresa para A, mas A não abriu.",
+    "B planejou uma caminhada ao ar livre para A, mas A recusou sair.",
+    "B ajustou o travesseiro de A para ele dormir melhor, mas A desfez o ajuste.")
 class Player{
     var clip : Clip = AudioSystem.getClip()
     fun diminuir(){
@@ -240,7 +316,7 @@ val palaInfancia = arrayOf(
     "construir forte com almofadas",
 )
 
-var eventos = arrayOf("Normal", "Natal", "Aniversário", "Ano novo")
+var eventos = arrayOf("Normal", "Natal", "Ano novo")
 var estados = arrayOf("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
 var estações = arrayOf("Verão", "Outono","Inverno","Primavera")
 var palaBoa = arrayOf("curtiu", "gostou de","amou","adorou","apreciou")
@@ -409,7 +485,7 @@ var diaadia = Random.nextInt(1,101)
 var regi = mutableListOf<tama>()
 var famili = mutableListOf<tamo.gochi>()
 data class atributos(val variavel : String ,val valor : String)
-data class tama(val Nome: String, val idade: Int, val frase : String,val anomorte:Int = 0, val anonasci: Int, val icon : String, val Vivo :Boolean, var causadamorte: String = "Morte morrida",val parceira: String = "não teve",val Pais:String = "Não sabe", var filho: MutableList<String>? = null,var analisedavida : String = "Teve uma vida feliz" )
+data class tama(val Nome: String, val idade: Int, val frase : String,val anomorte:Int = 0, val anonasci: Int, val icon : String, val Vivo :Boolean, var causadamorte: String? = "Morte morrida",val parceira: String = "não teve",val Pais:String = "Não sabe", var filho: MutableList<String>? = null,var analisedavida : String = "Teve uma vida feliz" )
 data class comida (val nome : String,var qualidade: Int)
 
 class tamo(tamanho : Boolean, colorido : Boolean) {
@@ -419,17 +495,40 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
     var v = " | ".repeat(es)+"\n"+"- O - ".repeat(es)+"\n"+" | ".repeat(es)
     var o = " | ".repeat(es)+"\n"+"/|\\ ".repeat(es)+"\n"+ "\\|/ ".repeat(es)
     var i = "o o ".repeat(es)+ "\n" + " o ".repeat(es) + "\n" +"o ".repeat(es)
+    var introestação = mutableListOf<String>(v,o,i,p)
     var mapadecomida = false; var rastreadordecomida = false
+    fun eventospecial(){// colocar no tama
+        if (estação == "Inverno" || estação == "Verão"){
+            var numeroaleatorio = Random.nextInt(1,32)
+            if (numeroaleatorio == 24 || numeroaleatorio == 25){
+                evento = eventos[1]
+            }else if (numeroaleatorio == 31){
+                evento = eventos[3]
+            }
+        }
+
+    }
+    fun tempo(){
+if(periododoano < introestação.size){
+    estação[periododoano]
+    introestação[periododoano]
+    periododoano++
+}else{
+    periododoano = 0
+    estação[periododoano]
+    introestação[periododoano]
+}
+    }
     inner class gochi(){
         var pasta1normal: String? = null; var pasta2feliz: String? = null; var pasta3nervoso : String?= null; var pasta4dormindo: String? = null; var pasta5hibernando :String? = null; var pasta6romantico : String? = null
         var identificador = Random.nextInt(1000); var rivalnome = ""; var rivalidentificador = 0
         var v = 100; var f = 100; var fe = 100; var s = 100;var gch = "";var anonasci = 0; var seed = 0;var vivo = true;var numeroemo : Int? = null;var estado = "Feliz"; var anomorte = dia
-        var bv = v; var bf = f; var bfe = fe; var bs = s;var emocon = 0; var parceira : gochi? = null; var luto : Boolean = false; var ativo = true; var proba = 0.3; var rivalseed = 0; var nomeparceira = ""
+        var bv = v; var bf = f; var bfe = fe; var bs = s;var parceira : gochi? = null; var luto : Boolean = false; var ativo = true; var probageral = 0.3; var rivalseed = 0; var nomeparceira = ""
         var idade = 0; var nome = "";var rival = ""; var rivalidade = false; var customintesidade: String = ""; var desenho = false; var Pais = "Desconhecido"; var custominten = false
         var frases = mutableListOf<String>(); var chancedeengravidar = 0; var intros = mutableListOf<String>() ; var intro = ""; var doente = false; var remedio = false
         var janela : janela? = null; var carinho = false ;var iniciardoença = 0; var danodoenca = 0;var danoconstante = false;var videojogo = false;var convideojogo = 0
         var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false; var acordomorte = false; var doencacontagiosa = false; var doencagenetica = false; var filhos  = mutableListOf<String>()
-        var condoenca = 0
+        var condoenca = 0; var idparceira = 0; var idpais = mutableListOf<Int>(); var idfilho = mutableListOf<Int>()
         fun doente() {
             if (iniciardoença == 0){
                 println("$nome ficou doente")
@@ -495,17 +594,7 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
             println(frase)
             frases.add(frase)
         }
-        fun eventospecial(){// colocar no tama
-            if (estação == "Inverno" || estação == "Verão"){
-                var numeroaleatorio = Random.nextInt(1,32)
-                if (numeroaleatorio == 24 || numeroaleatorio == 25){
-                    evento = eventos[1]
-                }else if (numeroaleatorio == 31){
-                    evento = eventos[3]
-                }
-            }
 
-        }
         fun romance(){
             var numeroaleatorio : Int
             if (estado == estados[5]){
@@ -520,6 +609,8 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
                         parceira = gochi()
                         parceira!!.nomeparceira = nome
                         parceira!!.ativo = false
+                        parceira!!.idparceira = identificador
+                        idparceira = parceira!!.identificador
                     }}else{
                     var realchancedeengravidar = if (parceira!!.chancedeengravidar == 0) 0 else (parceira!!.chancedeengravidar + chancedeengravidar)/2
                     if (Random.nextInt(1,101) <= realchancedeengravidar){
@@ -528,7 +619,13 @@ class tamo(tamanho : Boolean, colorido : Boolean) {
                             println("$nome e ${parceira!!.nome} tiveram um filho")
                             filhos.add(filho.nome)
                             parceira!!.filhos.add(filho.nome)
+
                             bfe += 10
+                            parceira!!.bfe += 10
+                            filho.idpais.add(identificador)
+                            filho.idpais.add(parceira!!.identificador)
+                            idfilho.add(filho.identificador)
+                            parceira!!.idfilho.add(filho.identificador)
                             filho.Pais = "$nome e ${parceira!!.nome}"
                         if(parceira!!.doencagenetica||doencagenetica){
                             filho.doencagenetica = true
@@ -633,12 +730,14 @@ if(estado == estados[0]){
                 tocador.mudar(musicasJogo[9])
                 println("O $nome fugiu para casa do Gabs. Ele acabou morrendo pela metralhadora de piadas sem graça do Gabriel porque não levantou no ônibus para uma menina")
                 vivo = false
+                anomorte = dia
                 readln()
 
             }
             else if(fugir == 66 || fugir == 61){
                 vivo = false
-                println("para")
+                anomorte = dia
+                causadamorte = "O(a) $nome vendo uma careca lustrada"
                 tocador.mudar(musicasJogo[Random.nextInt(9,11)])
                 println("O $nome fugiu para casa do JaJa. Ele acabou morrendo de desgosto e suas últimas palavras foram: 'CARECA,CARECA,CARECA'")
                 readln()
@@ -647,6 +746,8 @@ if(estado == estados[0]){
                 var numeroaleatorion = Random.nextInt(0,musicasJailson.size)
                 tocador.mudar(musicasJailson[numeroaleatorion])
                 vivo = false
+                anomorte = dia
+                causadamorte = "O(a) $nome morreu Descobrindo a verdade"
                 janela!!.mdg("./Assets/finaJailson/1/1.png")
                 println("O $nome fugiu para casa do JaJa. Depois de anos juntos, a máscara da mentira foi quebrada e sua face foi beijada pela verdade, nos últimos minutos de vida, ele disse: 'O Jaílson é muito melhor que o Gabriel e ele é o melhor professor do Pr... de todos os Senacs':" +
                         "\nAqui é o JaJa, o dono da caneta, Chego pesado, te deixo na treta. Sua lista da pureza não é nada, Só fachada, tua moral tá quebrada.\n" +
@@ -666,6 +767,10 @@ if(estado == estados[0]){
                 var numeroaleatorion = Random.nextInt(0,musicasGabriel.size)
                 tocador.mudar(musicasGabriel[numeroaleatorion])
                 vivo = false
+                anomorte = dia
+                causadamorte = "O(a) $nome morreu por ser feliz demais"
+
+                causadamorte = "Ser feliz demais"
                 println("O $nome fugiu para casa do Gabs. Eles viveram felizer para sempre e nos seus últimos momentos cantaram em uma só voz: " +
                         "\n" +
                         "Hino do Gabriel\nÉ a tropa do Gabs, chegou pra dominar, \n" +
@@ -700,6 +805,8 @@ if(estado == estados[0]){
 
             }
             famili.remove(this)
+            var frase = frases[Random.nextInt(0,frases.size)]
+            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte))
         }
         init {
 
@@ -855,10 +962,10 @@ if(estado == estados[0]){
             idade = 0
             seed = Random.nextInt(1,diaadia+1)
 
-            bv = v - ((v * proba).toFloat() * (seed / 100).toFloat()).toInt()
-            bf = f - ((f * proba).toFloat() * (seed / 100).toFloat()).toInt()
-            bfe = fe - ((fe * proba).toFloat() * (seed / 100).toFloat()).toInt()
-            bs = s - ((s * proba).toFloat() * (seed / 100).toFloat()).toInt()
+            bv = v - ((v * probageral).toFloat() * (seed / 100).toFloat()).toInt()
+            bf = f - ((f * probageral).toFloat() * (seed / 100).toFloat()).toInt()
+            bfe = fe - ((fe * probageral).toFloat() * (seed / 100).toFloat()).toInt()
+            bs = s - ((s * probageral).toFloat() * (seed / 100).toFloat()).toInt()
 if(diaadia%10 == 0){
     doencagenetica = true
 }
@@ -944,10 +1051,85 @@ if(diaadia%10 == 0){
             var analisedavida = if(diafeliz > diatriste) "O(a) $nome teve uma vida feliz" else "O(a) $nome teve uma vida triste"
             var frase = frases[Random.nextInt(0,frases.size)]
             println(analisedavida)
+            anomorte = dia
 
-            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte!!))
+            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte))
         }
-
+        fun acaofamilia(){
+            var index = 0
+            while (index < famili.size){
+                var numeroaleatorio = Random.nextInt(1,101)
+                var tama = famili.get(index)
+                if(!tama.equals(this) && numeroaleatorio in 1..10){
+                    if(tama.identificador == idparceira){
+                        if(diaadia < bfe && diaadia < tama.bfe){
+                            println(interaçãopositivaparceiraparceiro[Random.nextInt(0,interaçãopositivaparceiraparceiro.size)].replace("B",nome).replace("A",tama.nome))
+                        bfe+= 10
+                            tama.bfe += 10
+                        }else if (diaadia < bfe || diaadia < tama.bfe){
+                            println(interaçãonegativaparceiroparceira[Random.nextInt(0,interaçãonegativaparceiroparceira.size)].replace("B",nome).replace("A",tama.nome))
+                        tama.bfe -= 5
+                            bfe -= 5
+                        }else{
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome).replace("B",tama.nome))
+                        tama.bfe -= 10
+                            bfe -= 10
+                        }
+                    }else if (tama.identificador in idpais){
+                        if(diaadia < bfe && diaadia < tama.bfe){
+                            println(interaçãopositivapais[Random.nextInt(0,interaçãopositivapais.size)].replace("B",nome).replace("A",tama.nome))
+                            tama.bfe += 10
+                            bfe += 10
+                        }else if (diaadia < bfe){
+                            println(interaçãonegativapaispais[Random.nextInt(0,interaçãonegativapaispais.size)].replace("B",nome).replace("A",tama.nome))
+                            tama.bfe -= 5
+                            bfe -= 3
+                        }else if (diaadia < tama.bfe){
+                            println(interaçãonegativafilhospais[Random.nextInt(0,interaçãonegativafilhospais.size)].replace("B",nome).replace("A",tama.nome))
+                            tama.bfe -= 3
+                            bfe -= 5
+                        } else{
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome).replace("B",tama.nome))
+                            tama.bfe -= 10
+                            bfe -= 10
+                        }
+                    }else if (tama.identificador in idfilho){
+                        if(diaadia < bfe && diaadia < tama.bfe){
+                            println(interaçãopositivafilhos[Random.nextInt(0,interaçãopositivafilhos.size)].replace("A",nome).replace("B",tama.nome))
+                            tama.bfe += 10
+                            bfe += 10
+                        }else if (diaadia < bfe){
+                            println(interaçãonegativafilhosfilhos[Random.nextInt(0,interaçãonegativafilhosfilhos.size)].replace("A",nome).replace("B",tama.nome))
+                            tama.bfe -= 5
+                            bfe -= 3
+                        }else if (diaadia < tama.bfe){
+                            println(interaçãonegativapaisfilhos[Random.nextInt(0,interaçãonegativapaisfilhos.size)].replace("A",nome).replace("B",tama.nome))
+                            tama.bfe -= 3
+                            bfe -= 5
+                        } else{
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome).replace("B",tama.nome))
+                            tama.bfe -= 10
+                            bfe -= 10
+                        }
+                    }else if (tama.idpais == idpais){
+                        if(diaadia < bfe && diaadia < tama.bfe){
+                            println(interaçãopositivairmãoirmã[Random.nextInt(0,interaçãopositivairmãoirmã.size)].replace("B",nome).replace("A",tama.nome))
+                            tama.bfe += 10
+                            bfe += 10
+                        }else if (diaadia < bfe || diaadia < tama.bfe){
+                            println(interaçãonegativairmãoirmã[Random.nextInt(0,interaçãonegativairmãoirmã.size)].replace("B",nome).replace("A",tama.nome))
+                            tama.bfe -= 5
+                            bfe -= 5
+                        }else{
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome).replace("B",tama.nome))
+                            tama.bfe -= 10
+                            bfe -= 10
+                        }
+                    }
+                }
+                index++
+            }
+        }
 
         fun dano(){
             var multiplicadorDano = 1.0
@@ -1098,6 +1280,9 @@ if(luto){
     danofelicidade()
     luto = false
 }
+            if(famili.size > 1){
+                acaofamilia()
+            }
             var sorte = Random.nextInt(1,101)
             if(sorte in 1..10){
                 println("O(a) gochi $nome encontrou ")
@@ -1132,6 +1317,14 @@ if(luto){
                 diatriste++
             }
             acao()
+            if(diaadia == seed){
+                println("Hoje é o aniversário do(a) $nome")
+                bfe += 10
+                if(pasta2feliz != null){
+                    estado = estados[1]
+                    emotroca()
+                }
+            }
             idade++
             janela!!.title = "Nome: $nome | Idade: $idade | Vida: $bv | Fome: $bf"
         }

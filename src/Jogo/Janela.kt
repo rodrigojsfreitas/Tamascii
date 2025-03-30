@@ -1,6 +1,5 @@
 package Jogo
 
-import tama
 import javax.swing.*
 import java.awt.*
 import java.awt.image.BufferedImage
@@ -24,13 +23,12 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
     val deses = deses;
     var gif = gif;
     val intensi = intensi
-    val status = status
     val txt: JTextPane = JTextPane()
     var cor = mutableListOf<Color>()
     var frameascii = mutableListOf<String>()
     var cores = mutableListOf<MutableList<Color>>()
     var vad = ""
-    val intensidade = arrayOf(
+    var intensidade = arrayOf(
         "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:," + "\"^`\'. ",
         "$".repeat(9) + "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:," + "\"^`\'. ",
         "$".repeat(9) + "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:," + "\"^`\'. " + " ".repeat(9),
@@ -43,6 +41,7 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
         "$@%8&*#/-_+~<>;:,. ",
         " .'`^,:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao#MW&8%B@$"
     )
+
     fun tamanho(){
         add(txt)
         SwingUtilities.invokeAndWait{
@@ -52,10 +51,7 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
 
 
         }
-        if(col){
-        mdtc(frameascii)}else{
-            mdt(frameascii)
-        }
+        mdtc(frameascii)
         if(!processo!!.isAlive){
             processo?.start()
         }
@@ -132,6 +128,9 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
     }
 
     init {
+        if(!col){
+
+        }
         txt.isVisible = false
         isVisible = true
         title = status
@@ -164,10 +163,7 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
         frameascii = mudarestilo[numeroaletaroio].frames
         cores = mudarestilo[numeroaletaroio].cores
         mudar = true
-        if(col){
-        mdtc(frameascii)}else{
-            mdt(frameascii)
-        }
+        mdtc(frameascii)
     }
 
     fun mudarestilo() {
@@ -382,34 +378,6 @@ var iniciar = false
 
     }
 
-    fun mdt(F: MutableList<String>) {
-        val doc = DefaultStyledDocument()
-        var inicio = F[0].length
-
-        while (mudar) {
-            var con = 0
-            for (T in frameascii) {
-
-
-                T.forEachIndexed { index, t ->
-
-                    doc.insertString(doc.length, t.toString(), null)
-                }
-                txt.document = doc
-                if (txt.document.length > inicio) {
-                    doc.remove(0, inicio)
-                }
-
-
-
-
-
-
-                con++
-            }
-        }
-    }
-
     var processo: Thread? = null
     var mudar = true
     /*fun copy(original: DefaultStyledDocument): DefaultStyledDocument {
@@ -432,7 +400,7 @@ var iniciar = false
     }*/
 
 
-    inner class trabalhosujo : SwingWorker<Document, Document>() { // modo pesado
+    /*inner class trabalhosujo : SwingWorker<Document, Document>() { // modo pesado
         override fun doInBackground(): Document {
             var inicio = frameascii[0].length
             while (true) {
@@ -466,7 +434,7 @@ var iniciar = false
         }
 
 
-    }
+    }*/
 
     fun criascii(frams: MutableList<String>): Document {
 
@@ -494,7 +462,6 @@ var iniciar = false
         return (doc)
     }
 
-    var processo2: Thread? = null
     fun continuarascii():StyledDocument{
         var docu= DefaultStyledDocument()
 
@@ -518,9 +485,20 @@ var iniciar = false
         return(docu)
 
     }
+    fun continuarasciisemcor():StyledDocument{
+        var docu= DefaultStyledDocument()
+
+        frameascii.forEachIndexed { i, Fram: String ->
+
+                docu.insertString(docu.length, Fram, null)
+
+        }
+        return(docu)
+
+    }
     var frames : Document = DefaultStyledDocument()
     fun mdtc(F: MutableList<String>) {
-           var docu = continuarascii()
+           var doc = continuarascii()
         txt.isVisible = true
 
 
@@ -543,17 +521,19 @@ var iniciar = false
 
                 if(F[0].length *2 > txt.document.length){
                     SwingUtilities.invokeAndWait() {
-
-                    txt.styledDocument = docu
+                        txt.styledDocument = doc
                     }
                 }
 
                 if(inicio*frameascii.size - inicio == txt.document.length){
-                    SwingUtilities.invokeLater {
-
-                    docu = continuarascii()
-
-                }
+                    if(col){
+                        SwingUtilities.invokeLater {
+                            doc = continuarascii()
+                        }}else{
+                            SwingUtilities.invokeLater{
+                                doc = continuarasciisemcor()
+                            }
+                    }
 
                 }
 
@@ -579,9 +559,6 @@ var iniciar = false
 
 
     }
-        if(!processo!!.isAlive){
-            processo!!.start()
-        }
 
 }
     fun mtt(s: String) {
