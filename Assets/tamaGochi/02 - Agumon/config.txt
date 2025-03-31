@@ -1,6 +1,7 @@
-vida = 100
-fome = 90
-felicidade = 60
-sexappel = 0
-gochi = mickey
+vida = 50
+fome = 50
+felicidade = 80
+sexappel = 20
+gochi = Agumon
+desenho = false
 

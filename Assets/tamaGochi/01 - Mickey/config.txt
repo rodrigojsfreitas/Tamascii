@@ -1,6 +1,7 @@
-vida = 100
+vida = 40
 fome = 90
-felicidade = 60
+felicidade = 70
 sexappel = 0
-gochi = mickey
-
+gochi = Mickey
+rival = Pernalonga
+desenho = true

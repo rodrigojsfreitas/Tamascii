@@ -1,6 +1,7 @@
-vida = 100
-fome = 90
-felicidade = 60
+vida = 20
+fome = 80
+felicidade = 100
 sexappel = 0
-gochi = mickey
+gochi = "Bob Esponja"
+desenho = true
 

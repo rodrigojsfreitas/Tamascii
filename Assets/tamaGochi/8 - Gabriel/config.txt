@@ -1,6 +1,7 @@
 vida = 100
-fome = 90
-felicidade = 60
+fome = 100
+felicidade = 100
 sexappel = 0
-gochi = mickey
+gochi = "Gabriel AKA Gabs"
+desenho = true
 

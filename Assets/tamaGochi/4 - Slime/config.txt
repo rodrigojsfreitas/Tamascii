@@ -1,6 +1,7 @@
-vida = 100
-fome = 90
-felicidade = 60
-sexappel = 0
-gochi = mickey
-
+vida = 30
+fome = 30
+felicidade = 70
+sexappel = 50
+gochi = Slime
+desenho = false
+tamanhofamilia = 6

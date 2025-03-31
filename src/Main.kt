@@ -3,6 +3,8 @@ import java.io.File
 import javax.sound.sampled.*
 import kotlin.contracts.Returns
 import kotlin.random.Random
+import kotlin.random.nextInt
+
 var diarecord = 0
 var tocador = Player()
 var pastamusicaJogo = File("./Assets/Músicas/Jogo/").listFiles().filter { it.extension == "wav" }.sortedBy { it.name.filter { it.isDigit() }.toInt() }
@@ -844,7 +846,7 @@ analisedavida = "O(a) $nome teve uma vida triste"
 
 
 
-            var caminho = gochistama[0]
+            var caminho = gochistama[Random.nextInt(0,gochistama.size)]
             var caminhotamas = File(caminho).listFiles()
 
             caminhotamas.forEach { pasta ->
@@ -1008,7 +1010,6 @@ analisedavida = "O(a) $nome teve uma vida triste"
 
 
             }
-            println(gch)
             var fileintro = File(intro).listFiles().filter { it.extension == "wav" }
             fileintro.forEach(){
                     audio -> intros.add(audio.path)
@@ -2025,7 +2026,6 @@ fun main() {
     }
     tocador.play(musicasJogo[0])
     tocador.diminuir()
-    println(musicasJogo)
     var tam = false
     var color = false
     var dinamico = false

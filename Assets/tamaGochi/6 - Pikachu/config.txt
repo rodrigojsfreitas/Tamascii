@@ -1,6 +1,7 @@
-vida = 100
+vida = 40
 fome = 90
 felicidade = 60
-sexappel = 0
-gochi = mickey
+sexappel = 10
+gochi = Pikachu
+desenho = false
 
