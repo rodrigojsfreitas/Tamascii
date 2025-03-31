@@ -1,5 +1,6 @@
 package Jogo
 
+import tama
 import javax.swing.*
 import java.awt.*
 import java.awt.image.BufferedImage
@@ -12,11 +13,11 @@ import javax.swing.text.*
 import java.awt.Color
 import kotlin.random.Random
 // tonho: tamanho da página: grande ou pequena; col: se vai ser colorido ou não; deses: se a imagem vai estar mais definida ou mais embasada (Smoth), gif: as imagens para o tamagochi, status: titulo para o jogo, intensi: para definir a intensidade da art ascii"
-class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,gif: String, status : String,intensi : Int, customintens: String = "",velocidade:Int = 50) : JFrame() {
+class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,gif: String, status : String,intensi : Int, customintens: String = "",velocidade: Long) : JFrame() {
     var mudarestilo = mutableListOf<estilo>()
 
     data class estilo(val frames: MutableList<String>, val cores: MutableList<MutableList<Color>>)
-
+val velocidade = velocidade
     val tonho = tonho;
     var intensicustom = customintens
     val col = col;
@@ -51,10 +52,12 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
 
 
         }
+
         mdtc(frameascii)
         if(!processo!!.isAlive){
             processo?.start()
         }
+
 
 
     }
@@ -156,14 +159,18 @@ class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,
 
     }
     var pasta: BufferedImage = BufferedImage(80,80,10)
+    fun fechar(){
+        defaultCloseOperation = DISPOSE_ON_CLOSE
+        isVisible = false
+    }
     fun mudarestiloexterno(){
         mudar = false
-        processo?.join()
+        processo?.join(10)
         var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
         frameascii = mudarestilo[numeroaletaroio].frames
         cores = mudarestilo[numeroaletaroio].cores
         mudar = true
-        mdtc(frameascii)
+        tamanho()
     }
 
     fun mudarestilo() {
@@ -261,8 +268,13 @@ var iniciar = false
                                     inter7(me)
                                 } else if (i == 9) {
                                     inter8(me)
-                                } else {
+                                } else if(i == 10) {
                                     inter9(me)
+                                } else if(i == 11){
+                                    intercustom(me)
+                                }else{
+                                    println("Número custom inválido")
+                                    inter(me)
                                 }
                                 vad += intensida
                             }
@@ -344,10 +356,13 @@ var iniciar = false
                                 inter7(me)
                             } else if (i == 9) {
                                 inter8(me)
-                            } else if (i == 10) {
+                            } else if(i == 10) {
                                 inter9(me)
-                            } else {
+                            } else if(i == 11){
                                 intercustom(me)
+                            }else{
+                                println("Número custom inválido")
+                                inter(me)
                             }
                             vad += intensida
                         }
@@ -464,14 +479,16 @@ var iniciar = false
 
     fun continuarascii():StyledDocument{
         var docu= DefaultStyledDocument()
+        var coress = cores.toList()
+        var frame = frameascii.toList()
 
-        frameascii.forEachIndexed { i, Fram: String ->
+        frame.forEachIndexed { i, Fram: String ->
             Fram.forEachIndexed { index, t ->
 
                 val atributos = SimpleAttributeSet().apply {
                     StyleConstants.setForeground(
                         this,
-                        cores[i][index]
+                        coress[i][index]
                     )
 
                 }
@@ -487,8 +504,9 @@ var iniciar = false
     }
     fun continuarasciisemcor():StyledDocument{
         var docu= DefaultStyledDocument()
+        var frame = frameascii
 
-        frameascii.forEachIndexed { i, Fram: String ->
+        frame.forEachIndexed { i, Fram: String ->
 
                 docu.insertString(docu.length, Fram, null)
 
@@ -516,7 +534,7 @@ var iniciar = false
                         txt.styledDocument.remove(0,frameascii[0].length)
 
                     }
-                    Thread.sleep(50)
+                    Thread.sleep(velocidade)
         }
 
                 if(F[0].length *2 > txt.document.length){
@@ -574,8 +592,8 @@ var iniciar = false
     fun mdg(gq: String = gif) {
 
 mudar = false
-        processo?.join()
-
+        processo!!.join()
+mudar = true
         giff(g = gq)
         terminar()
 
