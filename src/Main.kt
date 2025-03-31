@@ -13,6 +13,7 @@ var pastamusicaJailson = File("./Assets/Músicas/Jailson/").listFiles().filter {
 var musicasGabriel = mutableListOf<String>()
 var musicasJailson = mutableListOf<String>()
 var musicasJogo = mutableListOf<String>()
+var frasemortes = arrayOf("partiu para o outro lado.","foi para o outro lado.","apagou as luzes.","subiu aos céus.","está no sono eterno.","deixou este mundo.","fez sua viagem final.","passou para o outro lado.","não está mais entre nós")
 var  interaçãodeutudoerrado = arrayOf("A e B não querem fazer nada.","A e B não querem se falar agora.","A e B querem ficar longe um do outro.")
 var interaçãonegativairmãoirmã = arrayOf(
     "B limpou o quarto que divide com A sem reclamar, mas A bagunçou de novo.",
@@ -1099,6 +1100,7 @@ if(diaadia%10 == 0){
         }
         var causadamorte : String? = null
         fun morreu(){
+            vivo = false
             famili.remove(this)
             var momentodamorte = palaAcoMorte[Random.nextInt(0,palaAcoMorte.size-1)]
             if (causadamorte == null){
@@ -1361,6 +1363,7 @@ if(luto){
             }
             if (bv <= 0){
                 morreu()
+                return
             }else if (bv > v){
                 bv = v
             }
@@ -1372,6 +1375,7 @@ if(luto){
             }
             if (comer == 3){
                 morreu()
+                return
             }
             if (bf > f) {
                 bf = f
@@ -1441,6 +1445,7 @@ var conhibernando = 1
             }
             if(bv <=0){
                 morreu()
+                return
             }
             idade++
             for (x in 1..conhibernando){
@@ -1635,7 +1640,7 @@ processodinamico =Thread{
         passadia = true}
         }}
 }
-        while (dia == 0 || famili.size > 0|| querosair == true){
+        while (dia == 0 || famili.size > 0 && !querosair){
             if(dinamico){
                 if(!processodinamico!!.isAlive){
                     processodinamico!!.start()
@@ -1646,6 +1651,55 @@ processodinamico =Thread{
             ocupado = false
 
         }
+        regi.forEach {
+            tama ->
+            println(tama.icon)
+            print("Nome: ${tama.Nome}  Idade: ${tama.idade}  Ano de Nacimento: ${tama.anonasci} ")
+            if(tama.anomorte != null){
+                print("Ano da morte: ${tama.anomorte}")
+            }else{
+                print("Ano da morte: ")
+            }
+            if(tama.fugir){
+                print(" Status: fugiu.")
+            }else if(tama.fugir && !tama.Vivo){
+                print(" Status: fugiu e ${frasemortes[Random.nextInt(0,frasemortes.size)]}")
+            }else if(!tama.Vivo){
+                print(" Status: ${frasemortes[Random.nextInt(0,frasemortes.size)]}")
+            }else{
+                print(" Status: está vivo.")
+            }
+            if(tama.Pais != null){
+                print("\nPais: ${tama.Pais}")
+            }else{
+                print("\nPais: Desconhecidos")
+            }
+            if(tama.parceira != null){
+                print(" Parceira: ${tama.parceira}")
+            }
+            if(tama.filho!!.size > 0){
+                print(" filho(s):")
+                for (x in tama.filho!!){
+                    if(tama.filho!!.indexOf(x) != tama.filho!!.size -1){
+                    print(" $x,")}else{
+                        print(" $x.")
+                    }
+                }
+            }
+            if(!tama.Vivo){
+                print("\nCausa da morte: ${tama.causadamorte}")
+            }
+            println("\nMomento marcante: ${tama.frase}")
+            println(tama.analisedavida)
+
+            var r = readln()
+            if(r == "Sair" || r == "S" || r == "N"){
+                return@forEach
+            }
+
+
+        }
+
         println("Você conseguiu Chegar à $dia")
     }
     fun menu() {
@@ -1665,6 +1719,8 @@ processodinamico =Thread{
             var resp = readln()
 
             when (resp) {
+                "7" -> {
+                    println( g!!.janela!!.icon())}
                 "6" -> {passaardia(); tocador.mudar(musicasJogo[1])}
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
                 "4" -> {darcomida();tocador.mudar(musicasJogo[1])}
@@ -2020,6 +2076,16 @@ eventospecial()
 }
 
 fun main() {
+    var save = File("./Assets/Save.txt")
+    save.forEachLine() { frase ->
+        var numero= ""
+        frase.forEach {
+            if(it.isDigit()){
+                numero += it
+            }
+        }
+        diarecord += numero.toInt()
+    }
     pastamusicaJogo.forEach{ arquivo ->
         musicasJogo.add(arquivo.path)
 
@@ -2029,14 +2095,13 @@ fun main() {
     var tam = false
     var color = false
     var dinamico = false
+    if(diarecord > 50){
+        bloqueio = 0
+    }
     println("Você quer a jogar com janelas grandes? (S/N)")
     var r = readln()
-    while (r.uppercase().replace(" ", "") != "S" && r.uppercase().replace(" ","") != "N"){
-        println("Escreva somente Grande ou Pequena")
-        r = readln()
+    r= verificadoSeN(r)
 
-
-    }
 
 
     when(r!!.uppercase().replace(" ", "")){
@@ -2046,11 +2111,8 @@ fun main() {
     }
     println("Você quer a jogar com cores? (S/N)")
     r = readln()
-    while (r!!.uppercase().replace(" ", "") != "S" && r!!.uppercase().replace(" ","") != "N"){
-        println("Escreva somente S ou N")
-        r = readln()
+    r= verificadoSeN(r)
 
-    }
 
 
     when(r!!.uppercase().replace(" ", "")){
@@ -2060,11 +2122,7 @@ fun main() {
     }
     println("Você quer a jogar de maneira temporal/dinâmica? (S/N)")
     r = readln()
-    while (r!!.uppercase().replace(" ", "") != "S" && r!!.uppercase().replace(" ","") != "N"){
-        println("Escreva somente S ou N")
-        r = readln()
-
-    }
+    r= verificadoSeN(r)
 
 
     when(r!!.uppercase().replace(" ", "")){
@@ -2074,11 +2132,34 @@ fun main() {
     }
     tocador.stop()
     tamo(tam,color,dinamico)
+    while (true){
+    save.writeText("diaRecord = ${diarecord+dia}")
+    println("Quer continuar? (S/N)")
+    r = readln()
+
+        r= verificadoSeN(r)
+
+
+
+        when(r!!.uppercase().replace(" ", "")){
+        "S" -> tamo(tam,color,dinamico)
+        "N" -> dinamico = false
+
+    }}
 
 
 
 
 
+}
+fun verificadoSeN(valor : String):String{
+    var r = valor
+    while (r!!.uppercase().replace(" ", "") != "S" && r!!.uppercase().replace(" ","") != "N"){
+        println("Escreva somente S ou N")
+        r = readln()
+
+    }
+    return(r)
 }
 
 

@@ -1,6 +1,5 @@
 package Jogo
 
-import tama
 import javax.swing.*
 import java.awt.*
 import java.awt.image.BufferedImage
@@ -158,7 +157,7 @@ val velocidade = velocidade
 
 
     }
-    var pasta: BufferedImage = BufferedImage(80,80,10)
+    var Imagemunica: File? = null
     fun fechar(){
         defaultCloseOperation = DISPOSE_ON_CLOSE
         isVisible = false
@@ -190,7 +189,7 @@ val velocidade = velocidade
         listimage.forEach { pastas ->
             var listadeimagem = pastas.listFiles()
             listadeimagem.forEach { image ->
-var iniciar = false
+var iniciar = true
                 if (image.extension == "gif") {
                     var inp = ImageIO.createImageInputStream(image)
                     var read: ImageReader = ImageIO.getImageReadersByFormatName("gif").next()
@@ -200,7 +199,8 @@ var iniciar = false
                     for (x in 0 until frameCount) {
                         val frame: BufferedImage = read.read(x)
                         if(iniciar) {
-                            pasta = frame
+                            Imagemunica = File(image.path)
+                            iniciar = false
                         }
                         var a = if (t == false) 25/* janela pequena*/ else 40 // Janela Grande
                         //l = 70 // janela pequena
@@ -292,7 +292,9 @@ var iniciar = false
                 } else if (image.extension == "jpg" || image.extension == "png" || image.extension == "jpeg") {
                     var frame: BufferedImage = ImageIO.read(image)
                     if(iniciar) {
-                        pasta = frame
+                        Imagemunica = File(image.path)
+                        iniciar = false
+
                     }
                     var a = if (t == false) 20/* janela pequena*/ else 40 // Janela Grande
                     //l = 70 // janela pequena
@@ -527,7 +529,7 @@ var iniciar = false
             while (mudar) {
 
 
-                if(txt.document.length > frameascii[0].length){
+                if(txt.text.length > frameascii[0].length && mudar){
 
 
                     SwingUtilities.invokeAndWait{
@@ -545,10 +547,10 @@ var iniciar = false
 
                 if(inicio*frameascii.size - inicio == txt.document.length){
                     if(col){
-                        SwingUtilities.invokeLater {
+                        SwingUtilities.invokeAndWait() {
                             doc = continuarascii()
                         }}else{
-                            SwingUtilities.invokeLater{
+                            SwingUtilities.invokeAndWait(){
                                 doc = continuarasciisemcor()
                             }
                     }
@@ -598,19 +600,17 @@ mudar = true
         terminar()
 
     }
-    fun icon(image : BufferedImage = pasta,largura: Int = 20,altura:Int =5, corse : Boolean =false): String {
+    fun icon(image : File? = Imagemunica, largura: Int = 20, altura:Int =5): String {
         var i = intensi
 
-        var image = image
+        var image = ImageIO.read(image)
         var reals = BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB)
         var greals: Graphics2D = reals.createGraphics()
         greals.drawImage(image, 0, 0, largura, altura, null)
         greals.dispose()
         var vadi = ""
         var x = 0
-        if (corse) {
-            cor = mutableListOf()
-        }
+
         while (x < reals.height) {
             var j = 0
 
@@ -622,9 +622,6 @@ mudar = true
                 var me = (r + v + a) / 3
                 j++
 
-                if (corse) {
-                    cor.add(c)
-                }
                 var intensida = if (i == 0) {
                     inter(me)
                 } else if (i == 1) {
@@ -648,18 +645,13 @@ mudar = true
                 } else {
                     inter9(me)
                 }
-                vadi += if (col == false) intensida else "\u001B[38;2;$r;$v;${a}m$intensida\u001B[0m"
+                vadi += if (col == false) intensida else "\u001B[38;2;$r;$v;${a}m$intensida"
             }
-            if (corse) {
-                cor.add(Color(0, 0, 0))
-            }
+
             vadi += if (col == false) "\n" else "\u001B[38;2;0;0;0m\n\u001B[0m"
             x++
         }
-        if (corse) {
-            cores.add(cor)
 
-        }
         return (vadi)
     }
 
