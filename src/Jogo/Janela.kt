@@ -530,13 +530,13 @@ var iniciar = true
 
 
                 if(txt.text.length > frameascii[0].length && mudar){
+                    Thread.sleep(velocidade)
 
 
                     SwingUtilities.invokeAndWait{
                         txt.styledDocument.remove(0,frameascii[0].length)
 
                     }
-                    Thread.sleep(velocidade)
         }
 
                 if(F[0].length *2 > txt.document.length){

@@ -1651,8 +1651,13 @@ processodinamico =Thread{
             ocupado = false
 
         }
+       despedida()
+
+        println("Você conseguiu Chegar à $dia")
+    }
+    fun despedida(){
         regi.forEach {
-            tama ->
+                tama ->
             println(tama.icon)
             print("Nome: ${tama.Nome}  Idade: ${tama.idade}  Ano de Nacimento: ${tama.anonasci} ")
             if(tama.anomorte != null){
@@ -1681,7 +1686,7 @@ processodinamico =Thread{
                 print(" filho(s):")
                 for (x in tama.filho!!){
                     if(tama.filho!!.indexOf(x) != tama.filho!!.size -1){
-                    print(" $x,")}else{
+                        print(" $x,")}else{
                         print(" $x.")
                     }
                 }
@@ -1699,8 +1704,6 @@ processodinamico =Thread{
 
 
         }
-
-        println("Você conseguiu Chegar à $dia")
     }
     fun menu() {
         println(intro)
@@ -2143,7 +2146,7 @@ fun main() {
 
         when(r!!.uppercase().replace(" ", "")){
         "S" -> tamo(tam,color,dinamico)
-        "N" -> dinamico = false
+        "N" -> break
 
     }}
 
