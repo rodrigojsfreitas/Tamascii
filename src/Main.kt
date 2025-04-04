@@ -1,11 +1,9 @@
 import Jogo.janela
 import java.io.File
 import javax.sound.sampled.*
-import kotlin.contracts.Returns
 import kotlin.random.Random
-import kotlin.random.nextInt
-
-var diarecord = 0
+var es = 12
+var diaRecord = 0
 var tocador = Player()
 var pastamusicaJogo = File("./Assets/Músicas/Jogo/").listFiles().filter { it.extension == "wav" }.sortedBy { it.name.filter { it.isDigit() }.toInt() }
 var pastamusicaGabriel = File("./Assets/Músicas/Gabriel/").listFiles().filter { it.extension == "wav" }
@@ -321,8 +319,11 @@ val palaInfancia = arrayOf(
 )
 
 var eventos = arrayOf("Normal", "Natal", "Ano novo")
-var estados = arrayOf("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
-var estações = arrayOf("Verão", "Outono","Inverno","Primavera")
+var listaDeTipoDeEmocoes = arrayOf("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
+var estacoes = arrayOf(estacao("   |   ".repeat(es)+"\n"+" - O - ".repeat(es)+"\n"+"   |   ".repeat(es),"Verão"),
+    estacao("   |   ".repeat(es)+"\n"+"  /|\\  ".repeat(es)+"\n"+ "  \\|/  ".repeat(es),"Outono"),
+    estacao("o    o ".repeat(es)+ "\n" + " o o   ".repeat(es) + "\n" +" o    o".repeat(es),"Inverno"),
+    estacao(" \\ ^ / ".repeat(es)+"\n"+" < O > ".repeat(es)+"\n"+" / v \\ ".repeat(es),"Primavera"))
 var palaBoa = arrayOf("curtiu", "gostou de","amou","adorou","apreciou")
 var palaAcoMorte = arrayOf("comendo miojo",
     "assaltando um banco",
@@ -484,198 +485,262 @@ var dia = 0
 // sistema de rivalidade
 // eventos aleatórios
 //colocar os estados ausentes como null
-var estoque = mutableListOf<comida>()
-var diaadia = Random.nextInt(1,101)
-var regi = mutableListOf<tama>()
-var famili = mutableListOf<tamo.gochi>()
-data class atributos(val variavel : String ,val valor : String)
-data class tama(val Nome: String, val idade: Int, val frase : String,val anomorte:Int? = 0, val anonasci: Int, val icon : String, val Vivo :Boolean, var causadamorte: String? = "Morte morrida",val parceira: String? = "não teve",val Pais:String? = "Não sabe", var filho: MutableList<String>? = null,var analisedavida : String = "Teve uma vida feliz", var fugir : Boolean )
+data class estacao(val intro:String, val estação: String)
+
 data class comida (val nome : String,var qualidade: Int)
 
-class tamo(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
-    var tamanho = tamanho; var colorido = colorido;var periododoano = 0; var estação = estações[periododoano]; var evento = "Normal"
-    var es = 12; var dinheiro = 0; var dinhero = 0
-    var p = " \\ ^ / ".repeat(es)+"\n"+" < O > ".repeat(es)+"\n"+" / v \\ ".repeat(es)
-    var v = "   |   ".repeat(es)+"\n"+" - O - ".repeat(es)+"\n"+"   |   ".repeat(es)
-    var o = "   |   ".repeat(es)+"\n"+"  /|\\  ".repeat(es)+"\n"+ "  \\|/  ".repeat(es)
-    var i = "o    o ".repeat(es)+ "\n" + " o o   ".repeat(es) + "\n" +" o    o".repeat(es)
-    var introestação = mutableListOf<String>(v,o,i,p);var intro = introestação[periododoano]
-    var mapadecomida = false; var rastreadordecomida = false; var processodinamico : Thread? = null
-    fun eventospecial(){// colocar no tama
-        if (estação == "Inverno" || estação == "Verão"){
-            var numeroaleatorio = Random.nextInt(1,32)
-            if (numeroaleatorio == 24 || numeroaleatorio == 25){
+
+class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
+
+    var estoque = mutableListOf<comida>()
+    var diaadia = Random.nextInt(1,101)
+    var regi = mutableListOf<tama>()
+    var famili = mutableListOf<jogoTama.gochi>()
+
+
+    data class doenca(var doente: Boolean = false, var contadorDeDoenca: Int = 0,var doencaGenetica: Boolean = false,
+                      var doencaContagiosa: Boolean = false, var danoDoencaConstante: Boolean = false,
+                      var danoDoenca : Int = 0, var iniciarDoenca: Boolean = true)
+
+    data class familia(var parceira: jogoTama.gochi? = null, var filho: MutableList<String>? = mutableListOf(),
+                       var pais: String = "Desconhecido", var filhoID : MutableList<Int> = mutableListOf(), var paisID : MutableList<Int> = mutableListOf(),
+                       var nomeParceira : String? = null, var parceiraID : Int? = null)
+
+
+    data class sentimentos(val pastaEmocao: String, val emocaoString: String)
+
+
+    data class caracteristicasTama(
+        var vida : Int = 50, var fome : Int = 50, var felicidade : Int = 50, var sexappel : Int = 50, var vidaReal: Int = 0, var fomeReal : Int = 0,
+        var felicidadeReal : Int = 0, var sexappelReal: Int = 0, var tamanhoDaFamilia : Int = 4, var porcentagemGeral : Double = 0.3,
+        var ativo : Boolean = true, var chanceDeEngravidar : Int = 0, var frases: MutableList<String> = mutableListOf(), var intensidadeCustomizadaBoolean : Boolean = false,
+        var intensidadeCustomizadaString: String = "", var desenho: Boolean? = false, var nome : String = "", var idade : Int = 0, var janela : janela? = null,
+        var diaParaTrocaDeEmocao: Int = 0, var luto : Boolean = false, var identificador : Int = Random.nextInt(1,1001), var seed : Int = 0, var anoNasci: Int = 0, var anoMorte: Int? = null, var vivo:Boolean = true,
+        var intros : MutableList<String> = mutableListOf(), var intro : String = "", var carinho : Boolean = false, var fugiu: Boolean = false, var velocidade : Long = 50, var tipoDoGochi: String = "Gochi generico"
+    )
+
+    data class atributos(val variavel : String ,val valor : String)
+
+    data class tama(val nome: String, val idade: Int, val frase : String, val anoMorte:Int? = 0,
+                    val anoNasci: Int, val icon : String, val vivo :Boolean, var causaDaMorte: String? = "Morte morrida",
+                    val parceira: String? = "não teve", val pais:String? = "Não sabe", val filho: MutableList<String>? = null,
+                    val analiseDaVida : String = "Teve uma vida feliz", val fugir : Boolean )
+
+
+    data class rival(var rivalNome: String? = null,var rivalidade : Boolean = false,var rivalTipoGochi: String? = null, var rivalIdentificador: Int? = null,var rivalSeed: Int? = null)
+
+
+    var tamanho = tamanho;
+    var colorido = colorido;
+    var periodoDoAno = 0;
+    var estacao = estacoes[periodoDoAno].estação;
+    var evento = "Normal"
+            ;
+    var dinheiro = 0;
+    var asciiDeApresentaçãoDaEstacao = estacoes[periodoDoAno].intro
+    var mapadecomida = false
+    var rastreadordecomida = false
+    var processodinamico: Thread? = null
+    fun eventospecial() {
+        if (estacao == "Inverno" || estacao == "Verão") {
+            var numeroaleatorio = Random.nextInt(1, 32)
+            if (numeroaleatorio == 24 || numeroaleatorio == 25) {
                 evento = eventos[1]
-            }else if (numeroaleatorio == 31){
+                println("Hoje é natal")
+            } else if (numeroaleatorio == 31) {
                 evento = eventos[2]
+                println("Hoje é ano novo")
+            } else {
+                evento = eventos[0]
             }
         }
 
     }
-    fun tempo(){
-if(periododoano < introestação.size){
-   estação =  estações[periododoano]
-    intro = introestação[periododoano]
-    periododoano++
-}else{
-    periododoano = 0
-    estação =  estações[periododoano]
-    intro = introestação[periododoano]
-}
+
+    fun tempo() {
+        if (periodoDoAno < estacoes.size) {
+            estacao = estacoes[periodoDoAno].estação
+            asciiDeApresentaçãoDaEstacao = estacoes[periodoDoAno].intro
+            periodoDoAno++
+        } else {
+            periodoDoAno = 0
+            estacao = estacoes[periodoDoAno].estação
+            asciiDeApresentaçãoDaEstacao = estacoes[periodoDoAno].intro
+        }
     }
-    inner class gochi(){
-        var pasta1normal: String? = null; var pasta2feliz: String? = null; var pasta3nervoso : String?= null; var pasta4dormindo: String? = null; var pasta5hibernando :String? = null; var pasta6romantico : String? = null
-        var identificador = Random.nextInt(1000); var rivalnome = ""; var rivalidentificador = 0
-        var v = 100; var f = 100; var fe = 100; var s = 100;var gch = "";var anonasci = 0; var seed = 0;var vivo = true;var numeroemo : Int? = null;var estado = "Feliz"; var anomorte : Int? = null
-        var bv = v; var bf = f; var bfe = fe; var bs = s;var parceira : gochi? = null; var luto : Boolean = false; var ativo = true; var probageral = 0.3; var rivalseed = 0; var nomeparceira = ""
-        var idade = 0; var nome = "";var rival = ""; var rivalidade = false; var customintesidade: String = ""; var desenho = false; var Pais = "Desconhecido"; var custominten = false
-        var frases = mutableListOf<String>(); var chancedeengravidar = 0; var intros = mutableListOf<String>() ; var intro = ""; var doente = false; var remedio = false
-        var janela : janela? = null; var carinho = false ;var iniciardoença = 0; var danodoenca = 0;var danoconstante = false;var videojogo = false;var convideojogo = 0
-        var vacina = false; var acariciador = false; var bolodeprestigio = false; var brinquedo = false; var acordomorte = false; var doencacontagiosa = false; var doencagenetica = false; var filhos  = mutableListOf<String>()
-        var fugiu = false; var tamanhofamili = 4; var velocidade: Long = 50
-        var condoenca = 0; var idparceira = 0; var idpais = mutableListOf<Int>(); var idfilho = mutableListOf<Int>()
+
+    inner class gochi() {
+        var caracteristicas = caracteristicasTama()
+        var doenca = doenca()
+        var familia = familia()
+        var rival = rival()
+        var listaDeEmocao = mutableListOf<sentimentos>()
+        var emocao: sentimentos? = null;
+        var remedio = false
+        var videojogo = false;
+        var contadorDeAbstinenciadeVideojogos = 0
+        var vacina = false;
+        var acariciador = false;
+        var bolodeprestigio = false;
+        var brinquedo = false;
+        var acordomorte = false;
         fun doente() {
-            if (iniciardoença == 0){
-                println("$nome ficou doente")
-                danoconstante = Random.nextBoolean()}
-            if (iniciardoença == 0 || !danoconstante){
-                if(idade < 4){
-                    danodoenca = Random.nextInt(0,3)
-                }else if (idade < 14){
-                    danodoenca = Random.nextInt(0,6)
-                }else{
-                    danodoenca = Random.nextInt(0,11)
+            if (doenca.iniciarDoenca) {
+                println("${caracteristicas.nome} ficou doente")
+                doenca.danoDoencaConstante = Random.nextBoolean()
+            }
+            if (doenca.iniciarDoenca || !doenca.danoDoencaConstante) {
+                if (caracteristicas.idade < 4) {
+                    doenca.danoDoenca = Random.nextInt(0, 3)
+                } else if (caracteristicas.idade < 14) {
+                    doenca.danoDoenca = Random.nextInt(0, 6)
+                } else {
+                    doenca.danoDoenca = Random.nextInt(0, 11)
                 }
             }
-            if(doente){
-                bv -= danodoenca
-                if ( iniciardoença > 1){
+            if (doenca.doente) {
+                caracteristicas.vidaReal -= doenca.danoDoenca
+                doenca.iniciarDoenca = false
+                if (!doenca.iniciarDoenca) {
                     var cura = Random.nextInt(101)
-                    var nãofunciona = idade*2
-                    if (cura > nãofunciona){
-                        println("$nome foi curado")
-                        condoenca--
-                        if(condoenca ==0){
-                        doente = false}
-                        iniciardoença = 0
-                    }else if (cura == danodoenca){
-                        println("A doença de $nome piorou")
-                        danodoenca *=2
-                        bv -= danodoenca
-                    }else{
-                        println("$nome continua doente")
-                    }}
-                iniciardoença ++
+                    var nãofunciona = caracteristicas.idade * 2
+                    if (cura > nãofunciona) {
+                        println("${caracteristicas.nome} foi curado")
+                        doenca.contadorDeDoenca--
+                        if (doenca.contadorDeDoenca == 0) {
+                            doenca.doente = false
+                            doenca.iniciarDoenca = true
+                        }
+                    } else if (cura == doenca.danoDoenca) {
+                        println("A doença de ${caracteristicas.nome} piorou")
+                        doenca.danoDoenca *= 2
+                        caracteristicas.vidaReal -= doenca.danoDoenca
+
+                    } else {
+                        println("${caracteristicas.nome} continua doente")
+
+                    }
+                }
             }
         }
-        fun acao (){
-            var palavra = if (diaadia <= bfe) palaBoa[Random.nextInt(0,palaBoa.size)] else palamal[Random.nextInt(0,palamal.size)]
+
+        fun acao() {
+            var palavra = if (diaadia <= caracteristicas.felicidadeReal) palaBoa[Random.nextInt(0, palaBoa.size)] else palamal[Random.nextInt(
+                0,
+                palamal.size
+            )]
             var ato = ""
             var frase = ""
-            while (true){
+            while (true) {
 
-                if (diaadia == 66){
-                    frase = "O(a) $nome teve aula com o Júlio e quase chorou"
-                    bfe -= 7
+                if (diaadia == 66) {
+                    frase = "O(a) ${caracteristicas.nome} teve aula com o Júlio e quase chorou."
+                    caracteristicas.felicidadeReal -= 7
                     break
-                }else if (diaadia == 61){
-                    frase = "O(a) $nome recebeu o Jaílson em casa"
-                    if(diaadia <= bfe) bfe -= 7 else bfe -= 3
+                } else if (diaadia == 61) {
+                    frase = "O(a) ${caracteristicas.nome} recebeu o Jaílson em casa."
+                    if (diaadia <= caracteristicas.felicidadeReal) caracteristicas.felicidadeReal -= 7 else caracteristicas.felicidadeReal -= 3
                     break
-                }else if (diaadia == 77){
-                    frase = "O(a) $nome recebeu o Gabriel em casa"
-                    if(diaadia <= bfe) bfe += 3 else bfe -= 3
+                } else if (diaadia == 77) {
+                    frase = "O(a) ${caracteristicas.nome} recebeu o Gabriel em casa."
+                    if (diaadia <= caracteristicas.felicidadeReal) caracteristicas.felicidadeReal += 3 else caracteristicas.felicidadeReal -= 3
                     break
-                }else if (idade <4){
-                    ato = palaInfancia[Random.nextInt(0,palaInfancia.size)]
-                }else if (idade < 14){
-                    ato = palaAco[Random.nextInt(0,palaAco.size)]
-                }else{
-                    ato = palaVelhice[Random.nextInt(0,palaVelhice.size)]
+                } else if (caracteristicas.idade < 4) {
+                    ato = palaInfancia[Random.nextInt(0, palaInfancia.size)]
+                } else if (caracteristicas.idade < 14) {
+                    ato = palaAco[Random.nextInt(0, palaAco.size)]
+                } else {
+                    ato = palaVelhice[Random.nextInt(0, palaVelhice.size)]
                 }
-                frase = "O(a) $nome $palavra $ato"
+                frase = "O(a) ${caracteristicas.nome} $palavra $ato"
                 break
             }
             println(frase)
-            frases.add(frase)
+            caracteristicas.frases.add(frase)
         }
 
-        fun romance(){
-            var numeroaleatorio : Int
-            if (estado == estados[5]){
-                numeroaleatorio = Random.nextInt(1,(seed+1*1.5).toInt())
-            }else{
-                numeroaleatorio = Random.nextInt(1,seed+1)}
-            if ( famili.size <= tamanhofamili){
-                if ( parceira == null ){
-                    if (numeroaleatorio <= bs){
-                        println("$nome encontrou uma parcera(o)")
-                        bfe += 10
-                        parceira = gochi()
-                        parceira!!.nomeparceira = nome
-                        parceira!!.ativo = false
-                        parceira!!.idparceira = identificador
-                        idparceira = parceira!!.identificador
-                    }}else{
-                    var realchancedeengravidar = if (parceira!!.chancedeengravidar == 0) 0 else (parceira!!.chancedeengravidar + chancedeengravidar)/2
-                    if (Random.nextInt(1,101) <= realchancedeengravidar){
+        fun romance() {
+            var numeroaleatorio: Int
+            if (emocao!!.emocaoString == listaDeTipoDeEmocoes[5]) {
+                numeroaleatorio = Random.nextInt(1, (caracteristicas.seed + 1 * 1.5).toInt())
+            } else {
+                numeroaleatorio = Random.nextInt(1, caracteristicas.seed + 1)
+            }
+            if (famili.size <= caracteristicas.tamanhoDaFamilia) {
+                if (familia.parceira == null) {
+                    if (numeroaleatorio <= caracteristicas.sexappelReal) {
+                        println("$caracteristicas.nome encontrou uma parcera(o)")
+                        caracteristicas.felicidadeReal += 10
+                        familia.parceira = gochi()
+                        familia.nomeParceira = familia!!.parceira!!.caracteristicas.nome
+                        familia.parceira!!.familia.nomeParceira = caracteristicas.nome
+                        familia.parceira!!.caracteristicas.idade = Random.nextInt(5, 14)
+                        familia.parceira!!.caracteristicas.ativo = false
+                        familia.parceira!!.familia.parceiraID = caracteristicas.identificador
+                        familia.parceiraID = familia.parceira!!.caracteristicas.identificador
+                    }
+                } else {
+                    var realchancedeengravidar =
+                        if (familia.parceira!!.caracteristicas.chanceDeEngravidar == 0 || caracteristicas.chanceDeEngravidar == 0) 0 else (familia.parceira!!.caracteristicas.chanceDeEngravidar + caracteristicas.chanceDeEngravidar) / 2
+                    if (Random.nextInt(0, 101) <= realchancedeengravidar) {
                         var filho = gochi()
-                        if (filho.gch == gch || parceira!!.gch == filho.gch){
-                            println("$nome e ${parceira!!.nome} tiveram um filho")
-                            filhos.add(filho.nome)
-                            parceira!!.filhos.add(filho.nome)
-
-                            bfe += 10
-                            parceira!!.bfe += 10
-                            filho.idpais.add(identificador)
-                            filho.idpais.add(parceira!!.identificador)
-                            idfilho.add(filho.identificador)
-                            parceira!!.idfilho.add(filho.identificador)
-                            filho.Pais = "$nome e ${parceira!!.nome}"
-                        if(parceira!!.doencagenetica||doencagenetica){
-                            filho.doencagenetica = true
-                        }
+                        if(filho.caracteristicas.tipoDoGochi == caracteristicas.tipoDoGochi || filho.caracteristicas.tipoDoGochi == familia.parceira!!.caracteristicas.tipoDoGochi){
+                            println("${caracteristicas.nome} e ${familia.parceira!!.caracteristicas.nome} tiveram um filho")
+                            filho.familia.pais = "${caracteristicas.nome} e ${familia.parceira!!.caracteristicas.nome}"
                         }else{
-                            filho.idade = Random.nextInt(0,5)
-                            println("$nome e ${parceira!!.nome} adotaram uma criança")
-                            bfe += 10
-                            filho.Pais = "Pais adotivos: $nome e ${parceira!!.nome}"
+                            println("${caracteristicas.nome} e ${familia.parceira!!.caracteristicas.nome} adotaram uma criança")
+                            filho.familia.pais = "Pais adotivos: ${caracteristicas.nome} e ${familia.parceira!!.caracteristicas.nome}"
+                            filho.caracteristicas.idade = Random.nextInt(0, 5)
                         }
-                    }}
+                            familia.filho!!.add(filho.caracteristicas.nome)
+                            familia.parceira!!.familia.filho!!.add(filho.caracteristicas.nome)
+
+                        caracteristicas.felicidadeReal += 10
+                            familia.parceira!!.caracteristicas.felicidadeReal += 10
+                            filho.familia.paisID.add(caracteristicas.identificador)
+                            filho.familia.paisID.add(familia.parceira!!.caracteristicas.identificador)
+                            familia.filhoID.add(filho.caracteristicas.identificador)
+                            familia.parceira!!.familia.filhoID.add(filho.caracteristicas.identificador)
+
+                            if (familia.parceira!!.doenca.doencaGenetica || doenca.doencaGenetica) {
+                                filho.doenca.doencaGenetica = Random.nextBoolean()
+                            }
+                    }
+                }
             }
         }
+
         fun rivalidade() {
             var index = 0
             while (index in 0 until famili.size) {
                 var x = famili.get(index)
                 index++
                 if (x != this) {
-                    if (rival == null) {
+                    if (rival.rivalTipoGochi == null) {
 
-                        if (seed == x.seed) {
-                            rival = x.gch
-                            rivalidade = true
-                            x.rivalidade = true
-                            rivalseed = x.seed
-                            rivalnome = x.nome
-                            rivalidentificador = x.identificador
+                        if (caracteristicas.seed == x.caracteristicas.seed) {
+                            rival.rivalTipoGochi = x.caracteristicas.tipoDoGochi
+                            rival.rivalidade = true
+                            rival.rivalSeed = x.caracteristicas.seed
+                            rival.rivalNome = x.caracteristicas.nome
+                            rival.rivalIdentificador = x.caracteristicas.identificador
                         }
-                    } else if (!rivalidade) {
-                        if (x.gch == rival) {
-                            rivalidade = true
-                            x.rivalidade = true
-                            rivalseed = x.seed
-                            rivalnome = x.nome
-                            rivalidentificador = x.identificador
-                        } else if (x.seed == rivalseed && rival == x.gch && rivalnome == x.nome && x.identificador == rivalidentificador) {
+                    } else if (!rival.rivalidade) {
+                        if (x.caracteristicas.tipoDoGochi == rival.rivalTipoGochi) {
+                            rival.rivalidade = true
+                            rival.rivalSeed = x.caracteristicas.seed
+                            rival.rivalNome = x.caracteristicas.nome
+                            rival.rivalIdentificador = x.caracteristicas.identificador
+                        } else if (x.caracteristicas.seed == rival.rivalSeed && rival.rivalTipoGochi == x.caracteristicas.tipoDoGochi && rival.rivalNome == x.caracteristicas.nome
+                            && x.caracteristicas.identificador == rival.rivalIdentificador) {
                             var numeroaleatorio = Random.nextInt(0, 101)
-                            var numeroataque = Random.nextInt(1, seed + 1)
+                            var numeroataque = Random.nextInt(1, caracteristicas.seed + 1)
                             if (numeroaleatorio < numeroataque) {
-                                x.bv -= 10
-                                println("O $nome bateu no ${x.nome}")
+                                x.caracteristicas.vidaReal -= 10
+                                println("O ${caracteristicas.nome} bateu no ${x.caracteristicas.nome}")
                             } else if (numeroaleatorio == 100) {
                                 famili.remove(x)
-                                println("O $nome matou o ${x.nome}")
+                                println("O ${caracteristicas.nome} matou o ${x.caracteristicas.nome}")
 
                             }
                         }
@@ -687,158 +752,158 @@ if(periododoano < introestação.size){
         }
 
         //var estados = arrayOf("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
-        fun emotroca(){
-if(estado == estados[0]){
-    if(pasta1normal != null){
-        janela!!.mdg(pasta1normal!!)
+        fun emotroca() {
+            if (emocao!!.emocaoString == listaDeTipoDeEmocoes[0]){
+                caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
+            } else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[1]){//colocar mudar() a imagem do estado. ("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
+                caracteristicas.janela!!.mdg(emocao!!.emocaoString)
+            }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[2]){
+                caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
+            } else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[3]){
+                caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
+            }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[4]) {
+                caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
+        }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[5]){
+                caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
     }
+
 }
-            if (estado == estados[1]){//colocar mudar() a imagem do estado. ("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
-                if (pasta2feliz != null){
-                    janela!!.mdg(pasta2feliz!!)}else{
-                        emocao()
-                }
-            }else if (estado == estados[2]){
-                if (pasta3nervoso != null){
-                    janela!!.mdg(pasta3nervoso!!)}else{
-                    emocao()
-
-                }
-
-            }else if (estado == estados[3]){
-                if (pasta4dormindo != null){
-                    janela!!.mdg(pasta4dormindo!!)}else{
-                    emocao()
-
-                }
-            }else if (estado == estados[4]){
-                if (pasta5hibernando != null && bf > f/2){
-                    janela!!.mdg(pasta5hibernando!!)}else{
-                    emocao()
-
-                }
-            }else if (estado == estados[5]){
-                if (pasta6romantico != null){
-                    janela!!.mdg(pasta6romantico!!)}else{
-                    emocao()
-
-                }
-            }
-        }
         fun emocao(){
             var personalidade = Random.nextInt(0, 101)
-            if( pasta1normal != null){
-                estado = if (seed < personalidade) estados[Random.nextInt(0,estados.size)] else estados[0]}
+            if( listaDeEmocao[0].emocaoString == listaDeTipoDeEmocoes[0]){
+                emocao = if (caracteristicas.seed < personalidade) listaDeEmocao[Random.nextInt(0,listaDeEmocao.size)] else listaDeEmocao[0]}
             else{
-                estado = estados[Random.nextInt(0,estados.size)]
+                emocao =  listaDeEmocao[Random.nextInt(0,listaDeEmocao.size)]
             }
-            if(estado == estados[1] || estado == estados[2]){
-                estado = if(personalidade < bfe) estados[0] else estados[1]
+            if(emocao!!.emocaoString == listaDeEmocao[1].emocaoString || emocao!!.emocaoString == listaDeEmocao[2].emocaoString){
+                emocao = if(personalidade < caracteristicas.felicidadeReal) listaDeEmocao[1] else listaDeEmocao[2]
             }
             emotroca()
         }
         var analisedavida : String? = null
-        fun fugir(){
-            fugiu = true
-            var fugir = Random.nextInt(0,101)
-            if (fugir == 0){
+        fun fugir() {
+            caracteristicas.fugiu = true
+            var fugir = Random.nextInt(0, 101)
+            if (fugir == 0) {
                 tocador.mudar(musicasJogo[9])
-                println("O $nome fugiu para casa do Gabs. Ele acabou morrendo pela metralhadora de piadas sem graça do Gabriel porque não levantou no ônibus para uma menina")
-                vivo = false
-                anomorte = dia
+                println("O ${caracteristicas.nome} fugiu para casa do Gabs. Ele acabou morrendo pela metralhadora de piadas sem graça do Gabriel porque não levantou no ônibus para uma menina")
+                caracteristicas.vivo = false
+                caracteristicas.anoMorte = dia
                 readln()
 
-            }
-            else if(fugir == 66 || fugir == 61){
-                vivo = false
-                anomorte = dia
-                causadamorte = "O(a) $nome vendo uma careca lustrada"
-                tocador.mudar(musicasJogo[Random.nextInt(9,11)])
-                println("O $nome fugiu para casa do JaJa. Ele acabou morrendo de desgosto e suas últimas palavras foram: 'CARECA,CARECA,CARECA'")
+            } else if (fugir == 66 || fugir == 61) {
+                caracteristicas.vivo = false
+                caracteristicas.anoMorte = dia
+                causadamorte = "O(a) ${caracteristicas.nome} vendo uma careca lustrada"
+                tocador.mudar(musicasJogo[Random.nextInt(9, 11)])
+                println("O ${caracteristicas.nome}fugiu para casa do JaJa. Ele acabou morrendo de desgosto e suas últimas palavras foram: 'CARECA,CARECA,CARECA'")
                 readln()
 
-            } else if (fugir == 1){
-                var numeroaleatorion = Random.nextInt(0,musicasJailson.size)
+            } else if (fugir == 1) {
+                var numeroaleatorion = Random.nextInt(0, musicasJailson.size)
                 tocador.mudar(musicasJailson[numeroaleatorion])
-                vivo = false
-                anomorte = dia
-                causadamorte = "O(a) $nome morreu Descobrindo a verdade"
-                janela!!.mdg("./Assets/finaJailson/1/1.png")
-                println("O $nome fugiu para casa do JaJa. Depois de anos juntos, a máscara da mentira foi quebrada e sua face foi beijada pela verdade, nos últimos minutos de vida, ele disse: 'O Jaílson é muito melhor que o Gabriel e ele é o melhor professor do Pr... de todos os Senacs':" +
-                        "\nAqui é o JaJa, o dono da caneta, Chego pesado, te deixo na treta. Sua lista da pureza não é nada, Só fachada, tua moral tá quebrada.\n" +
-                        "\n" +
-                        "Já era, acabou, o JaJa te detonou, Com cada verso, o palco inteiro ecoou. Gabs, meu chapa, tá na hora de aceitar, No código e no flow, você não vai me alcançar.\n" +
-                        "\n" +
-                        "Eu sou o Jailson, o mestre da codificação, Te deixo perdido, sem direção. Enquanto eu brilho, você só apaga, Na batalha, meu nome é quem se propaga.")
-                analisedavida = "O(a) $nome teve uma vida de revelações"
+                caracteristicas.vivo = false
+                caracteristicas.anoMorte = dia
+                causadamorte = "O(a) ${caracteristicas.nome} morreu Descobrindo a verdade"
+                caracteristicas.janela!!.mdg("./Assets/finaJailson/1/1.png")
+                println(
+                    "O ${caracteristicas.nome} fugiu para casa do JaJa. Depois de anos juntos, a máscara da mentira foi quebrada e sua face foi beijada pela verdade, nos últimos minutos de vida, ele disse: 'O Jaílson é muito melhor que o Gabriel e ele é o melhor professor do Pr... de todos os Senacs':" +
+                            "\nAqui é o JaJa, o dono da caneta, Chego pesado, te deixo na treta. Sua lista da pureza não é nada, Só fachada, tua moral tá quebrada.\n" +
+                            "\n" +
+                            "Já era, acabou, o JaJa te detonou, Com cada verso, o palco inteiro ecoou. Gabs, meu chapa, tá na hora de aceitar, No código e no flow, você não vai me alcançar.\n" +
+                            "\n" +
+                            "Eu sou o Jailson, o mestre da codificação, Te deixo perdido, sem direção. Enquanto eu brilho, você só apaga, Na batalha, meu nome é quem se propaga."
+                )
+                analisedavida = "O(a) ${caracteristicas.nome} teve uma vida de revelações"
                 readln()
 
-            }else if ( fugir <= 50){
+            } else if (fugir <= 50) {
                 tocador.mudar(musicasJogo[8])
-                println("O $nome fugiu para casa do Gabs. Ele teve uma vida feliz e saudável")
+                println("O ${caracteristicas.nome} fugiu para casa do Gabs. Ele teve uma vida feliz e saudável")
                 readln()
 
-analisedavida = "Teve uma vida feliz"
-            }else if (fugir == 100){
-                var numeroaleatorion = Random.nextInt(0,musicasGabriel.size)
+                analisedavida = "Teve uma vida feliz"
+            } else if (fugir == 100) {
+                var numeroaleatorion = Random.nextInt(0, musicasGabriel.size)
                 tocador.mudar(musicasGabriel[numeroaleatorion])
-                vivo = false
-                anomorte = dia
-                causadamorte = "O(a) $nome morreu por ser feliz demais"
+                caracteristicas.vivo = false
+                caracteristicas.anoMorte = dia
+                causadamorte = "O(a) ${caracteristicas.nome} morreu por ser feliz demais"
 
                 causadamorte = "Ser feliz demais"
-                println("O $nome fugiu para casa do Gabs. Eles viveram felizer para sempre e nos seus últimos momentos cantaram em uma só voz: " +
-                        "\n" +
-                        "Hino do Gabriel\nÉ a tropa do Gabs, chegou pra dominar, \n" +
-                        "Na lista da pureza,não tem erro, ninguém vai nos parar. \n" +
-                        "Mulheres primeiro, respeito é o lema, \n" +
-                        "Enquanto os bobos do JaJa só criam problema. \n" +
-                        "\n" +
-                        "Tropa do Gabs, só meia dúzia de atividades pra te humilhar, \n" +
-                        "Enquanto os do Jailson, 40 pra chorar. \n" +
-                        "Aqui é estratégia, aqui é visão, \n" +
-                        "Tropa do Gabs, sempre na missão. \n" +
-                        " \n" +
-                        "Os garotos de programa do Gabs são brabos, pode acreditar, \n" +
-                        "E as garotas de p... Nem vou falar, só dá pra admirar. \n" +
-                        "Quando o Gabs entra na metralhadora de piada, \n" +
-                        "Cai fora, Jajá, sua turma foi derrotada. \n" +
-                        "\n" +
-                        "Tropa do Gabs, só meia dúzia de atividades pra te humilhar, \n" +
-                        "Enquanto os do Jailson, 40 pra chorar. \n" +
-                        "Na lista da pureza, tamo no topo, \n" +
-                        "Jailson e os bobos, só ficam no sufoco. \n" +
-                        " \n" +
-                        "A turma do Jailson só toma surra programada, \n" +
-                        "Enquanto o Gabs comanda, a vitória é garantida. \n" +
-                        "Respeita o Gabs, que aqui é só talento, \n" +
-                        "Tropa do Gabs, ninguém pode deter. ")
-                analisedavida = "O(a) $nome teve uma vida boa demais feliz"
+                println(
+                    "O ${caracteristicas.nome} fugiu para casa do Gabs. Eles viveram felizer para sempre e nos seus últimos momentos cantaram em uma só voz: " +
+                            "\n" +
+                            "Hino do Gabriel\nÉ a tropa do Gabs, chegou pra dominar, \n" +
+                            "Na lista da pureza,não tem erro, ninguém vai nos parar. \n" +
+                            "Mulheres primeiro, respeito é o lema, \n" +
+                            "Enquanto os bobos do JaJa só criam problema. \n" +
+                            "\n" +
+                            "Tropa do Gabs, só meia dúzia de atividades pra te humilhar, \n" +
+                            "Enquanto os do Jailson, 40 pra chorar. \n" +
+                            "Aqui é estratégia, aqui é visão, \n" +
+                            "Tropa do Gabs, sempre na missão. \n" +
+                            " \n" +
+                            "Os garotos de programa do Gabs são brabos, pode acreditar, \n" +
+                            "E as garotas de p... Nem vou falar, só dá pra admirar. \n" +
+                            "Quando o Gabs entra na metralhadora de piada, \n" +
+                            "Cai fora, Jajá, sua turma foi derrotada. \n" +
+                            "\n" +
+                            "Tropa do Gabs, só meia dúzia de atividades pra te humilhar, \n" +
+                            "Enquanto os do Jailson, 40 pra chorar. \n" +
+                            "Na lista da pureza, tamo no topo, \n" +
+                            "Jailson e os bobos, só ficam no sufoco. \n" +
+                            " \n" +
+                            "A turma do Jailson só toma surra programada, \n" +
+                            "Enquanto o Gabs comanda, a vitória é garantida. \n" +
+                            "Respeita o Gabs, que aqui é só talento, \n" +
+                            "Tropa do Gabs, ninguém pode deter. "
+                )
+                analisedavida = "O(a) ${caracteristicas.nome} teve uma vida boa demais feliz"
 
                 readln()
-            }else{
+            } else {
                 tocador.mudar(musicasJogo[6])
-                println("O $nome fugiu para casa do JaJa. Ele viveu uma vida triste e miserável")
+                println("O ${caracteristicas.nome} fugiu para casa do JaJa. Ele viveu uma vida triste e miserável")
                 readln()
-analisedavida = "O(a) $nome teve uma vida triste"
+                analisedavida = "O(a) ${caracteristicas.nome} teve uma vida triste"
             }
-            if(analisedavida == null){
-                if(diafeliz > diatriste){
-                    analisedavida = if(diafeliz > diatriste) "O(a) $nome teve uma vida feliz" else "O(a) $nome teve uma vida triste"
+            if (analisedavida == null) {
+                if (diafeliz > diatriste) {
+                    analisedavida =
+                        if (diafeliz > diatriste) "O(a) ${caracteristicas.nome} teve uma vida feliz" else "O(a) ${caracteristicas.nome} teve uma vida triste"
                 }
             }
             println(analisedavida)
             famili.remove(this)
-            var frase = frases[Random.nextInt(0,frases.size)]
-            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte, parceira?.nome ,Pais,filhos,analisedavida!!,fugiu))
-            janela!!.fechar()
+            var frase = caracteristicas.frases[Random.nextInt(0, caracteristicas.frases.size)]
+            regi.add(
+                tama(
+                    caracteristicas.nome,
+                    caracteristicas.idade,
+                    frase,
+                    caracteristicas.anoMorte,
+                    caracteristicas.anoNasci,
+                    caracteristicas.janela!!.icon(),
+                    caracteristicas.vivo,
+                    causadamorte,
+                    familia.nomeParceira,
+                    familia.pais,
+                    familia.filho,
+                    analisedavida!!,
+                    caracteristicas.fugiu
+                )
+            )
+            caracteristicas.janela!!.fechar()
             var index = 0
-            while(index < famili.size){
-                var tama = famili.get(index)
-                tama.luto = true
-                if(tama.pasta3nervoso != null){
-                    tama.estado = estados[2]
-                    emotroca()
+            while (index < famili.size) {
+                var gochiTama = famili.get(index)
+                gochiTama.caracteristicas.luto = true
+                listaDeEmocao.forEach { sentimentos ->
+                    if (sentimentos.emocaoString == listaDeTipoDeEmocoes[2]) {
+                        emocao = sentimentos
+                        emotroca()
+                    }
                 }
             }
         }
@@ -864,22 +929,22 @@ analisedavida = "O(a) $nome teve uma vida triste"
                 }
                 var realchamado = pasta.path
                 if(pasta.name.uppercase() == "INTRO"){
-                    intro = realchamado
+                    caracteristicas.intro = realchamado
                 }else if (chamado != null) {
                     var chamadonum = chamado.toString().toInt()
 
                     if (chamadonum == 1) {
-                        pasta1normal = realchamado
+                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[0]))
                     } else if (chamadonum == 2) {
-                        pasta2feliz = realchamado
+                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[1]))
                     } else if (chamadonum == 3) {
-                        pasta3nervoso = realchamado
+                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[2]))
                     } else if (chamadonum == 4) {
-                        pasta4dormindo = realchamado
+                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[3]))
                     } else if (chamadonum == 5) {
-                        pasta5hibernando = realchamado
+                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[4]))
                     } else if (chamadonum == 6) {
-                        pasta6romantico = realchamado
+                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[5]))
                     }
                 }
                 if (pasta.name == "config.txt") {
@@ -955,34 +1020,34 @@ analisedavida = "O(a) $nome teve uma vida triste"
                     for (x in atributoss) {
                         if (x.variavel.uppercase().replace(" ", "") == "VIDA") {
                             var realnumber = x.valor.toInt()
-                            v = realnumber!!
+                            caracteristicas.vida = realnumber!!
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "FOME") {
 
                             var realnumber = x.valor.toInt()
-                            f = realnumber!!
+                            caracteristicas.fome = realnumber!!
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "FELICIDADE") {
 
                             var realnumber = x.valor.toInt()
-                            fe = realnumber!!
+                            caracteristicas.felicidade = realnumber!!
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "SEXAPPEL") {
 
                             var realnumber = x.valor.toInt()
-                            s = realnumber!!
+                            caracteristicas.sexappel = realnumber!!
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "GOCHI") {
 
-                            gch = x.valor
+                            caracteristicas.tipoDoGochi = x.valor
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "RIVAL") {
 
-                            rival = x.valor
+                            rival.rivalTipoGochi = x.valor
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "INTENSIDADE") {
-                            custominten = true
-                            customintesidade = x.valor
+                            caracteristicas.intensidadeCustomizadaBoolean = true
+                            caracteristicas.intensidadeCustomizadaString = x.valor
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "DESENHO") {
 
-                            desenho = x.valor.toBoolean()
+                            caracteristicas.desenho = x.valor.toBoolean()
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "PORCENTAGEMGERAL") {
 
-                            probageral = x.valor.toDouble()/100
+                            caracteristicas.porcentagemGeral = x.valor.toDouble()/100
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "DANO") {
 
                             dano = x.valor.toDouble()
@@ -996,10 +1061,10 @@ analisedavida = "O(a) $nome teve uma vida triste"
                             valormultidanofelicidade = x.valor.toDouble()
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "VELOCIDADE") {
 
-                            velocidade = x.valor.toLong()
+                            caracteristicas.velocidade = x.valor.toLong()
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "TAMANHOFAMILIA") {
 
-                            tamanhofamili = x.valor.toInt()
+                            caracteristicas.tamanhoDaFamilia = x.valor.toInt()
                         }
 
 
@@ -1011,56 +1076,43 @@ analisedavida = "O(a) $nome teve uma vida triste"
 
 
             }
-            var fileintro = File(intro).listFiles().filter { it.extension == "wav" }
-            fileintro.forEach(){
-                    audio -> intros.add(audio.path)
+            var fileIntro = File(caracteristicas.intro).listFiles().filter { it.extension == "wav" }
+            fileIntro.forEach(){
+                    audio -> caracteristicas.intros.add(audio.path)
             }
-            var audioreal = intros[Random.nextInt(0,intros.size)]
+            var audioReal = caracteristicas.intros[Random.nextInt(0,caracteristicas.intros.size)]
 
-            anonasci = dia
-            idade = 0
-            seed = Random.nextInt(1,diaadia+1)
+            caracteristicas.anoNasci = dia
+            caracteristicas.idade = 0
+            caracteristicas.seed = Random.nextInt(1,diaadia+1)
 
-            bv = v - ((v * probageral).toFloat() * (seed / 100).toFloat()).toInt()
-            bf = f - ((f * probageral).toFloat() * (seed / 100).toFloat()).toInt()
-            bfe = fe - ((fe * probageral).toFloat() * (seed / 100).toFloat()).toInt()
-            bs = s - ((s * probageral).toFloat() * (seed / 100).toFloat()).toInt()
+            caracteristicas.vidaReal = caracteristicas.vida - ((caracteristicas.vida * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.fomeReal = caracteristicas.fome - ((caracteristicas.fome * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.felicidadeReal = caracteristicas.felicidade - ((caracteristicas.felicidade * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.sexappelReal = caracteristicas.sexappel - ((caracteristicas.sexappel * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
 if(diaadia%10 == 0){
-    doencagenetica = true
+    doenca.doencaGenetica = true
 }
 
-            numeroemo = (seed/10)
-            if (numeroemo == 0){
-                numeroemo = numeroemo!! + 1
-            }else if(numeroemo!! > 10){
-                numeroemo = numeroemo!! - 1
+            caracteristicas.diaParaTrocaDeEmocao = (caracteristicas.seed/10)
+            if (caracteristicas.diaParaTrocaDeEmocao == 0){
+                caracteristicas.diaParaTrocaDeEmocao = caracteristicas.diaParaTrocaDeEmocao!! + 1
+            }else if(caracteristicas.diaParaTrocaDeEmocao!! > 10){
+                caracteristicas.diaParaTrocaDeEmocao = caracteristicas.diaParaTrocaDeEmocao!! - 1
             }
-            chancedeengravidar = if (seed > 20) 20 else seed
-            var ap = "Nome: $nome | Idade: $idade | Vida: $v | Fome: $f"
+            caracteristicas.chanceDeEngravidar = if (caracteristicas.seed > 20) 20 else caracteristicas.seed
+            caracteristicas.nome = readln()
+            var status = "Nome: ${caracteristicas.nome} | Idade: ${caracteristicas.idade} | Vida: ${caracteristicas.vidaReal} | Fome: ${caracteristicas.fomeReal}"
             var numeroaleatorio = Random.nextInt(1,101)
             tamanho = if (numeroaleatorio == 100) !tamanho else tamanho
             numeroaleatorio = Random.nextInt(1,101)
             colorido = if(numeroaleatorio == 100) !colorido else colorido
-            var intensidadealea = if (custominten) 11 else Random.nextInt(1,11)
-            var emoinicio = pasta1normal
-            if(pasta1normal != null){
-                emoinicio = pasta1normal
-            }else if (pasta2feliz != null){
-                emoinicio = pasta2feliz
-            }else if (pasta3nervoso != null){
-                emoinicio = pasta3nervoso
-            }else if (pasta4dormindo != null){
-                emoinicio = pasta4dormindo
-            }else if (pasta5hibernando != null){
-                emoinicio = pasta5hibernando
-            }else if (pasta6romantico != null){
-                emoinicio = pasta6romantico
-            }
-            janela = janela(tamanho,colorido,desenho,emoinicio!!,ap,intensidadealea,customintesidade!!, velocidade)
+            var intensidadeAleatoria = if (caracteristicas.intensidadeCustomizadaBoolean) 11 else Random.nextInt(1,11)
+            emocao = listaDeEmocao[0]
+            caracteristicas.janela = janela(tamanho,colorido,caracteristicas.desenho!!,emocao!!.pastaEmocao,status,intensidadeAleatoria,caracteristicas.intensidadeCustomizadaString!!, caracteristicas.velocidade)
             println("Escreva o nome do TamaGochi") // colocar em um Jlabel
-            nome = readln()
-            janela!!.terminar()
-            tocador.mudar(audioreal)
+            caracteristicas.janela!!.terminar()
+            tocador.mudar(audioReal)
             famili.add(this)
 
 
@@ -1068,59 +1120,61 @@ if(diaadia%10 == 0){
 
         fun come(qualidade: Int){
             comer = 0
-            var numeroaleatorio = Random.nextInt(1,seed+1)
-            bf += qualidade*(diaadia/100) - numeroaleatorio
+            var numeroaleatorio = Random.nextInt(1,caracteristicas.seed+1)
+            caracteristicas.felicidadeReal += qualidade*(diaadia/100) - numeroaleatorio
             if(qualidade > 30){
-                bfe+= qualidade/10
+                caracteristicas.felicidadeReal += qualidade/10
             }
 
         }
         fun danoFome(){
-            var danofome = Random.nextInt(0,seed+1/10)
-            if(carinho){
+            var danofome = Random.nextInt(0,caracteristicas.seed+1/10)
+            if(caracteristicas.carinho){
                 danofome = (danofome * 1.5).toInt()
             }
-            bf -= danofome
+            caracteristicas.fomeReal -= danofome
         }
         fun brincadeira(){
-            carinho = true
+            caracteristicas.carinho = true
             var numeroaleatoriobrincadeira = 0
-            var afinidade = (idade/100) + 1
-            if (estado == estados[1]){
-                numeroaleatoriobrincadeira = Random.nextInt(1, ((seed+1)*1.5).toInt())
-            }else if (estado == estados[2]){
-                numeroaleatoriobrincadeira = Random.nextInt(1, ((seed+1)*0.5).toInt())
+            var afinidade = (caracteristicas.idade/100) + 1
+            if (emocao!!.emocaoString == listaDeTipoDeEmocoes[1]){
+                numeroaleatoriobrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*1.5).toInt())
+            }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[2]){
+                numeroaleatoriobrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*0.5).toInt())
 
             }else{
-                numeroaleatoriobrincadeira = Random.nextInt(1, seed+1)}
-            bfe += numeroaleatoriobrincadeira * afinidade
+                numeroaleatoriobrincadeira = Random.nextInt(1, caracteristicas.seed+1)}
+            caracteristicas.felicidadeReal += numeroaleatoriobrincadeira * afinidade
             if(videojogo){
-                bfe += 10 - convideojogo
+                caracteristicas.felicidadeReal += 10 - contadorDeAbstinenciadeVideojogos
             }
         }
         var causadamorte : String? = null
         fun morreu(){
-            vivo = false
+            caracteristicas.vivo = false
             famili.remove(this)
             var momentodamorte = palaAcoMorte[Random.nextInt(0,palaAcoMorte.size-1)]
             if (causadamorte == null){
-                causadamorte = "O(a) $nome morreu $momentodamorte"
+                causadamorte = "O(a) ${caracteristicas.nome} morreu $momentodamorte"
                 println(causadamorte)
 
             }
-            analisedavida = if(diafeliz > diatriste) "O(a) $nome teve uma vida feliz" else "O(a) $nome teve uma vida triste"
-            var frase = frases[Random.nextInt(0,frases.size)]
+            analisedavida = if(diafeliz > diatriste) "O(a) ${caracteristicas.nome} teve uma vida feliz" else "O(a) ${caracteristicas.nome} teve uma vida triste"
+            var frase = caracteristicas.frases[Random.nextInt(0,caracteristicas.frases.size)]
             println(analisedavida)
-            anomorte = dia
-            regi.add(tama(nome, idade,frase,anomorte,anonasci,janela!!.icon(),vivo,causadamorte,parceira?.nome,Pais,filhos,analisedavida!!,fugiu))
-            janela!!.fechar()
+            caracteristicas.anoMorte = dia
+            regi.add(tama(caracteristicas.nome, caracteristicas.idade,frase,caracteristicas.anoMorte,caracteristicas.anoNasci,caracteristicas.janela!!.icon(),caracteristicas.vivo,causadamorte,familia.nomeParceira,familia.pais,familia.filho,analisedavida!!,caracteristicas.fugiu))
+            caracteristicas.janela!!.fechar()
             var index = 0
             while(index < famili.size){
                 var tama = famili.get(index)
-                tama.luto = true
-                if(tama.pasta3nervoso != null){
-                    tama.estado = estados[2]
-                    emotroca()
+                tama.caracteristicas.luto = true
+listaDeEmocao.forEach {
+    if(it.emocaoString == listaDeTipoDeEmocoes[2]){
+        emocao = it
+        emotroca()
+}
                 }
             }
         }
@@ -1130,69 +1184,69 @@ if(diaadia%10 == 0){
                 var numeroaleatorio = Random.nextInt(1,101)
                 var tama = famili.get(index)
                 if(!tama.equals(this) && numeroaleatorio in 1..10){
-                    if(tama.identificador == idparceira){
-                        if(diaadia < bfe && diaadia < tama.bfe){
-                            println(interaçãopositivaparceiraparceiro[Random.nextInt(0,interaçãopositivaparceiraparceiro.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                        bfe+= 10
-                            tama.bfe += 10
-                        }else if (diaadia < bfe || diaadia < tama.bfe){
-                            println(interaçãonegativaparceiroparceira[Random.nextInt(0,interaçãonegativaparceiroparceira.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                        tama.bfe -= 5
-                            bfe -= 5
+                    if(tama.caracteristicas.identificador == familia.parceiraID){
+                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãopositivaparceiraparceiro[Random.nextInt(0,interaçãopositivaparceiraparceiro.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                            caracteristicas.felicidadeReal+= 10
+                            tama.caracteristicas.felicidadeReal += 10
+                        }else if (diaadia < caracteristicas.felicidadeReal || diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãonegativaparceiroparceira[Random.nextInt(0,interaçãonegativaparceiroparceira.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                        tama.caracteristicas.felicidadeReal -= 5
+                            caracteristicas.felicidadeReal -= 5
                         }else{
-                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                        tama.bfe -= 10
-                            bfe -= 10
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                        tama.caracteristicas.felicidadeReal -= 10
+                            caracteristicas.felicidadeReal -= 10
                         }
-                    }else if (tama.identificador in idpais){
-                        if(diaadia < bfe && diaadia < tama.bfe){
-                            println(interaçãopositivapais[Random.nextInt(0,interaçãopositivapais.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                            tama.bfe += 10
-                            bfe += 10
-                        }else if (diaadia < bfe){
-                            println(interaçãonegativapaispais[Random.nextInt(0,interaçãonegativapaispais.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                            tama.bfe -= 5
-                            bfe -= 3
-                        }else if (diaadia < tama.bfe){
-                            println(interaçãonegativafilhospais[Random.nextInt(0,interaçãonegativafilhospais.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                            tama.bfe -= 3
-                            bfe -= 5
+                    }else if (tama.caracteristicas.identificador in familia.paisID){
+                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãopositivapais[Random.nextInt(0,interaçãopositivapais.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal += 10
+                            caracteristicas.felicidadeReal += 10
+                        }else if (diaadia < caracteristicas.felicidadeReal){
+                            println(interaçãonegativapaispais[Random.nextInt(0,interaçãonegativapaispais.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 5
+                            caracteristicas.felicidadeReal -= 3
+                        }else if (diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãonegativafilhospais[Random.nextInt(0,interaçãonegativafilhospais.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 3
+                            caracteristicas.felicidadeReal -= 5
                         } else{
-                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                            tama.bfe -= 10
-                            bfe -= 10
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 10
+                            caracteristicas.felicidadeReal -= 10
                         }
-                    }else if (tama.identificador in idfilho){
-                        if(diaadia < bfe && diaadia < tama.bfe){
-                            println(interaçãopositivafilhos[Random.nextInt(0,interaçãopositivafilhos.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                            tama.bfe += 10
-                            bfe += 10
-                        }else if (diaadia < bfe){
-                            println(interaçãonegativafilhosfilhos[Random.nextInt(0,interaçãonegativafilhosfilhos.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                            tama.bfe -= 5
-                            bfe -= 3
-                        }else if (diaadia < tama.bfe){
-                            println(interaçãonegativapaisfilhos[Random.nextInt(0,interaçãonegativapaisfilhos.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                            tama.bfe -= 3
-                            bfe -= 5
+                    }else if (tama.caracteristicas.identificador in familia.filhoID){
+                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãopositivafilhos[Random.nextInt(0,interaçãopositivafilhos.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal += 10
+                            caracteristicas.felicidadeReal += 10
+                        }else if (diaadia < caracteristicas.felicidadeReal){
+                            println(interaçãonegativafilhosfilhos[Random.nextInt(0,interaçãonegativafilhosfilhos.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 5
+                            caracteristicas.felicidadeReal -= 3
+                        }else if (diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãonegativapaisfilhos[Random.nextInt(0,interaçãonegativapaisfilhos.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 3
+                            caracteristicas.felicidadeReal -= 5
                         } else{
-                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                            tama.bfe -= 10
-                            bfe -= 10
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 10
+                            caracteristicas.felicidadeReal -= 10
                         }
-                    }else if (tama.idpais == idpais){
-                        if(diaadia < bfe && diaadia < tama.bfe){
-                            println(interaçãopositivairmãoirmã[Random.nextInt(0,interaçãopositivairmãoirmã.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                            tama.bfe += 10
-                            bfe += 10
-                        }else if (diaadia < bfe || diaadia < tama.bfe){
-                            println(interaçãonegativairmãoirmã[Random.nextInt(0,interaçãonegativairmãoirmã.size)].replace("B",nome.lowercase()).replace("A",tama.nome.lowercase()).replace(nome.lowercase(),nome).replace(tama.nome.lowercase(),tama.nome))
-                            tama.bfe -= 5
-                            bfe -= 5
+                    }else if (tama.familia.paisID == familia.paisID){
+                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãopositivairmãoirmã[Random.nextInt(0,interaçãopositivairmãoirmã.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal += 10
+                            caracteristicas.felicidadeReal += 10
+                        }else if (diaadia < caracteristicas.felicidadeReal || diaadia < tama.caracteristicas.felicidadeReal){
+                            println(interaçãonegativairmãoirmã[Random.nextInt(0,interaçãonegativairmãoirmã.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 5
+                            caracteristicas.felicidadeReal -= 5
                         }else{
-                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",nome.lowercase()).replace("B",tama.nome.lowercase()).replace(nome.lowercase(), nome).replace(tama.nome.lowercase(), tama.nome))
-                            tama.bfe -= 10
-                            bfe -= 10
+                            println(interaçãodeutudoerrado[Random.nextInt(0,interaçãodeutudoerrado.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
+                            tama.caracteristicas.felicidadeReal -= 10
+                            caracteristicas.felicidadeReal -= 10
                         }
                     }
                 }
@@ -1200,31 +1254,31 @@ if(diaadia%10 == 0){
             }
         }
         var valormultidano = 1.0
-        var dano = 10 - (10*0.3)*(seed/100)
+        var dano = 10 - (10*0.3)*(caracteristicas.seed/100)
         fun dano(){
             var multiplicadorDano = valormultidano
-            if (estação == "Inverno") {
+            if (estacao == "Inverno") {
                 multiplicadorDano = 2.0
 
             }
             var danoreal = dano * multiplicadorDano
             if(!acordomorte){
-            bv-= (danoreal - (danoreal*(((bf+bfe)/2)/100))).toInt()}
+                caracteristicas.vidaReal-= (danoreal - (danoreal*(((caracteristicas.fomeReal+caracteristicas.felicidadeReal)/2)/100))).toInt()}
         }
-        var danoFelicidade = 10 - (10*0.3)*(seed/100)
+        var danoFelicidade = 10 - (10*0.3)*(caracteristicas.seed/100)
 var valormultidanofelicidade = 1.0
         fun danofelicidade(){
             var multiplicadorDanodefelicidade = valormultidanofelicidade
 
-            var afinidade = (idade/100) + 1
-            if (estação == "Inverno") {
+            var afinidade = (caracteristicas.idade/100) + 1
+            if (estacao == "Inverno") {
                 multiplicadorDanodefelicidade = 2.0
 
             }
-            if(idade < 4){
+            if(caracteristicas.idade < 4){
                 danoFelicidade /= 2
                 multiplicadorDanodefelicidade -= 0.5
-            }else if (idade >= 14){
+            }else if (caracteristicas.idade >= 14){
                 danoFelicidade *= 1.5
                 multiplicadorDanodefelicidade += 0.5
             }
@@ -1235,22 +1289,22 @@ var valormultidanofelicidade = 1.0
             }
             var danoreal = danoFelicidade * multiplicadorDanodefelicidade
             if(brinquedo) {
-                if(!carinho){
-                    if(idade < 14){
-                    bfe-= ((afinidade * danoreal*0.5 + (danoreal - danoreal*(bf/100)))/2).toInt()}else{
-                        bfe-= ((afinidade * danoreal*0.5 + (danoreal - danoreal*(bf/100)))/3).toInt()}
+                if(!caracteristicas.carinho){
+                    if(caracteristicas.idade < 14){
+                        caracteristicas.felicidadeReal -= ((afinidade * danoreal*0.5 + (danoreal - danoreal*(caracteristicas.fomeReal/100)))/2).toInt()}else{
+                            caracteristicas.felicidadeReal -= ((afinidade * danoreal*0.5 + (danoreal - danoreal*(caracteristicas.fomeReal/100)))/3).toInt()}
                 }else{
-                    if(idade < 14){
-                    bfe-= ((danoreal*0.5 + (danoreal - danoreal*(bf/100)))/2).toInt()}else{
-                        bfe-= ((danoreal*0.5 + (danoreal - danoreal*(bf/100)))/1.5).toInt()
+                    if(caracteristicas.idade < 14){
+                        caracteristicas.felicidadeReal-= ((danoreal*0.5 + (danoreal - danoreal*(caracteristicas.fomeReal/100)))/2).toInt()}else{
+                            caracteristicas.felicidadeReal-= ((danoreal*0.5 + (danoreal - danoreal*(caracteristicas.fomeReal/100)))/1.5).toInt()
                     }
                 }
 
             }else{
-            if(!carinho){
-                bfe-= (afinidade * danoreal*0.5 + (danoreal - danoreal*(bf/100))).toInt()
+            if(!caracteristicas.carinho){
+                    caracteristicas.felicidadeReal-= (afinidade * danoreal*0.5 + (danoreal - danoreal*(caracteristicas.fomeReal/100))).toInt()
             }else{
-                bfe-= (danoreal*0.5 + (danoreal - danoreal*(bf/100))).toInt()
+                    caracteristicas.felicidadeReal-= (danoreal*0.5 + (danoreal - danoreal*(caracteristicas.fomeReal/100))).toInt()
             }}
 
         }
@@ -1258,76 +1312,77 @@ var valormultidanofelicidade = 1.0
         var diafeliz = 0
         var diatriste = 0
         fun check(){
-            var multiplasdoenças = Random.nextInt(0,(idade+1)*2)
-            if(!vivo){
+            var multiplasdoenças = Random.nextInt(0,(caracteristicas.idade+1)*2)
+            if(!caracteristicas.vivo){
                 morreu()
                 return
             }
 if(vacina){
-    doente = false
-    condoenca = 0
-    doencacontagiosa = false
+    doenca.doente = false
+    doenca.contadorDeDoenca = 0
+    doenca.doencaContagiosa = false
 }
             if (!vacina) {
                 var saude = Random.nextInt(1, 101)
-                if (idade < 4 && saude in 1..10 ) {
-                    doente = true
-                    condoenca++
-                } else if (idade < 14 && saude in 1..20) {
-                    condoenca++
-                    doente = true
-                } else if (idade >= 14 && saude in 1..40) {
-                    condoenca++
-                    doente = true
+                if (caracteristicas.idade < 4 && saude in 1..10 ) {
+                    doenca.doente = true
+                    doenca.contadorDeDoenca++
+                } else if (caracteristicas.idade < 14 && saude in 1..20) {
+                    doenca.doente = true
+                    doenca.contadorDeDoenca++
+
+                } else if (caracteristicas.idade >= 14 && saude in 1..40) {
+                    doenca.doente = true
+                    doenca.contadorDeDoenca++
                 }
             }
-            if(seed in 1..multiplasdoenças && doente){
-                condoenca ++
-                if(!doencacontagiosa && Random.nextInt(1,11) ==  1){
-                    doencacontagiosa = true
+            if(caracteristicas.seed in 1..multiplasdoenças && doenca.doente){
+                doenca.contadorDeDoenca++
+                if(!doenca.doencaContagiosa && Random.nextInt(1,11) ==  1){
+                    doenca.doencaContagiosa = true
                 }
             }
-            if(doente){
-             for (doenca in 1..condoenca){
+            if(doenca.doente){
+             for (doenca in 1..doenca.contadorDeDoenca){
                  doente()
              }
-                if(iniciardoença == 0 && Random.nextInt(1,11) ==  1){
-                    doencacontagiosa = true
+                if(!doenca.iniciarDoenca && Random.nextInt(1,11) ==  1){
+                    doenca.doencaContagiosa = true
                 }
             }
-            if(doencacontagiosa && famili.size > 1){
+            if(doenca.doencaContagiosa && famili.size > 1){
                 var index = 0
                 while (index < famili.size){
                     var ficardoente = Random.nextInt(1,11)
                     if(!famili.get(index).equals(this)&& ficardoente in 1..3){
 
-                            famili.get(index).condoenca++
-                            famili.get(index).doente = true
-                            famili.get(index).doencacontagiosa = true
+                            famili.get(index).doenca.contadorDeDoenca++
+                            famili.get(index).doenca.doente = true
+                            famili.get(index).doenca.doencaContagiosa = true
                     }
                 }
             }
 
-            if (dia % numeroemo!! == 0) {
+            if (dia % caracteristicas.diaParaTrocaDeEmocao!! == 0) {
                 emocao()
             }
 
-            if(idade > 4){
-                if (bfe <= 0){
+            if(caracteristicas.idade > 4){
+                if (caracteristicas.felicidadeReal <= 0){
                     fugir()
                     return
                 }
 
                 rivalidade()
 
-                if(ativo){
+                if(caracteristicas.ativo){
                     romance()
                 }
 
             }
 
             var ataquecardiaco = Random.nextBoolean()
-            if (ataquecardiaco && idade > 14){
+            if (ataquecardiaco && caracteristicas.idade > 14){
                 println("Morreu de ataque cardiaco.")
                 morreu()
                 return
@@ -1338,88 +1393,90 @@ if(vacina){
                     if(!famili.get(index).equals(this)){
                     var morto = Random.nextBoolean()
                     if(morto){
-                        println("O(a) ${famili.get(index).nome} morreu de maneira estranha.")
+                        println("O(a) ${famili.get(index).caracteristicas.nome} morreu de maneira estranha.")
                         famili.get(index).morreu()
                     }
                 }}
             }
-if(luto){
+if(caracteristicas.luto){
     danofelicidade()
-    luto = false
+    caracteristicas.luto = false
 }
             if(famili.size > 1){
                 acaofamilia()
             }
             var sorte = Random.nextInt(1,101)
             if(sorte in 1..10){
-                println("O(a) gochi $nome encontrou dinheiro.")
-                dinhero++
+                println("O(a) gochi ${caracteristicas.nome} encontrou dinheiro.")
+                dinheiro++
             }else if(sorte == 1 || sorte == 100){
-                println("O(a) gochi $nome encontrou muito dinheiro.")
-                dinhero += 3
+                println("O(a) gochi ${caracteristicas.nome} encontrou muito dinheiro.")
+                dinheiro += 3
             }
-            if(doencagenetica){
-                bv -= Random.nextInt(0,6)
+            if(doenca.doencaGenetica){
+                caracteristicas.vidaReal -= Random.nextInt(0,6)
             }
-            if (bv <= 0){
+            if (caracteristicas.vidaReal <= 0){
                 morreu()
                 return
-            }else if (bv > v){
-                bv = v
+            }else if (caracteristicas.vidaReal > caracteristicas.vida){
+                caracteristicas.vidaReal = caracteristicas.vida
             }
-            if (bfe > fe){
-                bfe = fe
+            if (caracteristicas.felicidadeReal > caracteristicas.felicidade){
+                caracteristicas.felicidadeReal = caracteristicas.felicidade
             }
-            if (bf == 0){
+            if (caracteristicas.fomeReal == 0){
                 comer ++
             }
             if (comer == 3){
                 morreu()
                 return
             }
-            if (bf > f) {
-                bf = f
+            if (caracteristicas.fomeReal > caracteristicas.fome) {
+                caracteristicas.fomeReal = caracteristicas.fome
             }
-            if (bfe > 50){
+            if (caracteristicas.felicidadeReal > 50){
                 diafeliz++
             }else{
                 diatriste++
             }
             acao()
-            if(diaadia == seed){
-                println("Hoje é o aniversário do(a) $nome")
-                bfe += 10
-                if(pasta2feliz != null){
-                    estado = estados[1]
-                    emotroca()
+            if(diaadia == caracteristicas.seed){
+                println("Hoje é o aniversário do(a) ${caracteristicas.nome}")
+                caracteristicas.felicidadeReal += 10
+listaDeEmocao.forEach {
+    if(it.emocaoString == listaDeTipoDeEmocoes[1]){
+        emocao = listaDeEmocao[1]
+        emotroca()
+}
                 }
             }
-            idade++
-            janela!!.mudarestiloexterno()
+            caracteristicas.idade++
+            caracteristicas.janela!!.mudarestiloexterno()
 
-            janela!!.title = "Nome: $nome | Idade: $idade | Vida: $bv | Fome: $bf"
+            caracteristicas.janela!!.title = "Nome: ${caracteristicas.nome} | Idade: ${caracteristicas.idade} | Vida: ${caracteristicas.vidaReal} | Fome: ${caracteristicas.fomeReal}"
         }
         fun passardia(){
-            if(estado != estados[3] && estado != estados [4]){
+            if(emocao!!.emocaoString != listaDeTipoDeEmocoes[3] && emocao!!.emocaoString != listaDeTipoDeEmocoes [4]){
             if(remedio){
-                doente = false
+                doenca.doente = false
                 remedio = false
             }
-            if(vacina && idade >= 14){
+            if(vacina && caracteristicas.idade >= 14){
                 vacina = false
             }
-            if(acariciador && !carinho){
+            if(acariciador && !caracteristicas.carinho){
                 brincadeira()
             }
             if(bolodeprestigio){
-                if(idade >= 14){
-                    bv += v/2
-                    bf += f/2
-                    bfe += fe/2
+                if(caracteristicas.idade >= 14){
+                    caracteristicas.vidaReal += caracteristicas.vida/2
+                    caracteristicas.fomeReal += caracteristicas.fome/2
+                    caracteristicas.felicidadeReal += caracteristicas.felicidade/2
                 }else{
-                    bv = v
-                    bf = f
-                    bfe = fe
+                    caracteristicas.vidaReal = caracteristicas.vida
+                    caracteristicas.fomeReal = caracteristicas.fome
+                    caracteristicas.felicidadeReal = caracteristicas.felicidade
                 }
                 bolodeprestigio = false
             }
@@ -1427,9 +1484,9 @@ if(luto){
             danofelicidade()
             dano()
             check()
-        }else if( estado == estados [3]){
+        }else if( emocao!!.emocaoString == listaDeTipoDeEmocoes [3]){
               dormindo()
-            }else if(estado == estados[4]){
+            }else if(emocao!!.emocaoString == listaDeTipoDeEmocoes[4]){
 hibernando()
             }
         }
@@ -1438,16 +1495,16 @@ var conhibernando = 1
         fun hibernando(){
 
             danoFome()
-            bv += Random.nextInt(1,6)
+            caracteristicas.vidaReal += Random.nextInt(1,11)
 
-            if(bf > v){
-                bf = v
+            if(caracteristicas.vidaReal > caracteristicas.vida){
+                caracteristicas.vidaReal = caracteristicas.vida
             }
-            if(bv <=0){
+            if(caracteristicas.vidaReal <=0){
                 morreu()
                 return
             }
-            idade++
+            caracteristicas.idade++
             for (x in 1..conhibernando){
                 var numeroaleatorio = Random.nextInt(1,101)
                 if(numeroaleatorio in 1..10){
@@ -1461,13 +1518,13 @@ var conhibernando = 1
         fun dormindo(){
             danoFome()
             dano()
-            if(bf < 0){
-                bf = 0
+            if(caracteristicas.fomeReal < 0){
+                caracteristicas.fomeReal = 0
             }
-            if(bv <=0){
+            if(caracteristicas.vidaReal <=0){
                 morreu()
             }
-            idade++
+            caracteristicas.idade++
             emocao()
         }
 
@@ -1523,12 +1580,12 @@ var conhibernando = 1
                 }
             }
             if(famili.size == 1){
-                println("${famili[0].nome} comeu ${comidatama!!.nome}")
+                println("${famili[0].caracteristicas.nome} comeu ${comidatama!!.nome}")
                 tamagochi = famili[0]
             }else {
                 println("Qual tama você quer alimentar")
                 famili.forEachIndexed { index, gochi ->
-                    println("${index + 1} - ${gochi.nome}")
+                    println("${index + 1} - ${gochi.caracteristicas.nome}")
 
                 }
                 println("0 - Sair")
@@ -1558,10 +1615,10 @@ var conhibernando = 1
                     println("Sair")
                     return
                 } else {
-                    if(famili.get(r.toInt() - 1).estado != estados[3] && famili.get(r.toInt() - 1).estado != estados[4]){
+                    if(famili.get(r.toInt() - 1).emocao!!.emocaoString != listaDeTipoDeEmocoes[3] && famili.get(r.toInt() - 1).emocao!!.emocaoString != listaDeTipoDeEmocoes[4]){
                     println("Comida: ${famili[r - 1]}")
                     tamagochi = famili[r - 1]}else{
-                        println(famili.get(r.toInt() -1).nome + " está dormindo")
+                        println(famili.get(r.toInt() -1).caracteristicas.nome + " está dormindo")
                         return
                     }
 
@@ -1580,13 +1637,13 @@ var dinamico = dinamico
         if(!dinamico){
         acao = true}
         var multiplicador = 0.5
-        if (estação == "Verão"){
+        if (estacao == "Verão"){
             multiplicador = 1.0
-        }else if (estação =="Inverno"){
+        }else if (estacao =="Inverno"){
             multiplicador = 0.5
-        }else if (estação =="Outono"){
+        }else if (estacao =="Outono"){
             multiplicador = 0.8
-        }else if (estação =="Primavera"){
+        }else if (estacao =="Primavera"){
             multiplicador =2.0
         }
         var numeroaleatorio = diaadia
@@ -1659,23 +1716,23 @@ processodinamico =Thread{
         regi.forEach {
                 tama ->
             println(tama.icon)
-            print("Nome: ${tama.Nome}  Idade: ${tama.idade}  Ano de Nacimento: ${tama.anonasci} ")
-            if(tama.anomorte != null){
-                print("Ano da morte: ${tama.anomorte}")
+            print("Nome: ${tama.nome}  Idade: ${tama.idade}  Ano de Nacimento: ${tama.anoNasci} ")
+            if(tama.anoMorte != null){
+                print("Ano da morte: ${tama.anoMorte}")
             }else{
                 print("Ano da morte: ")
             }
             if(tama.fugir){
                 print(" Status: fugiu.")
-            }else if(tama.fugir && !tama.Vivo){
+            }else if(tama.fugir && !tama.vivo){
                 print(" Status: fugiu e ${frasemortes[Random.nextInt(0,frasemortes.size)]}")
-            }else if(!tama.Vivo){
+            }else if(!tama.vivo){
                 print(" Status: ${frasemortes[Random.nextInt(0,frasemortes.size)]}")
             }else{
                 print(" Status: está vivo.")
             }
-            if(tama.Pais != null){
-                print("\nPais: ${tama.Pais}")
+            if(tama.pais != null){
+                print("\nPais: ${tama.pais}")
             }else{
                 print("\nPais: Desconhecidos")
             }
@@ -1691,23 +1748,23 @@ processodinamico =Thread{
                     }
                 }
             }
-            if(!tama.Vivo){
-                print("\nCausa da morte: ${tama.causadamorte}")
+            if(!tama.vivo){
+                print("\nCausa da morte: ${tama.causaDaMorte}")
             }
             println("\nMomento marcante: ${tama.frase}")
-            println(tama.analisedavida)
+            println(tama.analiseDaVida)
 
             var r = readln()
             if(r == "Sair" || r == "S" || r == "N"){
-                return@forEach
+                return
             }
 
 
         }
     }
     fun menu() {
-        println(intro)
-        tocador.mudar(musicasJogo[periododoano+2])
+        println(asciiDeApresentaçãoDaEstacao)
+        tocador.mudar(musicasJogo[periodoDoAno+2])
         println("-".repeat(40)+"Menu"+"-".repeat(40))
         if(!acao){
             println("1"+" ".repeat(35)+"Procurar comida")
@@ -1723,7 +1780,7 @@ processodinamico =Thread{
 
             when (resp) {
                 "7" -> {
-                    println( g!!.janela!!.icon())}
+                    println( g!!.caracteristicas.janela!!.icon())}
                 "6" -> {passaardia(); tocador.mudar(musicasJogo[1])}
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
                 "4" -> {darcomida();tocador.mudar(musicasJogo[1])}
@@ -1754,8 +1811,8 @@ processodinamico =Thread{
             passadia = false
             return
         }
-        println(intro)
-        tocador.mudar(musicasJogo[periododoano+2])
+        println(asciiDeApresentaçãoDaEstacao)
+        tocador.mudar(musicasJogo[periodoDoAno+2])
         println("-".repeat(40)+"Menu"+"-".repeat(40))
         if(!acao){
             println("1"+" ".repeat(35)+"Procurar comida")
@@ -1786,7 +1843,7 @@ ocupado = false
     fun brincadeira(){
         println("-".repeat(84))
         famili.forEachIndexed { index, comida ->
-            println("${index + 1} - ${comida.nome}")
+            println("${index + 1} - ${comida.caracteristicas.nome}")
         }
         println("0 - Sair")
         println("Escolha um gochi para dar carinho")
@@ -1812,12 +1869,12 @@ ocupado = false
             }
         }
         if(r.toInt() > 0){
-            if(famili.get(r.toInt() - 1).estado != estados[3] && famili.get(r.toInt() - 1).estado != estados[4]){
+            if(famili.get(r.toInt() - 1).emocao!!.emocaoString != listaDeTipoDeEmocoes[3] && famili.get(r.toInt() - 1).emocao!!.emocaoString != listaDeTipoDeEmocoes[4]){
                 famili.get(r.toInt() - 1).brincadeira()
                 if(!dinamico){
                     acao = true}
             }else{
-                    println("${famili.get(r.toInt() -1).nome} está dormindo")
+                    println("${famili.get(r.toInt() -1).caracteristicas.nome} está dormindo")
                 return
             }
 
@@ -1865,10 +1922,10 @@ println("Dinheiro: $dinheiro")
                 return
             }
         }
-if(resp == "1"&& dinhero - 5 >= 0){
+if(resp == "1"&& dinheiro - 5 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para dar o videojogo")
@@ -1895,14 +1952,14 @@ if(resp == "1"&& dinhero - 5 >= 0){
     }
     if(r.toInt() >= 1){
     index = r.toInt() -1
-    famili.get(index).videojogo = true; famili.get(index).convideojogo = 0}else if (r.toInt() == 0){
+    famili.get(index).videojogo = true; famili.get(index).contadorDeAbstinenciadeVideojogos = 0}else if (r.toInt() == 0){
         return
     }
-    dinhero -= 5
-}else if (resp == "2" && dinhero - 5 >= 0){
-    var index = 0
+    dinheiro -= 5
+}else if (resp == "2" && dinheiro - 5 >= 0){
+    var index : Int
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para dar o remédio")
@@ -1914,7 +1971,7 @@ if(resp == "1"&& dinhero - 5 >= 0){
     if(r.toInt() >= 1  && !famili.get(r.toInt()-1).remedio){
         index = r.toInt() -1
         famili.get(index).remedio = true
-        dinhero -= 5
+        dinheiro -= 5
     }else if (r.toInt() == 0){
         return
     }else{
@@ -1922,10 +1979,10 @@ if(resp == "1"&& dinhero - 5 >= 0){
 loja()
     }
 
-}else if (resp == "3" && dinhero - 15 >= 0){
+}else if (resp == "3" && dinheiro - 15 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para dar a vacina")
@@ -1937,17 +1994,17 @@ loja()
     if(r.toInt() >= 1  && !famili.get(r.toInt()-1).vacina){
         index = r.toInt() -1
         famili.get(index).vacina = true
-        dinhero -= 15
+        dinheiro -= 15
     }else if (r.toInt() == 0){
         return
     }else{
         println("Você já deu a vacina para o gochi")
         loja()
     }
-}else if (resp == "4" && dinhero - 15 >= 0){
+}else if (resp == "4" && dinheiro - 15 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para dar o acariciador automatico")
@@ -1959,7 +2016,7 @@ loja()
     if(r.toInt() >= 1  && !famili.get(r.toInt()-1).acariciador){
         index = r.toInt() -1
         famili.get(index).acariciador = true
-        dinhero -= 15
+        dinheiro -= 15
     }else if (r.toInt() == 0){
         return
     }else{
@@ -1967,10 +2024,10 @@ loja()
         loja()
     }
 
-}else if (resp == "5" && dinhero - 10 >= 0){
+}else if (resp == "5" && dinheiro - 10 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para dar o bolo de prestigio")
@@ -1982,17 +2039,17 @@ loja()
     if(r.toInt() >= 1  && !famili.get(r.toInt()-1).bolodeprestigio){
         index = r.toInt() -1
         famili.get(index).bolodeprestigio = true
-        dinhero -= 10
+        dinheiro -= 10
     }else if (r.toInt() == 0){
         return
     }else{
         println("Você já deu um bolo de prestígio para o gochi")
         loja()
     }
-}else if (resp == "6" && dinhero - 10 >= 0){
+}else if (resp == "6" && dinheiro - 10 >= 0){
     var index = 0
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para dar o brinquedo")
@@ -2004,17 +2061,17 @@ loja()
     if(r.toInt() >= 1  && famili.get(r.toInt()-1).brinquedo == false){
         index = r.toInt() -1
         famili.get(index).brinquedo = true
-        dinhero -= 10
+        dinheiro -= 10
     }else if (r.toInt() == 0){
         return
     }else{
         println("O gochi já tem um brinquedo")
     loja()
     }
-}else if (resp == "7" && dinhero - 20 >= 0){
+}else if (resp == "7" && dinheiro - 20 >= 0){
     var index : Int
     famili.forEachIndexed { index, gochi ->
-        println("${index+1} - ${gochi.nome}")
+        println("${index+1} - ${gochi.caracteristicas.nome}")
     }
     println("0 - Sair")
     println("Escolha um gochi para fazer um acordo com a morte")
@@ -2026,25 +2083,25 @@ loja()
     if(r.toInt() >= 1 && famili.get(r.toInt()-1).acordomorte == false){
         index = r.toInt() -1
         famili.get(index).acordomorte = true
-        dinhero -= 20
+        dinheiro -= 20
     }else if (r.toInt() == 0){
      return
     }else{
         println("O gochi já fez um acordo com a morte")
         loja()
     }
-}else if (resp == "8" && dinhero - 15 >= 0) {
+}else if (resp == "8" && dinheiro - 15 >= 0) {
     if(!mapadecomida){
     println("Você comprou o mapa de comida")
     mapadecomida = true
-    dinhero -= 15}else{
+    dinheiro -= 15}else{
         println("Você já tem o mapa de comida")
     }
-}else if (resp == "9" && dinhero - 30 >= 0) {
+}else if (resp == "9" && dinheiro - 30 >= 0) {
     if(!rastreadordecomida){
    println("Você comprou o rastreador de comida")
     rastreadordecomida = true
-    dinhero -= 30}else{
+    dinheiro -= 30}else{
         println("Você já tem o rastreador de comida")
     }
 }
@@ -2087,7 +2144,7 @@ fun main() {
                 numero += it
             }
         }
-        diarecord += numero.toInt()
+        diaRecord += numero.toInt()
     }
     pastamusicaJogo.forEach{ arquivo ->
         musicasJogo.add(arquivo.path)
@@ -2098,10 +2155,11 @@ fun main() {
     var tam = false
     var color = false
     var dinamico = false
-    if(diarecord > 50){
+    if(diaRecord > 50){
         bloqueio = 0
     }
-    println("Você quer a jogar com janelas grandes? (S/N)")
+    titulo()
+    println("\nVocê quer a jogar com janelas grandes? (S/N)")
     var r = readln()
     r= verificadoSeN(r)
 
@@ -2134,9 +2192,9 @@ fun main() {
 
     }
     tocador.stop()
-    tamo(tam,color,dinamico)
+    jogoTama(tam,color,dinamico)
     while (true){
-    save.writeText("diaRecord = ${diarecord+dia}")
+    save.writeText("diaRecord = ${diaRecord+dia}")
     println("Quer continuar? (S/N)")
     r = readln()
 
@@ -2145,7 +2203,7 @@ fun main() {
 
 
         when(r!!.uppercase().replace(" ", "")){
-        "S" -> tamo(tam,color,dinamico)
+        "S" -> jogoTama(tam,color,dinamico)
         "N" -> break
 
     }}
@@ -2167,37 +2225,19 @@ fun verificadoSeN(valor : String):String{
 
 
 fun titulo(){
-    println("\n" +
-            " ________ _______ ___ ________ ________ _______ _____ ______ ___ ___ ___ ________ ________ ________ \n" +
-            "|\\ ____\\ |\\ ___ \\ |\\ \\ |\\ __ \\ |\\ __ \\ |\\ ___ \\ |\\ _ \\ _ \\ |\\ \\ / /||\\ \\ |\\ ___ \\ |\\ ___ \\ |\\ __ \\ \n" +
-            "\\ \\ \\___|_ \\ \\ __/| \\ \\ \\ \\ \\ \\|\\ \\ \\ \\ \\|\\ /_ \\ \\ __/| \\ \\ \\\\\\__\\ \\ \\ ____________ \\ \\ \\ / / /\\ \\ \\ \\ \\ \\\\ \\ \\ \\ \\ \\_|\\ \\ \\ \\ \\|\\ \\ \n" +
-            " \\ \\_____ \\ \\ \\ \\_|/__ __ \\ \\ \\ \\ \\ __ \\ \\ \\ __ \\ \\ \\ \\_|/__ \\ \\ \\\\|__| \\ \\ |\\____________\\ \\ \\ \\/ / / \\ \\ \\ \\ \\ \\\\ \\ \\ \\ \\ \\ \\\\ \\ \\ \\ \\\\\\ \\ \n" +
-            " \\|____|\\ \\ \\ \\ \\_|\\ \\ |\\ \\\\_\\ \\ \\ \\ \\ \\ \\ \\ \\ \\|\\ \\ \\ \\ \\_|\\ \\ \\ \\ \\ \\ \\ \\ \\|____________| \\ \\ / / \\ \\ \\ \\ \\ \\\\ \\ \\ \\ \\ \\_\\\\ \\ \\ \\ \\\\\\ \\ \n" +
-            " ____\\_\\ \\ \\ \\_______\\\\ \\________\\ \\ \\__\\ \\__\\ \\ \\_______\\ \\ \\_______\\ \\ \\__\\ \\ \\__\\ \\ \\__/ / \\ \\__\\ \\ \\__\\\\ \\__\\ \\ \\_______\\ \\ \\_______\\ \n" +
-            " |\\_________\\ \\|_______| \\|________| \\|__|\\|__| \\|_______| \\|_______| \\|__| \\|__| \\|__|/ \\|__| \\|__| \\|__| \\|_______| \\|_______| \n" +
-            " \\|_________| \n" +
-            " \n" +
-            " \n" +
-            " ________ ________ \n" +
-            " |\\ __ \\ |\\ __ \\ \n" +
-            " \\ \\ \\|\\ \\ \\ \\ \\|\\ \\ \n" +
-            " \\ \\ __ \\ \\ \\ \\\\\\ \\ \n" +
-            " \\ \\ \\ \\ \\ \\ \\ \\\\\\ \\ \n" +
-            " \\ \\__\\ \\__\\ \\ \\_______\\ \n" +
-            " \\|__|\\|__| \\|_______| \n" +
-            " \n" +
-            " \n" +
-            " \n" +
-            " ___ ________ ________ ________ ________ ________ _________ ________ _____ ______ ________ ________ ________ ________ ___ ___ ___ \n" +
-            " |\\ \\ |\\ __ \\ |\\ ____\\ |\\ __ \\ |\\ ___ \\ |\\ __ \\ |\\___ ___\\ |\\ __ \\ |\\ _ \\ _ \\ |\\ __ \\ |\\ ____\\ |\\ __ \\ |\\ ____\\ |\\ \\|\\ \\ |\\ \\ \n" +
-            " \\ \\ \\ \\ \\ \\|\\ \\ \\ \\ \\___| \\ \\ \\|\\ \\ \\ \\ \\_|\\ \\ \\ \\ \\|\\ \\ \\|___ \\ \\_| \\ \\ \\|\\ \\ \\ \\ \\\\\\__\\ \\ \\ \\ \\ \\|\\ \\ \\ \\ \\___| \\ \\ \\|\\ \\ \\ \\ \\___| \\ \\ \\\\\\ \\ \\ \\ \\ \n" +
-            " __ \\ \\ \\ \\ \\ \\\\\\ \\ \\ \\ \\ ___ \\ \\ \\\\\\ \\ \\ \\ \\ \\\\ \\ \\ \\ \\\\\\ \\ \\ \\ \\ \\ \\ __ \\ \\ \\ \\\\|__| \\ \\ \\ \\ __ \\ \\ \\ \\ ___ \\ \\ \\\\\\ \\ \\ \\ \\ \\ \\ __ \\ \\ \\ \\ \n" +
-            "|\\ \\\\_\\ \\ \\ \\ \\\\\\ \\ \\ \\ \\|\\ \\ \\ \\ \\\\\\ \\ \\ \\ \\_\\\\ \\ \\ \\ \\\\\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\|\\ \\ \\ \\ \\\\\\ \\ \\ \\ \\____ \\ \\ \\ \\ \\ \\ \\ \\ \n" +
-            "\\ \\________\\ \\ \\_______\\ \\ \\_______\\ \\ \\_______\\ \\ \\_______\\ \\ \\_______\\ \\ \\__\\ \\ \\__\\ \\__\\ \\ \\__\\ \\ \\__\\ \\ \\__\\ \\__\\ \\ \\_______\\ \\ \\_______\\ \\ \\_______\\ \\ \\__\\ \\__\\ \\ \\__\\\n" +
-            " \\|________| \\|_______| \\|_______| \\|_______| \\|_______| \\|_______| \\|__| \\|__|\\|__| \\|__| \\|__| \\|__|\\|__| \\|_______| \\|_______| \\|_______| \\|__|\\|__| \\|__|\n" +
-            " \n" +
-            " \n" +
-            " \n")
+    println(" / __|  ___    (_)  __ _    | |__   ___   _ __    ___  __ __ (_)  _ _    __| |  ___   \n" +
+            " \\__ \\ / -_)   | | / _` |   | '_ \\ / -_) | '  \\  |___| \\ V / | | | ' \\  / _` | / _ \\  \n" +
+            " |___/ \\___|  _/ | \\__,_|   |_.__/ \\___| |_|_|_|        \\_/  |_| |_||_| \\__,_| \\___/  \n" +
+            "             |__/                                                                     \n" +
+            "                                                                                      \n" +
+            "  __ _   ___                                                                          \n" +
+            " / _` | / _ \\                                                                         \n" +
+            " \\__,_| \\___/                                                                         \n" +
+            "                                                                                      \n" +
+            "  _____                                   _   _                                       \n" +
+            " |_   _|  __ _   _ __    __ _   ___  __  (_) (_)                                      \n" +
+            "   | |   / _` | | '  \\  / _` | (_-< / _| | | | |                                      \n" +
+            "   |_|   \\__,_| |_|_|_| \\__,_| /__/ \\__| |_| |_|      ")
 
 }
 

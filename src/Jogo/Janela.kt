@@ -65,43 +65,43 @@ val velocidade = velocidade
     fun inter(me: Int): String {
         var n = "${intensidade[0][me * (intensidade[0].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter1(me: Int): String {
         var n = "${intensidade[1][me * (intensidade[0].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter12(me: Int): String {
         var n = "${intensidade[2][me * (intensidade[0].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter2(me: Int): String {
         var n = "${intensidade[3][me * (intensidade[3].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter3(me: Int): String {
         var n = "${intensidade[4][me * (intensidade[4].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter4(me: Int): String {
         var n = "${intensidade[5][me * (intensidade[5].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter5(me: Int): String {
         var n = "${intensidade[6][me * (intensidade[6].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter6(me: Int): String {
         var n = "${intensidade[7][me * (intensidade[7].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter7(me: Int): String {
         var n = "${intensidade[8][me * (intensidade[8].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter8(me: Int): String {
         var n = "${intensidade[9][me * (intensidade[9].length - 1) / 255]}"
         return (n)
-    };
+    }
     fun inter9(me: Int): String {
         var n = "${intensidade[10][me * (intensidade[10].length - 1) / 255]}"
         return (n)
@@ -157,7 +157,7 @@ val velocidade = velocidade
 
 
     }
-    var Imagemunica: File? = null
+    var ImagemUnica: File? = null
     fun fechar(){
         defaultCloseOperation = DISPOSE_ON_CLOSE
         isVisible = false
@@ -199,7 +199,7 @@ var iniciar = true
                     for (x in 0 until frameCount) {
                         val frame: BufferedImage = read.read(x)
                         if(iniciar) {
-                            Imagemunica = File(image.path)
+                            ImagemUnica = File(image.path)
                             iniciar = false
                         }
                         var a = if (t == false) 25/* janela pequena*/ else 40 // Janela Grande
@@ -292,7 +292,7 @@ var iniciar = true
                 } else if (image.extension == "jpg" || image.extension == "png" || image.extension == "jpeg") {
                     var frame: BufferedImage = ImageIO.read(image)
                     if(iniciar) {
-                        Imagemunica = File(image.path)
+                        ImagemUnica = File(image.path)
                         iniciar = false
 
                     }
@@ -600,7 +600,7 @@ mudar = true
         terminar()
 
     }
-    fun icon(image : File? = Imagemunica, largura: Int = 20, altura:Int =5): String {
+    fun icon(image : File? = ImagemUnica, largura: Int = 20, altura:Int =5): String {
         var i = intensi
 
         var image = ImageIO.read(image)
