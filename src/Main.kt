@@ -118,7 +118,7 @@ var bloqueio = 1
 // criar sistema de estação
 
 // aniversario quando seed for igual ao diaadia
-var gochistama = mutableListOf<String>()
+var gochisTama = mutableListOf<String>()
 val palaVelhice = arrayOf(
     "tomar remédios",
     "reclamar do tempo",
@@ -516,7 +516,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
         var ativo : Boolean = true, var chanceDeEngravidar : Int = 0, var frases: MutableList<String> = mutableListOf(), var intensidadeCustomizadaBoolean : Boolean = false,
         var intensidadeCustomizadaString: String = "", var desenho: Boolean? = false, var nome : String = "", var idade : Int = 0, var janela : janela? = null,
         var diaParaTrocaDeEmocao: Int = 0, var luto : Boolean = false, var identificador : Int = Random.nextInt(1,1001), var seed : Int = 0, var anoNasci: Int = 0, var anoMorte: Int? = null, var vivo:Boolean = true,
-        var intros : MutableList<String> = mutableListOf(), var intro : String = "", var carinho : Boolean = false, var fugiu: Boolean = false, var velocidade : Long = 50, var tipoDoGochi: String = "Gochi generico"
+        var intros : MutableList<String> = mutableListOf(), var intro : String = "", var carinho : Boolean = false, var fugiu: Boolean = false, var velocidade : Long = 50, var tipoDoGochi: String = "Gochi generico", var danoDeFome: Int? = null
     )
 
     data class atributos(val variavel : String ,val valor : String)
@@ -912,7 +912,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
 
 
-            var caminho = gochistama[Random.nextInt(0,gochistama.size)]
+            var caminho = gochisTama[4]
             var caminhotamas = File(caminho).listFiles()
 
             caminhotamas.forEach { pasta ->
@@ -927,36 +927,36 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
                     }
 
                 }
-                var realchamado = pasta.path
+                var realChamado = pasta.path
                 if(pasta.name.uppercase() == "INTRO"){
-                    caracteristicas.intro = realchamado
+                    caracteristicas.intro = realChamado
                 }else if (chamado != null) {
-                    var chamadonum = chamado.toString().toInt()
+                    var chamadoNumero = chamado.toString().toInt()
 
-                    if (chamadonum == 1) {
-                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[0]))
-                    } else if (chamadonum == 2) {
-                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[1]))
-                    } else if (chamadonum == 3) {
-                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[2]))
-                    } else if (chamadonum == 4) {
-                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[3]))
-                    } else if (chamadonum == 5) {
-                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[4]))
-                    } else if (chamadonum == 6) {
-                        listaDeEmocao.add(sentimentos(realchamado, listaDeTipoDeEmocoes[5]))
+                    if (chamadoNumero == 1) {
+                        listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[0]))
+                    } else if (chamadoNumero == 2) {
+                        listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[1]))
+                    } else if (chamadoNumero == 3) {
+                        listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[2]))
+                    } else if (chamadoNumero == 4) {
+                        listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[3]))
+                    } else if (chamadoNumero == 5) {
+                        listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[4]))
+                    } else if (chamadoNumero == 6) {
+                        listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[5]))
                     }
                 }
                 if (pasta.name == "config.txt") {
-                    var atributoss = mutableListOf<atributos>()
+                    var variaveis = mutableListOf<atributos>()
 
                     pasta.forEachLine { frase ->
                         var chamada: String? = null
                         var numero: String? = null
                         var palavra: String? = null
                         var chamadobol = true
-                        var numerobol = false
-                        var palavrabol = false
+                        var numeroBoolean = false
+                        var palavraBoolean = false
                         var parentese = false
                         for (x in frase) {
                             if (x == '"' || parentese){
@@ -977,24 +977,24 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
                                     palavra+= x
 
-                                    palavrabol = true
+                                    palavraBoolean = true
                                 }
                             }else if (x == '=' || chamadobol == false) {
                                 chamadobol = false
-                                if (x.isDigit() && !palavrabol) {
+                                if (x.isDigit() && !palavraBoolean) {
                                     if (numero == null) {
                                         numero = ""
                                     }
 
                                     numero += x
-                                    numerobol = true
+                                    numeroBoolean = true
 
-                                } else if (x.isLetter() && !numerobol) {
+                                } else if (x.isLetter() && !numeroBoolean) {
                                     if (palavra == null) {
                                         palavra = ""
                                     }
                                     palavra += x
-                                    palavrabol = true
+                                    palavraBoolean = true
 
                                 }
                             } else if (x.isLetter() && chamadobol) {
@@ -1009,18 +1009,17 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
                         }
                         var valor: String? = null
                         if(numero != null || palavra != null){
-                            if (palavrabol) {
+                            if (palavraBoolean) {
                                 valor = palavra!!
                             } else {
                                 valor = numero!!
                             }}
                         if(chamada != null || valor != null){
-                            atributoss.add(atributos(chamada!!, valor!!))}
+                            variaveis.add(atributos(chamada!!, valor!!))}
                     }
-                    for (x in atributoss) {
+                    for (x in variaveis) {
                         if (x.variavel.uppercase().replace(" ", "") == "VIDA") {
-                            var realnumber = x.valor.toInt()
-                            caracteristicas.vida = realnumber!!
+                            caracteristicas.vida = x.valor.toInt()
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "FOME") {
 
                             var realnumber = x.valor.toInt()
@@ -1065,6 +1064,9 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
                         } else if (x.variavel!!.uppercase().replace(" ", "") == "TAMANHOFAMILIA") {
 
                             caracteristicas.tamanhoDaFamilia = x.valor.toInt()
+                        }else if (x.variavel!!.uppercase().replace(" ", "") == "DANOFOME") {
+
+                            caracteristicas.danoDeFome = x.valor.toInt()
                         }
 
 
@@ -1086,10 +1088,15 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
             caracteristicas.idade = 0
             caracteristicas.seed = Random.nextInt(1,diaadia+1)
 
-            caracteristicas.vidaReal = caracteristicas.vida - ((caracteristicas.vida * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
-            caracteristicas.fomeReal = caracteristicas.fome - ((caracteristicas.fome * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
-            caracteristicas.felicidadeReal = caracteristicas.felicidade - ((caracteristicas.felicidade * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
-            caracteristicas.sexappelReal = caracteristicas.sexappel - ((caracteristicas.sexappel * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.vida -= ((caracteristicas.vida * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.fome -= ((caracteristicas.fome * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.felicidade -= ((caracteristicas.felicidade * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.sexappel -= ((caracteristicas.sexappel * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
+            caracteristicas.vidaReal = caracteristicas.vida
+            caracteristicas.fomeReal = caracteristicas.fome
+            caracteristicas.felicidadeReal = caracteristicas.felicidade
+            caracteristicas.sexappelReal = caracteristicas.sexappel
+
 if(diaadia%10 == 0){
     doenca.doencaGenetica = true
 }
@@ -1101,17 +1108,17 @@ if(diaadia%10 == 0){
                 caracteristicas.diaParaTrocaDeEmocao = caracteristicas.diaParaTrocaDeEmocao!! - 1
             }
             caracteristicas.chanceDeEngravidar = if (caracteristicas.seed > 20) 20 else caracteristicas.seed
-            caracteristicas.nome = readln()
-            var status = "Nome: ${caracteristicas.nome} | Idade: ${caracteristicas.idade} | Vida: ${caracteristicas.vidaReal} | Fome: ${caracteristicas.fomeReal}"
             var numeroaleatorio = Random.nextInt(1,101)
             tamanho = if (numeroaleatorio == 100) !tamanho else tamanho
             numeroaleatorio = Random.nextInt(1,101)
             colorido = if(numeroaleatorio == 100) !colorido else colorido
             var intensidadeAleatoria = if (caracteristicas.intensidadeCustomizadaBoolean) 11 else Random.nextInt(1,11)
             emocao = listaDeEmocao[0]
-            caracteristicas.janela = janela(tamanho,colorido,caracteristicas.desenho!!,emocao!!.pastaEmocao,status,intensidadeAleatoria,caracteristicas.intensidadeCustomizadaString!!, caracteristicas.velocidade)
-            println("Escreva o nome do TamaGochi") // colocar em um Jlabel
-            caracteristicas.janela!!.terminar()
+            caracteristicas.janela = janela(tamanho,colorido,caracteristicas.desenho!!,emocao!!.pastaEmocao,"",intensidadeAleatoria,caracteristicas.intensidadeCustomizadaString!!, caracteristicas.velocidade)
+            println("Escreva o nome do TamaGochi")
+            caracteristicas.nome = readln()
+            caracteristicas.janela!!.title = "Nome: ${caracteristicas.nome} | Idade: ${caracteristicas.idade} | Vida: ${caracteristicas.vidaReal} | Fome: ${caracteristicas.fomeReal}"
+            caracteristicas.janela!!.terminando()
             tocador.mudar(audioReal)
             famili.add(this)
 
@@ -1120,32 +1127,34 @@ if(diaadia%10 == 0){
 
         fun come(qualidade: Int){
             comer = 0
-            var numeroaleatorio = Random.nextInt(1,caracteristicas.seed+1)
-            caracteristicas.felicidadeReal += qualidade*(diaadia/100) - numeroaleatorio
+            var numeroAleatorio = Random.nextInt(1,caracteristicas.seed+1)
+            caracteristicas.felicidadeReal += qualidade*(diaadia/100) - numeroAleatorio
             if(qualidade > 30){
                 caracteristicas.felicidadeReal += qualidade/10
             }
 
         }
         fun danoFome(){
-            var danofome = Random.nextInt(0,caracteristicas.seed+1/10)
+            var danoFome = 0
+            if(caracteristicas.danoDeFome == null){
+            danoFome = Random.nextInt(0,caracteristicas.seed+1/10)}else {danoFome = caracteristicas.danoDeFome!!}
             if(caracteristicas.carinho){
-                danofome = (danofome * 1.5).toInt()
+                danoFome = (danoFome * 1.5).toInt()
             }
-            caracteristicas.fomeReal -= danofome
+            caracteristicas.fomeReal -= danoFome
         }
         fun brincadeira(){
             caracteristicas.carinho = true
-            var numeroaleatoriobrincadeira = 0
+            var numeroAleatorioBrincadeira = 0
             var afinidade = (caracteristicas.idade/100) + 1
             if (emocao!!.emocaoString == listaDeTipoDeEmocoes[1]){
-                numeroaleatoriobrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*1.5).toInt())
+                numeroAleatorioBrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*1.5).toInt())
             }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[2]){
-                numeroaleatoriobrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*0.5).toInt())
+                numeroAleatorioBrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*0.5).toInt())
 
             }else{
-                numeroaleatoriobrincadeira = Random.nextInt(1, caracteristicas.seed+1)}
-            caracteristicas.felicidadeReal += numeroaleatoriobrincadeira * afinidade
+                numeroAleatorioBrincadeira = Random.nextInt(1, caracteristicas.seed+1)}
+            caracteristicas.felicidadeReal += numeroAleatorioBrincadeira * afinidade
             if(videojogo){
                 caracteristicas.felicidadeReal += 10 - contadorDeAbstinenciadeVideojogos
             }
@@ -1676,7 +1685,7 @@ var dinamico = dinamico
     var querosair = false
     init {
         caminhotamas.forEach { pasta ->
-            gochistama.add(pasta.path)
+            gochisTama.add(pasta.path)
         }
         pastamusicaGabriel.forEach { arquivo ->
             musicasGabriel.add(arquivo.path)
@@ -2161,18 +2170,18 @@ fun main() {
     titulo()
     println("\nVocê quer a jogar com janelas grandes? (S/N)")
     var r = readln()
-    r= verificadoSeN(r)
+    r= verificadorSEN(r)
 
 
 
     when(r!!.uppercase().replace(" ", "")){
         "S" -> tam = true
-        "N" -> tam = false
 
+        "N" -> tam = false
     }
     println("Você quer a jogar com cores? (S/N)")
     r = readln()
-    r= verificadoSeN(r)
+    r= verificadorSEN(r)
 
 
 
@@ -2183,7 +2192,7 @@ fun main() {
     }
     println("Você quer a jogar de maneira temporal/dinâmica? (S/N)")
     r = readln()
-    r= verificadoSeN(r)
+    r= verificadorSEN(r)
 
 
     when(r!!.uppercase().replace(" ", "")){
@@ -2198,7 +2207,7 @@ fun main() {
     println("Quer continuar? (S/N)")
     r = readln()
 
-        r= verificadoSeN(r)
+        r= verificadorSEN(r)
 
 
 
@@ -2213,7 +2222,7 @@ fun main() {
 
 
 }
-fun verificadoSeN(valor : String):String{
+fun verificadorSEN(valor : String):String{
     var r = valor
     while (r!!.uppercase().replace(" ", "") != "S" && r!!.uppercase().replace(" ","") != "N"){
         println("Escreva somente S ou N")

@@ -1,5 +1,6 @@
 package Jogo
 
+import listaDeTipoDeEmocoes
 import javax.swing.*
 import java.awt.*
 import java.awt.image.BufferedImage
@@ -12,22 +13,22 @@ import javax.swing.text.*
 import java.awt.Color
 import kotlin.random.Random
 // tonho: tamanho da página: grande ou pequena; col: se vai ser colorido ou não; deses: se a imagem vai estar mais definida ou mais embasada (Smoth), gif: as imagens para o tamagochi, status: titulo para o jogo, intensi: para definir a intensidade da art ascii"
-class janela(tonho: Boolean = true, col: Boolean = true, deses: Boolean = false,gif: String, status : String,intensi : Int, customintens: String = "",velocidade: Long) : JFrame() {
+class janela(tamanhoDaJanela: Boolean = true, col: Boolean = true, desenho: Boolean = false, caminhoDasImagens: String, status : String, intensidade : Int, intensidadeCustomizada: String = "", velocidade: Long) : JFrame() {
     var mudarestilo = mutableListOf<estilo>()
 
     data class estilo(val frames: MutableList<String>, val cores: MutableList<MutableList<Color>>)
 val velocidade = velocidade
-    val tonho = tonho;
-    var intensicustom = customintens
+    val tonho = tamanhoDaJanela;
+    var intensicustom = intensidadeCustomizada
     val col = col;
-    val deses = deses;
-    var gif = gif;
-    val intensi = intensi
-    val txt: JTextPane = JTextPane()
+    val deses = desenho;
+    var gif = caminhoDasImagens;
+    val intensi = intensidade
+    val blocoDeTexto: JTextPane = JTextPane()
     var cor = mutableListOf<Color>()
-    var frameascii = mutableListOf<String>()
+    var framesAscii = mutableListOf<String>()
     var cores = mutableListOf<MutableList<Color>>()
-    var vad = ""
+    var quadros = ""
     var intensidade = arrayOf(
         "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:," + "\"^`\'. ",
         "$".repeat(9) + "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:," + "\"^`\'. ",
@@ -43,18 +44,16 @@ val velocidade = velocidade
     )
 
     fun tamanho(){
-        add(txt)
+        add(blocoDeTexto)
         SwingUtilities.invokeAndWait{
-            txt.text = frameascii[0]
-            pack()
-            size = Dimension(size.width -20,size.height -15)
+            blocoDeTexto.text = framesAscii[0]
 
 
         }
 
-        mdtc(frameascii)
-        if(!processo!!.isAlive){
-            processo?.start()
+        execucaoDaAnimacao(framesAscii)
+        if(!processoDaAnimacao!!.isAlive){
+            processoDaAnimacao?.start()
         }
 
 
@@ -62,52 +61,52 @@ val velocidade = velocidade
     }
 
     // Essa parte é das intensidades, em algumas imagens principalmente as que tem fundo fica muito díficil de ver qual é a imagem
-    fun inter(me: Int): String {
+    fun aplicacaoDaIntensidade11(me: Int): String {
         var n = "${intensidade[0][me * (intensidade[0].length - 1) / 255]}"
         return (n)
     }
-    fun inter1(me: Int): String {
+    fun aplicacaoDaIntensidade12(me: Int): String {
         var n = "${intensidade[1][me * (intensidade[0].length - 1) / 255]}"
         return (n)
     }
-    fun inter12(me: Int): String {
+    fun aplicacaoDaIntensidade13(me: Int): String {
         var n = "${intensidade[2][me * (intensidade[0].length - 1) / 255]}"
         return (n)
     }
-    fun inter2(me: Int): String {
+    fun aplicacaoDaIntensidade2(me: Int): String {
         var n = "${intensidade[3][me * (intensidade[3].length - 1) / 255]}"
         return (n)
     }
-    fun inter3(me: Int): String {
+    fun aplicacaoDaIntensidade3(me: Int): String {
         var n = "${intensidade[4][me * (intensidade[4].length - 1) / 255]}"
         return (n)
     }
-    fun inter4(me: Int): String {
+    fun aplicacaoDaIntensidade4(me: Int): String {
         var n = "${intensidade[5][me * (intensidade[5].length - 1) / 255]}"
         return (n)
     }
-    fun inter5(me: Int): String {
+    fun aplicacaoDaIntensidade5(me: Int): String {
         var n = "${intensidade[6][me * (intensidade[6].length - 1) / 255]}"
         return (n)
     }
-    fun inter6(me: Int): String {
+    fun aplicacaoDaIntensidade6(me: Int): String {
         var n = "${intensidade[7][me * (intensidade[7].length - 1) / 255]}"
         return (n)
     }
-    fun inter7(me: Int): String {
+    fun aplicacaoDaIntensidade7(me: Int): String {
         var n = "${intensidade[8][me * (intensidade[8].length - 1) / 255]}"
         return (n)
     }
-    fun inter8(me: Int): String {
+    fun aplicacaoDaIntensidade8(me: Int): String {
         var n = "${intensidade[9][me * (intensidade[9].length - 1) / 255]}"
         return (n)
     }
-    fun inter9(me: Int): String {
+    fun aplicacaoDaIntensidade9(me: Int): String {
         var n = "${intensidade[10][me * (intensidade[10].length - 1) / 255]}"
         return (n)
     }
 
-    fun intercustom(me: Int): String {
+    fun aplicacaoDaIntensidadeCustomizada(me: Int): String {
         var n = "${intensicustom[me * (intensicustom.length - 1) / 255]}"
         return (n)
     }
@@ -121,11 +120,11 @@ val velocidade = velocidade
     }
     var init = true
 
-    fun terminar() {
+    fun terminando() {
         if (init){
             init = false
         this.remove(iniciar)}
-        txt.isVisible = true
+        blocoDeTexto.isVisible = true
         tamanho()
     }
 
@@ -133,27 +132,27 @@ val velocidade = velocidade
         if(!col){
 
         }
-        txt.isVisible = false
+        blocoDeTexto.isVisible = false
         isVisible = true
         title = status
-        txt.isEditable = false
-        txt.background = if (col) {
+        blocoDeTexto.isEditable = false
+        blocoDeTexto.background = if (col) {
             Color.BLACK
         } else {
             Color.WHITE
         }
-        background = txt.background
+        background = blocoDeTexto.background
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
-        txt.font = if (tonho) Font("Monospaced", Font.PLAIN, 10) else Font("Monospaced", Font.PLAIN, 8)
+        blocoDeTexto.font = if (tamanhoDaJanela) Font("Monospaced", Font.PLAIN, 10) else Font("Monospaced", Font.PLAIN, 8)
         layout = GridBagLayout()
-        txt.minimumSize = Dimension(8000, 8000)
-        size = if (tonho) {
-            Dimension(530, 640)
+        blocoDeTexto.minimumSize = Dimension(Int.MAX_VALUE, Int.MAX_VALUE)
+        size = if (tamanhoDaJanela) {
+            Dimension(530, 940)
         } else {
             Dimension(340, 370)
         }
         iniciando()
-        giff()
+        processamentoDasImagens()
 
 
     }
@@ -164,9 +163,9 @@ val velocidade = velocidade
     }
     fun mudarestiloexterno(){
         mudar = false
-        processo?.join(10)
+        processoDaAnimacao?.join(10)
         var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
-        frameascii = mudarestilo[numeroaletaroio].frames
+        framesAscii = mudarestilo[numeroaletaroio].frames
         cores = mudarestilo[numeroaletaroio].cores
         mudar = true
         tamanho()
@@ -175,29 +174,29 @@ val velocidade = velocidade
     fun mudarestilo() {
 
         var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
-            frameascii = mudarestilo[numeroaletaroio].frames
+            framesAscii = mudarestilo[numeroaletaroio].frames
             cores = mudarestilo[numeroaletaroio].cores
     }
 
-    fun giff(t: Boolean = tonho, c: Boolean = col, d: Boolean = deses, g: String = gif, i: Int = intensi) {
+    fun processamentoDasImagens(t: Boolean = tonho, c: Boolean = col, d: Boolean = deses, g: String = gif, i: Int = intensi) {
         mudarestilo = mutableListOf()
         cores = mutableListOf()
-        frameascii = mutableListOf()
+        framesAscii = mutableListOf()
         var image = File(g)
         var listimage = image.listFiles().filter { it.isDirectory }
         isResizable = false
         listimage.forEach { pastas ->
             var listadeimagem = pastas.listFiles()
+            var iniciar = true
             listadeimagem.forEach { image ->
-var iniciar = true
                 if (image.extension == "gif") {
                     var inp = ImageIO.createImageInputStream(image)
                     var read: ImageReader = ImageIO.getImageReadersByFormatName("gif").next()
 
                     read.setInput(inp)
                     val frameCount = read.getNumImages(true)
-                    for (x in 0 until frameCount) {
-                        val frame: BufferedImage = read.read(x)
+                    for (frame in 0 until frameCount) {
+                        val imagem: BufferedImage = read.read(frame)
                         if(iniciar) {
                             ImagemUnica = File(image.path)
                             iniciar = false
@@ -205,42 +204,38 @@ var iniciar = true
                         var a = if (t == false) 25/* janela pequena*/ else 40 // Janela Grande
                         //l = 70 // janela pequena
                         var l = if (t == false ) 70 /* janela pequena*/ else 80// Janela Grande
-                        var reals = BufferedImage(l, a, BufferedImage.TYPE_INT_RGB)
+                        var realImagem = BufferedImage(l, a, BufferedImage.TYPE_INT_ARGB)
                         if (deses) {
-                            val origin = frame.getScaledInstance(
+                            val origem = imagem.getScaledInstance(
                                 l,
                                 a,
                                 Image.SCALE_SMOOTH
                             ) //para imagens que tem muitos detalhes, como desenhos
-                            var greals: Graphics2D = reals.createGraphics()
-                            greals.drawImage(origin, 0, 0, l, a, null)
-                            greals.dispose()
+                            var graphicReal: Graphics2D = realImagem.createGraphics()
+                            graphicReal.drawImage(origem, 0, 0, l, a, null)
+                            graphicReal.dispose()
 
                         } else {
-
- // para algo mais definido, como pixel art
-                            var greals: Graphics2D = reals.createGraphics()
-                            greals.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-                            greals.setRenderingHint(
+                            var graphicReal: Graphics2D = realImagem.createGraphics()
+                            graphicReal.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+                            graphicReal.setRenderingHint(
                                 RenderingHints.KEY_RENDERING,
                                 RenderingHints.VALUE_RENDER_QUALITY
                             )
-                            greals.drawImage(frame, 0, 0, l, a, null)
-                            greals.dispose()
+                            graphicReal.drawImage(imagem, 0, 0, l, a, null)
+                            graphicReal.dispose()
                         }
 
-                        var x = 0
                         cor = mutableListOf()
-                        while (x < reals.height) {
-                            var j = 0
+                        for ( y in 0 ..< realImagem.height) {
+                            var x = 0
 
-                            while (j < reals.width) {
-                                var c = Color(reals.getRGB(j, x))
+                            for (x in 0 ..< realImagem.width) {
+                                var c = Color(realImagem.getRGB(x, y))
                                 var r = c.red
                                 var v = c.green
                                 var a = c.blue
-                                var me = (r + v + a) / 3
-                                j++
+                                var media = (r + v + a) / 3
                                 for (x in image.name) {
                                     var alt = ""
                                     alt += x
@@ -248,49 +243,49 @@ var iniciar = true
                                 }
 
                                 cor.add(c)
-                                var intensida = if (i == 0) {
-                                    inter(me)
+                                var intensidade = if (i == 0) {
+                                    aplicacaoDaIntensidade11(media)
                                 } else if (i == 1) {
-                                    inter1(me)
+                                    aplicacaoDaIntensidade12(media)
                                 } else if (i == 2) {
-                                    inter12(me)
+                                    aplicacaoDaIntensidade13(media)
                                 } else if (i == 3) {
-                                    inter2(me)
+                                    aplicacaoDaIntensidade2(media)
                                 } else if (i == 4) {
-                                    inter3(me)
+                                    aplicacaoDaIntensidade3(media)
                                 } else if (i == 5) {
-                                    inter4(me)
+                                    aplicacaoDaIntensidade4(media)
                                 } else if (i == 6) {
-                                    inter5(me)
+                                    aplicacaoDaIntensidade5(media)
                                 } else if (i == 7) {
-                                    inter6(me)
+                                    aplicacaoDaIntensidade6(media)
                                 } else if (i == 8) {
-                                    inter7(me)
+                                    aplicacaoDaIntensidade7(media)
                                 } else if (i == 9) {
-                                    inter8(me)
+                                    aplicacaoDaIntensidade8(media)
                                 } else if(i == 10) {
-                                    inter9(me)
+                                    aplicacaoDaIntensidade9(media)
                                 } else if(i == 11){
-                                    intercustom(me)
+                                    aplicacaoDaIntensidadeCustomizada(media)
                                 }else{
                                     println("Número custom inválido")
-                                    inter(me)
+                                    aplicacaoDaIntensidade11(media)
                                 }
-                                vad += intensida
+                                quadros += intensidade
                             }
                             cor.add(Color(0, 0, 0))
 
-                            vad += "\n"
+                            quadros += "\n"
                             x++
                         }
                         cores.add(cor)
-                        frameascii.add(vad)
-                        vad = ""
+                        framesAscii.add(quadros)
+                        quadros = ""
                     }
 
 
                 } else if (image.extension == "jpg" || image.extension == "png" || image.extension == "jpeg") {
-                    var frame: BufferedImage = ImageIO.read(image)
+                    var imagem: BufferedImage = ImageIO.read(image)
                     if(iniciar) {
                         ImagemUnica = File(image.path)
                         iniciar = false
@@ -299,93 +294,86 @@ var iniciar = true
                     var a = if (t == false) 20/* janela pequena*/ else 40 // Janela Grande
                     //l = 70 // janela pequena
                     var l = if (t == false) 40 /* janela pequena*/ else 80 // Janela Grande
-                    var reals = BufferedImage(l, a, BufferedImage.TYPE_INT_RGB)
+                    var realImagem = BufferedImage(l, a, BufferedImage.TYPE_INT_ARGB)
                     if (d == false) {
-                        val origin = frame.getScaledInstance(
+                        val origem = imagem.getScaledInstance(
                             l,
                             a,
                             Image.SCALE_SMOOTH
                         ) //para imagens que tem muitos detalhes, como desenhos
-                        var greals: Graphics2D = reals.createGraphics()
-                        greals.drawImage(origin, 0, 0, l, a, null)
-                        greals.dispose()
+                        var graphicReal: Graphics2D = realImagem.createGraphics()
+                        graphicReal.drawImage(origem, 0, 0, l, a, null)
+                        graphicReal.dispose()
 
                     } else {
-
-                        reals =
-                            BufferedImage(l, a, BufferedImage.TYPE_INT_RGB) // para algo mais definido, como pixel art
-                        var greals: Graphics2D = reals.createGraphics()
-                        greals.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-                        greals.setRenderingHint(
+                        var graphicReal: Graphics2D = realImagem.createGraphics()
+                        graphicReal.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+                        graphicReal.setRenderingHint(
                             RenderingHints.KEY_RENDERING,
                             RenderingHints.VALUE_RENDER_QUALITY
                         )
-                        greals.drawImage(frame, 0, 0, l, a, null)
-                        greals.dispose()
+                        graphicReal.drawImage(imagem, 0, 0, l, a, null)
+                        graphicReal.dispose()
                     }
                     var x = 0
                     cor = mutableListOf()
-                    while (x < reals.height) {
-                        var j = 0
-
-                        while (j < reals.width) {
-                            var c = Color(reals.getRGB(j, x))
+                    for(y in 0 ..< realImagem.height) {
+                        for(x in 0 ..< realImagem.width) {
+                            var c = Color(realImagem.getRGB(x, y))
                             var r = c.red
                             var v = c.green
                             var a = c.blue
                             var me = (r + v + a) / 3
-                            j++
 
 
                             cor.add(c)
                             var intensida = if (i == 0) {
-                                inter(me)
+                                aplicacaoDaIntensidade11(me)
                             } else if (i == 1) {
-                                inter1(me)
+                                aplicacaoDaIntensidade12(me)
                             } else if (i == 2) {
-                                inter12(me)
+                                aplicacaoDaIntensidade13(me)
                             } else if (i == 3) {
-                                inter2(me)
+                                aplicacaoDaIntensidade2(me)
                             } else if (i == 4) {
-                                inter3(me)
+                                aplicacaoDaIntensidade3(me)
                             } else if (i == 5) {
-                                inter4(me)
+                                aplicacaoDaIntensidade4(me)
                             } else if (i == 6) {
-                                inter5(me)
+                                aplicacaoDaIntensidade5(me)
                             } else if (i == 7) {
-                                inter6(me)
+                                aplicacaoDaIntensidade6(me)
                             } else if (i == 8) {
-                                inter7(me)
+                                aplicacaoDaIntensidade7(me)
                             } else if (i == 9) {
-                                inter8(me)
+                                aplicacaoDaIntensidade8(me)
                             } else if(i == 10) {
-                                inter9(me)
+                                aplicacaoDaIntensidade9(me)
                             } else if(i == 11){
-                                intercustom(me)
+                                aplicacaoDaIntensidadeCustomizada(me)
                             }else{
                                 println("Número custom inválido")
-                                inter(me)
+                                aplicacaoDaIntensidade11(me)
                             }
-                            vad += intensida
+                            quadros += intensida
                         }
                         cor.add(Color(0, 0, 0))
 
-                        vad += "\n"
-                        x++
+                        quadros += "\n"
 
 
                     }
                     cores.add(cor)
-                    frameascii.add(vad)
-                    vad = ""
+                    framesAscii.add(quadros)
+                    quadros = ""
 
                 }
 
 
             }
-            var estiloa = estilo(frameascii, cores)
-            mudarestilo.add(estiloa)
-            frameascii = mutableListOf()
+            var estilo = estilo(framesAscii, cores)
+            mudarestilo.add(estilo)
+            framesAscii = mutableListOf()
             cores = mutableListOf()
 
 
@@ -395,7 +383,7 @@ var iniciar = true
 
     }
 
-    var processo: Thread? = null
+    var processoDaAnimacao: Thread? = null
     var mudar = true
     /*fun copy(original: DefaultStyledDocument): DefaultStyledDocument {
         val newDoc = DefaultStyledDocument()
@@ -452,37 +440,52 @@ var iniciar = true
 
 
     }*/
-
-    fun criascii(frams: MutableList<String>): Document {
-
+    var listframes = mutableListOf<Document>()
+    fun quadroAsciiColorido(image: String,local:Int): Document{
         var doc = DefaultStyledDocument()
+        var copiaCores = cores.toList()
+        image.forEachIndexed { index, t ->
+            val atributos = SimpleAttributeSet().apply {
+                StyleConstants.setForeground(
+                    this,
+                    copiaCores[local][index]
 
-        var con = 0
+                )
 
-        for (T in frams) {
-
-
-            T.forEachIndexed { index, t ->
-                val atributos = SimpleAttributeSet().apply {
-                    StyleConstants.setForeground(
-                        this,
-                        cores[con][index]
-
-                    )
-
-                }
-
-                doc.insertString(doc.length, t.toString(), atributos)
             }
-            con++
+
+            doc.insertString(doc.length, t.toString(), atributos)
         }
-        return (doc)
+        return doc
+
     }
+    fun quadroAscii(image: String): Document{
+        var doc = DefaultStyledDocument()
+       doc.insertString(0,image,null)
+        return doc
+
+    }
+
+
+    fun criascii(frams: MutableList<String>) {
+        var imagensascii = frams.toList()
+
+        imagensascii.forEachIndexed{
+                i,f  ->
+            if(col){
+            listframes.add(quadroAscii(f))}else{
+                listframes.add(quadroAsciiColorido(f,i))
+            }
+        }
+
+
+    }
+
 
     fun continuarascii():StyledDocument{
         var docu= DefaultStyledDocument()
         var coress = cores.toList()
-        var frame = frameascii.toList()
+        var frame = framesAscii.toList()
 
         frame.forEachIndexed { i, Fram: String ->
             Fram.forEachIndexed { index, t ->
@@ -506,7 +509,7 @@ var iniciar = true
     }
     fun continuarasciisemcor():StyledDocument{
         var docu= DefaultStyledDocument()
-        var frame = frameascii
+        var frame = framesAscii
 
         frame.forEachIndexed { i, Fram: String ->
 
@@ -516,36 +519,36 @@ var iniciar = true
         return(docu)
 
     }
-    var frames : Document = DefaultStyledDocument()
-    fun mdtc(F: MutableList<String>) {
+    fun execucaoDaAnimacao(F: MutableList<String>) {
            var doc = continuarascii()
-        txt.isVisible = true
+        blocoDeTexto.isVisible = true
 
 
-        txt.isVisible = true
+        blocoDeTexto.isVisible = true
             var inicio = F[0].length
             mudar = true
-        processo = Thread {
+        processoDaAnimacao = Thread {
+            listframes = mutableListOf()
             while (mudar) {
 
 
-                if(txt.text.length > frameascii[0].length && mudar){
+                if(blocoDeTexto.text.length > framesAscii[0].length && mudar){
                     Thread.sleep(velocidade)
 
 
                     SwingUtilities.invokeAndWait{
-                        txt.styledDocument.remove(0,frameascii[0].length)
+                        blocoDeTexto.styledDocument.remove(0,framesAscii[0].length)
 
                     }
         }
 
-                if(F[0].length *2 > txt.document.length){
+                if(F[0].length *2 > blocoDeTexto.document.length){
                     SwingUtilities.invokeAndWait() {
-                        txt.styledDocument = doc
+                        blocoDeTexto.styledDocument = doc
                     }
                 }
 
-                if(inicio*frameascii.size - inicio == txt.document.length){
+                if(inicio*framesAscii.size - inicio == blocoDeTexto.document.length){
                     if(col){
                         SwingUtilities.invokeAndWait() {
                             doc = continuarascii()
@@ -556,103 +559,69 @@ var iniciar = true
                     }
 
                 }
-
-
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
 }
-    fun mtt(s: String) {
-        title = s
-    }
-
-    fun espera() {
-        Thread.sleep(10)
-        mudar = false
-        processo?.join()
-    }
 
     fun mdg(gq: String = gif) {
 
 mudar = false
-        processo!!.join()
+        processoDaAnimacao!!.join()
 mudar = true
-        giff(g = gq)
-        terminar()
+        processamentoDasImagens(g = gq)
+        terminando()
 
     }
     fun icon(image : File? = ImagemUnica, largura: Int = 20, altura:Int =5): String {
         var i = intensi
 
         var image = ImageIO.read(image)
-        var reals = BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB)
-        var greals: Graphics2D = reals.createGraphics()
-        greals.drawImage(image, 0, 0, largura, altura, null)
-        greals.dispose()
-        var vadi = ""
+        var realImagem = BufferedImage(largura, altura, BufferedImage.TYPE_INT_ARGB)
+        var graphicReal: Graphics2D = realImagem.createGraphics()
+        graphicReal.drawImage(image, 0, 0, largura, altura, null)
+        graphicReal.dispose()
+        var quadroDoIcone = ""
         var x = 0
 
-        while (x < reals.height) {
-            var j = 0
+        for(y in 0 ..< realImagem.height) {
 
-            while (j < reals.width) {
-                var c = Color(reals.getRGB(j, x))
+            for (x in 0..<realImagem.width) {
+                var c = Color(realImagem.getRGB(x, y))
                 var r = c.red
                 var v = c.green
                 var a = c.blue
-                var me = (r + v + a) / 3
-                j++
+                var media = (r + v + a) / 3
 
-                var intensida = if (i == 0) {
-                    inter(me)
+                var intensidade = if (i == 0) {
+                    aplicacaoDaIntensidade11(media)
                 } else if (i == 1) {
-                    inter1(me)
+                    aplicacaoDaIntensidade12(media)
                 } else if (i == 2) {
-                    inter12(me)
+                    aplicacaoDaIntensidade13(media)
                 } else if (i == 3) {
-                    inter2(me)
+                    aplicacaoDaIntensidade2(media)
                 } else if (i == 4) {
-                    inter3(me)
+                    aplicacaoDaIntensidade3(media)
                 } else if (i == 5) {
-                    inter4(me)
+                    aplicacaoDaIntensidade4(media)
                 } else if (i == 6) {
-                    inter5(me)
+                    aplicacaoDaIntensidade5(media)
                 } else if (i == 7) {
-                    inter6(me)
+                    aplicacaoDaIntensidade6(media)
                 } else if (i == 8) {
-                    inter7(me)
+                    aplicacaoDaIntensidade7(media)
                 } else if (i == 9) {
-                    inter8(me)
+                    aplicacaoDaIntensidade8(media)
                 } else {
-                    inter9(me)
+                    aplicacaoDaIntensidade9(media)
                 }
-                vadi += if (col == false) intensida else "\u001B[38;2;$r;$v;${a}m$intensida"
+                quadroDoIcone += if (!col) intensidade else "\u001B[38;2;$r;$v;${a}m$intensidade"
             }
 
-            vadi += if (col == false) "\n" else "\u001B[38;2;0;0;0m\n\u001B[0m"
-            x++
+            quadroDoIcone += "\n"
         }
 
-        return (vadi)
+        return (quadroDoIcone)
     }
 
 }
