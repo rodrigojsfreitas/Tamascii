@@ -493,7 +493,7 @@ data class comida (val nome : String,var qualidade: Int)
 class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
     var estoque = mutableListOf<comida>()
-    var diaadia = Random.nextInt(1,101)
+    var diaADia = Random.nextInt(1,101)
     var regi = mutableListOf<tama>()
     var famili = mutableListOf<jogoTama.gochi>()
 
@@ -538,8 +538,8 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
             ;
     var dinheiro = 0;
     var asciiDeApresentaçãoDaEstacao = estacoes[periodoDoAno].intro
-    var mapadecomida = false
-    var rastreadordecomida = false
+    var mapaDeComida = false
+    var rastreadorDeComida = false
     var processodinamico: Thread? = null
     fun eventospecial() {
         if (estacao == "Inverno" || estacao == "Verão") {
@@ -569,7 +569,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
         }
     }
 
-    inner class gochi() {
+    inner class gochi{
         var caracteristicas = caracteristicasTama()
         var doenca = doenca()
         var familia = familia()
@@ -625,7 +625,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
         }
 
         fun acao() {
-            var palavra = if (diaadia <= caracteristicas.felicidadeReal) palaBoa[Random.nextInt(0, palaBoa.size)] else palamal[Random.nextInt(
+            var palavra = if (diaADia <= caracteristicas.felicidadeReal) palaBoa[Random.nextInt(0, palaBoa.size)] else palamal[Random.nextInt(
                 0,
                 palamal.size
             )]
@@ -633,17 +633,17 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
             var frase = ""
             while (true) {
 
-                if (diaadia == 66) {
+                if (diaADia == 66) {
                     frase = "O(a) ${caracteristicas.nome} teve aula com o Júlio e quase chorou."
                     caracteristicas.felicidadeReal -= 7
                     break
-                } else if (diaadia == 61) {
+                } else if (diaADia == 61) {
                     frase = "O(a) ${caracteristicas.nome} recebeu o Jaílson em casa."
-                    if (diaadia <= caracteristicas.felicidadeReal) caracteristicas.felicidadeReal -= 7 else caracteristicas.felicidadeReal -= 3
+                    if (diaADia <= caracteristicas.felicidadeReal) caracteristicas.felicidadeReal -= 7 else caracteristicas.felicidadeReal -= 3
                     break
-                } else if (diaadia == 77) {
+                } else if (diaADia == 77) {
                     frase = "O(a) ${caracteristicas.nome} recebeu o Gabriel em casa."
-                    if (diaadia <= caracteristicas.felicidadeReal) caracteristicas.felicidadeReal += 3 else caracteristicas.felicidadeReal -= 3
+                    if (diaADia <= caracteristicas.felicidadeReal) caracteristicas.felicidadeReal += 3 else caracteristicas.felicidadeReal -= 3
                     break
                 } else if (caracteristicas.idade < 4) {
                     ato = palaInfancia[Random.nextInt(0, palaInfancia.size)]
@@ -778,6 +778,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
             if(emocao!!.emocaoString == listaDeEmocao[1].emocaoString || emocao!!.emocaoString == listaDeEmocao[2].emocaoString){
                 emocao = if(personalidade < caracteristicas.felicidadeReal) listaDeEmocao[1] else listaDeEmocao[2]
             }
+            println(emocao)
             emotroca()
         }
         var analisedavida : String? = null
@@ -912,8 +913,8 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
 
 
-            var caminho = gochisTama[4]
-            var caminhotamas = File(caminho).listFiles()
+            var caminho = gochisTama[Random.nextInt(0,gochisTama.size - bloqueio)]
+            var caminhotamas = File(caminho).listFiles().filter{ it.isDirectory }
 
             caminhotamas.forEach { pasta ->
                 var chamado: String? = null
@@ -1086,7 +1087,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
             caracteristicas.anoNasci = dia
             caracteristicas.idade = 0
-            caracteristicas.seed = Random.nextInt(1,diaadia+1)
+            caracteristicas.seed = Random.nextInt(1,diaADia+1)
 
             caracteristicas.vida -= ((caracteristicas.vida * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
             caracteristicas.fome -= ((caracteristicas.fome * caracteristicas.porcentagemGeral).toFloat() * (caracteristicas.seed / 100).toFloat()).toInt()
@@ -1097,7 +1098,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
             caracteristicas.felicidadeReal = caracteristicas.felicidade
             caracteristicas.sexappelReal = caracteristicas.sexappel
 
-if(diaadia%10 == 0){
+if(diaADia%10 == 0){
     doenca.doencaGenetica = true
 }
 
@@ -1125,10 +1126,10 @@ if(diaadia%10 == 0){
 
         }
 
-        fun come(qualidade: Int){
+        fun comer(qualidade: Int){
             comer = 0
             var numeroAleatorio = Random.nextInt(1,caracteristicas.seed+1)
-            caracteristicas.felicidadeReal += qualidade*(diaadia/100) - numeroAleatorio
+            caracteristicas.felicidadeReal += qualidade*(diaADia/100) - numeroAleatorio
             if(qualidade > 30){
                 caracteristicas.felicidadeReal += qualidade/10
             }
@@ -1194,11 +1195,11 @@ listaDeEmocao.forEach {
                 var tama = famili.get(index)
                 if(!tama.equals(this) && numeroaleatorio in 1..10){
                     if(tama.caracteristicas.identificador == familia.parceiraID){
-                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                        if(diaADia < caracteristicas.felicidadeReal && diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãopositivaparceiraparceiro[Random.nextInt(0,interaçãopositivaparceiraparceiro.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                             caracteristicas.felicidadeReal+= 10
                             tama.caracteristicas.felicidadeReal += 10
-                        }else if (diaadia < caracteristicas.felicidadeReal || diaadia < tama.caracteristicas.felicidadeReal){
+                        }else if (diaADia < caracteristicas.felicidadeReal || diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãonegativaparceiroparceira[Random.nextInt(0,interaçãonegativaparceiroparceira.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                         tama.caracteristicas.felicidadeReal -= 5
                             caracteristicas.felicidadeReal -= 5
@@ -1208,15 +1209,15 @@ listaDeEmocao.forEach {
                             caracteristicas.felicidadeReal -= 10
                         }
                     }else if (tama.caracteristicas.identificador in familia.paisID){
-                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                        if(diaADia < caracteristicas.felicidadeReal && diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãopositivapais[Random.nextInt(0,interaçãopositivapais.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal += 10
                             caracteristicas.felicidadeReal += 10
-                        }else if (diaadia < caracteristicas.felicidadeReal){
+                        }else if (diaADia < caracteristicas.felicidadeReal){
                             println(interaçãonegativapaispais[Random.nextInt(0,interaçãonegativapaispais.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal -= 5
                             caracteristicas.felicidadeReal -= 3
-                        }else if (diaadia < tama.caracteristicas.felicidadeReal){
+                        }else if (diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãonegativafilhospais[Random.nextInt(0,interaçãonegativafilhospais.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal -= 3
                             caracteristicas.felicidadeReal -= 5
@@ -1226,15 +1227,15 @@ listaDeEmocao.forEach {
                             caracteristicas.felicidadeReal -= 10
                         }
                     }else if (tama.caracteristicas.identificador in familia.filhoID){
-                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                        if(diaADia < caracteristicas.felicidadeReal && diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãopositivafilhos[Random.nextInt(0,interaçãopositivafilhos.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal += 10
                             caracteristicas.felicidadeReal += 10
-                        }else if (diaadia < caracteristicas.felicidadeReal){
+                        }else if (diaADia < caracteristicas.felicidadeReal){
                             println(interaçãonegativafilhosfilhos[Random.nextInt(0,interaçãonegativafilhosfilhos.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal -= 5
                             caracteristicas.felicidadeReal -= 3
-                        }else if (diaadia < tama.caracteristicas.felicidadeReal){
+                        }else if (diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãonegativapaisfilhos[Random.nextInt(0,interaçãonegativapaisfilhos.size)].replace("A",caracteristicas.nome.lowercase()).replace("B",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(), caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(), tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal -= 3
                             caracteristicas.felicidadeReal -= 5
@@ -1244,11 +1245,11 @@ listaDeEmocao.forEach {
                             caracteristicas.felicidadeReal -= 10
                         }
                     }else if (tama.familia.paisID == familia.paisID){
-                        if(diaadia < caracteristicas.felicidadeReal && diaadia < tama.caracteristicas.felicidadeReal){
+                        if(diaADia < caracteristicas.felicidadeReal && diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãopositivairmãoirmã[Random.nextInt(0,interaçãopositivairmãoirmã.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal += 10
                             caracteristicas.felicidadeReal += 10
-                        }else if (diaadia < caracteristicas.felicidadeReal || diaadia < tama.caracteristicas.felicidadeReal){
+                        }else if (diaADia < caracteristicas.felicidadeReal || diaADia < tama.caracteristicas.felicidadeReal){
                             println(interaçãonegativairmãoirmã[Random.nextInt(0,interaçãonegativairmãoirmã.size)].replace("B",caracteristicas.nome.lowercase()).replace("A",tama.caracteristicas.nome.lowercase()).replace(caracteristicas.nome.lowercase(),caracteristicas.nome).replace(tama.caracteristicas.nome.lowercase(),tama.caracteristicas.nome))
                             tama.caracteristicas.felicidadeReal -= 5
                             caracteristicas.felicidadeReal -= 5
@@ -1450,7 +1451,7 @@ if(caracteristicas.luto){
                 diatriste++
             }
             acao()
-            if(diaadia == caracteristicas.seed){
+            if(diaADia == caracteristicas.seed){
                 println("Hoje é o aniversário do(a) ${caracteristicas.nome}")
                 caracteristicas.felicidadeReal += 10
 listaDeEmocao.forEach {
@@ -1543,7 +1544,7 @@ var conhibernando = 1
     var passadia = false
     var g : gochi? = null
     var acao = false
-    fun darcomida(){
+    fun darComida(){
         ocupado = true
         var comidatama: comida
         println("-".repeat(80)+ "\n")
@@ -1633,7 +1634,7 @@ var conhibernando = 1
 
                 }
             }
-                tamagochi.come(comidatama!!.qualidade)
+                tamagochi.comer(comidatama!!.qualidade)
             estoque.remove(comidatama)
 
         }else{
@@ -1641,7 +1642,7 @@ var conhibernando = 1
         }
     }
 var dinamico = dinamico
-    fun procurarcomida(){
+    fun procurarComida(){
         ocupado = true
         if(!dinamico){
         acao = true}
@@ -1655,25 +1656,25 @@ var dinamico = dinamico
         }else if (estacao =="Primavera"){
             multiplicador =2.0
         }
-        var numeroaleatorio = diaadia
+        var numeroaleatorio = diaADia
         var numeroAletorioParaoMapa = Random.nextInt(10,21)
-        if(rastreadordecomida){
+        if(rastreadorDeComida){
             numeroaleatorio = Random.nextInt(79,101)
         }
-        if(mapadecomida && diaadia + numeroAletorioParaoMapa <=100){
+        if(mapaDeComida && diaADia + numeroAletorioParaoMapa <=100){
             numeroaleatorio +=20
         }
         var indice = comidas.size -2
         var comida : comida
         if (numeroaleatorio in 1..40){
-            comida = comidas[Random.nextInt(0,indice/4)]
+            comida = comidas[Random.nextInt(0,indice/4)].copy()
         }else if (numeroaleatorio == 100){
             tocador.mudar(musicasJogo[7])
-            comida = comidas[Random.nextInt(indice, comidas.size)]
+            comida = comidas[Random.nextInt(indice, comidas.size)].copy()
         }else if (numeroaleatorio in 41..80){
-            comida = comidas[Random.nextInt(2,indice/2)]
+            comida = comidas[Random.nextInt(2,indice/2)].copy()
         }else{
-            comida = comidas[Random.nextInt(4,indice)]
+            comida = comidas[Random.nextInt(4,indice)].copy()
 
         }
         comida.qualidade = (comida.qualidade * multiplicador).toInt()
@@ -1682,7 +1683,7 @@ var dinamico = dinamico
 
     }
     var caminhotamas = File("./Assets/tamaGochi").listFiles()
-    var querosair = false
+    var queroSair = false
     init {
         caminhotamas.forEach { pasta ->
             gochisTama.add(pasta.path)
@@ -1706,7 +1707,7 @@ processodinamico =Thread{
         passadia = true}
         }}
 }
-        while (dia == 0 || famili.size > 0 && !querosair){
+        while (dia == 0 || famili.size > 0 && !queroSair){
             if(dinamico){
                 if(!processodinamico!!.isAlive){
                     processodinamico!!.start()
@@ -1792,11 +1793,11 @@ processodinamico =Thread{
                     println( g!!.caracteristicas.janela!!.icon())}
                 "6" -> {passaardia(); tocador.mudar(musicasJogo[1])}
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
-                "4" -> {darcomida();tocador.mudar(musicasJogo[1])}
-                "3" -> {brincadeira(); tocador.mudar(musicasJogo[1])}
+                "4" -> {darComida();tocador.mudar(musicasJogo[1])}
+                "3" -> {brincar(); tocador.mudar(musicasJogo[1])}
                 "2"-> {estoque(); tocador.mudar(musicasJogo[1])}
-                "1" -> {procurarcomida(); tocador.mudar(musicasJogo[1])}
-                "0" -> {querosair = true; tocador.mudar(musicasJogo[1])}
+                "1" -> {procurarComida(); tocador.mudar(musicasJogo[1])}
+                "0" -> {queroSair = true; tocador.mudar(musicasJogo[1])}
             }}else{
             println("1"+" ".repeat(35)+"Estoque")
             println("2"+" ".repeat(35)+"Dar comida")
@@ -1807,10 +1808,10 @@ processodinamico =Thread{
 
             when (resp) {
                 "1" -> {estoque(); tocador.mudar(musicasJogo[1])}
-                "2" -> {darcomida(); tocador.mudar(musicasJogo[1])}
+                "2" -> {darComida(); tocador.mudar(musicasJogo[1])}
                 "3"-> {loja();tocador.mudar(musicasJogo[1])}
                 "4" -> {passaardia(); tocador.mudar(musicasJogo[1])}
-                "0" -> {querosair = true; tocador.mudar(musicasJogo[1])}
+                "0" -> {queroSair = true; tocador.mudar(musicasJogo[1])}
 
             }
         }}
@@ -1823,7 +1824,6 @@ processodinamico =Thread{
         println(asciiDeApresentaçãoDaEstacao)
         tocador.mudar(musicasJogo[periodoDoAno+2])
         println("-".repeat(40)+"Menu"+"-".repeat(40))
-        if(!acao){
             println("1"+" ".repeat(35)+"Procurar comida")
             println("2"+" ".repeat(35)+"Estoque")
             println("3"+" ".repeat(35)+"Brincadeira")
@@ -1842,14 +1842,14 @@ ocupado = false
             }
             when (resp) {
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
-                "4" -> {darcomida();tocador.mudar(musicasJogo[1])}
-                "3" -> {brincadeira(); tocador.mudar(musicasJogo[1])}
+                "4" -> {darComida();tocador.mudar(musicasJogo[1])}
+                "3" -> {brincar(); tocador.mudar(musicasJogo[1])}
                 "2"-> {estoque(); tocador.mudar(musicasJogo[1])}
-                "1" -> {procurarcomida(); tocador.mudar(musicasJogo[1])}
-                "0" -> {querosair = true; tocador.mudar(musicasJogo[1])}
+                "1" -> {procurarComida(); tocador.mudar(musicasJogo[1])}
+                "0" -> {queroSair = true; tocador.mudar(musicasJogo[1])}
             }
-        }}
-    fun brincadeira(){
+        }
+    fun brincar(){
         println("-".repeat(84))
         famili.forEachIndexed { index, comida ->
             println("${index + 1} - ${comida.caracteristicas.nome}")
@@ -1865,7 +1865,7 @@ ocupado = false
             passadia = false
             return
         }
-        while(r.toIntOrNull() !in 0..famili.size){
+        while(r.toIntOrNull() !in 0..famili.size){ // verificação da resposta
             println("Escolha um gochi,somente números da lista")
             ocupado = true
             r = readln()
@@ -1890,9 +1890,9 @@ ocupado = false
         }else{
             return
         }
-        var numeroaleatorio = Random.nextInt(0,diaadia)
-        if(diaadia in 1..10){
-            brincadeira()
+        var numeroaleatorio = Random.nextInt(0,diaADia)
+        if(diaADia in 1..10){
+            brincar()
         }
 
     }
@@ -1905,7 +1905,7 @@ println("Dinheiro: $dinheiro")
         println("3"+" ".repeat(35)+"Vacina - Protege o Gochi até a velhice contra doenças                                     15")
         println("4"+" ".repeat(35)+"Acariciador automático - brinca com o gochi automaticamente                               15")
         println("5"+" ".repeat(35)+"Bolo de prestígio - restaura toda a vida, fome e felicidade                               10")
-        println("6"+" ".repeat(35)+"Boneco - Diminui o dano de felicidade                                                     10")
+        println("6"+" ".repeat(35)+"Brinquedo - Diminui o dano de felicidade                                                     10")
         println("7"+" ".repeat(35)+"Acordo com a  morte - Seu Gochi não toma mais dano, mas haverá consequências              20")
         println("8"+" ".repeat(35)+"Mapa de comida - Faz você ter mais chance de conseguir comidas melhores                   15")
         println("9"+" ".repeat(35)+"Rastreador de comida - Faz você conseguir só as melhores comidas                          30")
@@ -2100,16 +2100,16 @@ loja()
         loja()
     }
 }else if (resp == "8" && dinheiro - 15 >= 0) {
-    if(!mapadecomida){
+    if(!mapaDeComida){
     println("Você comprou o mapa de comida")
-    mapadecomida = true
+    mapaDeComida = true
     dinheiro -= 15}else{
         println("Você já tem o mapa de comida")
     }
 }else if (resp == "9" && dinheiro - 30 >= 0) {
-    if(!rastreadordecomida){
+    if(!rastreadorDeComida){
    println("Você comprou o rastreador de comida")
-    rastreadordecomida = true
+    rastreadorDeComida = true
     dinheiro -= 30}else{
         println("Você já tem o rastreador de comida")
     }
@@ -2133,7 +2133,7 @@ loja()
             index++
         }
         dia++
-        diaadia = Random.nextInt(1,100)
+        diaADia = Random.nextInt(1,101)
         if(dia % 4 == 0){
             tempo()
         }

@@ -1,6 +1,5 @@
 package Jogo
 
-import listaDeTipoDeEmocoes
 import javax.swing.*
 import java.awt.*
 import java.awt.image.BufferedImage
@@ -14,7 +13,7 @@ import java.awt.Color
 import kotlin.random.Random
 // tonho: tamanho da página: grande ou pequena; col: se vai ser colorido ou não; deses: se a imagem vai estar mais definida ou mais embasada (Smoth), gif: as imagens para o tamagochi, status: titulo para o jogo, intensi: para definir a intensidade da art ascii"
 class janela(tamanhoDaJanela: Boolean = true, col: Boolean = true, desenho: Boolean = false, caminhoDasImagens: String, status : String, intensidade : Int, intensidadeCustomizada: String = "", velocidade: Long) : JFrame() {
-    var mudarestilo = mutableListOf<estilo>()
+    var mudarEstilo = mutableListOf<estilo>()
 
     data class estilo(val frames: MutableList<String>, val cores: MutableList<MutableList<Color>>)
 val velocidade = velocidade
@@ -45,22 +44,18 @@ val velocidade = velocidade
 
     fun tamanho(){
         add(blocoDeTexto)
-        SwingUtilities.invokeAndWait{
-            blocoDeTexto.text = framesAscii[0]
-
-
-        }
-
-        execucaoDaAnimacao(framesAscii)
+SwingUtilities.invokeAndWait {
+    blocoDeTexto.text = framesAscii[0]
+this.pack()
+}
+        execucaoDaAnimacao()
         if(!processoDaAnimacao!!.isAlive){
             processoDaAnimacao?.start()
         }
 
 
-
     }
 
-    // Essa parte é das intensidades, em algumas imagens principalmente as que tem fundo fica muito díficil de ver qual é a imagem
     fun aplicacaoDaIntensidade11(me: Int): String {
         var n = "${intensidade[0][me * (intensidade[0].length - 1) / 255]}"
         return (n)
@@ -123,7 +118,11 @@ val velocidade = velocidade
     fun terminando() {
         if (init){
             init = false
-        this.remove(iniciar)}
+        this.remove(iniciar)}else{
+        if(processoDaAnimacao!!.isAlive){
+            mudar = false
+            processoDaAnimacao!!.join()
+        }}
         blocoDeTexto.isVisible = true
         tamanho()
     }
@@ -147,7 +146,7 @@ val velocidade = velocidade
         layout = GridBagLayout()
         blocoDeTexto.minimumSize = Dimension(Int.MAX_VALUE, Int.MAX_VALUE)
         size = if (tamanhoDaJanela) {
-            Dimension(530, 940)
+            Dimension(530, 440)
         } else {
             Dimension(340, 370)
         }
@@ -164,26 +163,26 @@ val velocidade = velocidade
     fun mudarestiloexterno(){
         mudar = false
         processoDaAnimacao?.join(10)
-        var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
-        framesAscii = mudarestilo[numeroaletaroio].frames
-        cores = mudarestilo[numeroaletaroio].cores
+        var numeroaletaroio = Random.nextInt(0, mudarEstilo.size)
+        framesAscii = mudarEstilo[numeroaletaroio].frames
+        cores = mudarEstilo[numeroaletaroio].cores
         mudar = true
         tamanho()
     }
 
     fun mudarestilo() {
 
-        var numeroaletaroio = Random.nextInt(0, mudarestilo.size)
-            framesAscii = mudarestilo[numeroaletaroio].frames
-            cores = mudarestilo[numeroaletaroio].cores
+        var numeroaletaroio = Random.nextInt(0, mudarEstilo.size)
+            framesAscii = mudarEstilo[numeroaletaroio].frames
+            cores = mudarEstilo[numeroaletaroio].cores
     }
 
-    fun processamentoDasImagens(t: Boolean = tonho, c: Boolean = col, d: Boolean = deses, g: String = gif, i: Int = intensi) {
-        mudarestilo = mutableListOf()
+    fun processamentoDasImagens(t: Boolean = tonho, d: Boolean = deses, g: String = gif, i: Int = intensi) {
+        mudarEstilo = mutableListOf()
         cores = mutableListOf()
         framesAscii = mutableListOf()
-        var image = File(g)
-        var listimage = image.listFiles().filter { it.isDirectory }
+        var caminhoPastasDeImagem = File(g)
+        var listimage = caminhoPastasDeImagem.listFiles().filter {it.isDirectory}
         isResizable = false
         listimage.forEach { pastas ->
             var listadeimagem = pastas.listFiles()
@@ -195,7 +194,7 @@ val velocidade = velocidade
 
                     read.setInput(inp)
                     val frameCount = read.getNumImages(true)
-                    for (frame in 0 until frameCount) {
+                    for (frame in 0 ..< frameCount) {
                         val imagem: BufferedImage = read.read(frame)
                         if(iniciar) {
                             ImagemUnica = File(image.path)
@@ -372,7 +371,7 @@ val velocidade = velocidade
 
             }
             var estilo = estilo(framesAscii, cores)
-            mudarestilo.add(estilo)
+            mudarEstilo.add(estilo)
             framesAscii = mutableListOf()
             cores = mutableListOf()
 
@@ -459,20 +458,20 @@ val velocidade = velocidade
         return doc
 
     }
-    fun quadroAscii(image: String): Document{
+    fun quadroAscii(imageAscii: String): Document{
         var doc = DefaultStyledDocument()
-       doc.insertString(0,image,null)
+       doc.insertString(0,imageAscii,null)
         return doc
 
     }
 
 
-    fun criascii(frams: MutableList<String>) {
-        var imagensascii = frams.toList()
+    fun criascii(quadros: MutableList<String>) {
+        var imagensascii = quadros.toList()
 
         imagensascii.forEachIndexed{
                 i,f  ->
-            if(col){
+            if(!col){
             listframes.add(quadroAscii(f))}else{
                 listframes.add(quadroAsciiColorido(f,i))
             }
@@ -482,7 +481,7 @@ val velocidade = velocidade
     }
 
 
-    fun continuarascii():StyledDocument{
+    fun continuarascii(): StyledDocument {
         var docu= DefaultStyledDocument()
         var coress = cores.toList()
         var frame = framesAscii.toList()
@@ -507,7 +506,7 @@ val velocidade = velocidade
         return(docu)
 
     }
-    fun continuarasciisemcor():StyledDocument{
+    fun continuarasciisemcor(): DefaultStyledDocument {
         var docu= DefaultStyledDocument()
         var frame = framesAscii
 
@@ -519,47 +518,33 @@ val velocidade = velocidade
         return(docu)
 
     }
-    fun execucaoDaAnimacao(F: MutableList<String>) {
-           var doc = continuarascii()
+    fun execucaoDaAnimacao() {
+        listframes = mutableListOf()
+        criascii(framesAscii)
         blocoDeTexto.isVisible = true
 
+        var apontadorDoFrame = 0
 
-        blocoDeTexto.isVisible = true
-            var inicio = F[0].length
-            mudar = true
+        mudar = true
         processoDaAnimacao = Thread {
-            listframes = mutableListOf()
             while (mudar) {
-
-
-                if(blocoDeTexto.text.length > framesAscii[0].length && mudar){
-                    Thread.sleep(velocidade)
-
-
+if(apontadorDoFrame in listframes.indices){
                     SwingUtilities.invokeAndWait{
-                        blocoDeTexto.styledDocument.remove(0,framesAscii[0].length)
 
-                    }
-        }
-
-                if(F[0].length *2 > blocoDeTexto.document.length){
-                    SwingUtilities.invokeAndWait() {
-                        blocoDeTexto.styledDocument = doc
-                    }
-                }
-
-                if(inicio*framesAscii.size - inicio == blocoDeTexto.document.length){
-                    if(col){
-                        SwingUtilities.invokeAndWait() {
-                            doc = continuarascii()
-                        }}else{
-                            SwingUtilities.invokeAndWait(){
-                                doc = continuarasciisemcor()
-                            }
-                    }
+                            blocoDeTexto.document = listframes[apontadorDoFrame]}
 
                 }
+                if (apontadorDoFrame == listframes.size - 1) {
+                    apontadorDoFrame = 0
+                } else {
+                    apontadorDoFrame++
+                }
+                Thread.sleep(velocidade)
+
+
+
         }
+                apontadorDoFrame = 0
     }
 }
 
