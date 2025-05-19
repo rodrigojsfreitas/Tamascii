@@ -753,15 +753,16 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
         //var estados = arrayOf("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
         fun emotroca() {
+
             if (emocao!!.emocaoString == listaDeTipoDeEmocoes[0]){
                 caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
             } else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[1]){//colocar mudar() a imagem do estado. ("Normal","Feliz","Nervoso","Dormindo","Hibernando","Romântico")
-                caracteristicas.janela!!.mdg(emocao!!.emocaoString)
             }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[2]){
                 caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
             } else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[3]){
                 caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
             }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[4]) {
+                println( emocao!!.pastaEmocao)
                 caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
         }else if (emocao!!.emocaoString == listaDeTipoDeEmocoes[5]){
                 caracteristicas.janela!!.mdg(emocao!!.pastaEmocao)
@@ -913,7 +914,9 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
 
 
 
-            var caminho = gochisTama[Random.nextInt(0,gochisTama.size - bloqueio)]
+//            var caminho = gochisTama[Random.nextInt(0,gochisTama.size - bloqueio)]
+            var caminho = gochisTama[2]
+
             var caminhotamas = File(caminho).listFiles().filter{ it.isDirectory }
 
             caminhotamas.forEach { pasta ->
@@ -932,7 +935,7 @@ class jogoTama(tamanho : Boolean, colorido : Boolean, dinamico: Boolean) {
                 if(pasta.name.uppercase() == "INTRO"){
                     caracteristicas.intro = realChamado
                 }else if (chamado != null) {
-                    var chamadoNumero = chamado.toString().toInt()
+                    var chamadoNumero = chamado.toInt()
 
                     if (chamadoNumero == 1) {
                         listaDeEmocao.add(sentimentos(realChamado, listaDeTipoDeEmocoes[0]))
@@ -1136,7 +1139,7 @@ if(diaADia%10 == 0){
 
         }
         fun danoFome(){
-            var danoFome = 0
+            var danoFome : Int
             if(caracteristicas.danoDeFome == null){
             danoFome = Random.nextInt(0,caracteristicas.seed+1/10)}else {danoFome = caracteristicas.danoDeFome!!}
             if(caracteristicas.carinho){
@@ -1146,7 +1149,7 @@ if(diaADia%10 == 0){
         }
         fun brincadeira(){
             caracteristicas.carinho = true
-            var numeroAleatorioBrincadeira = 0
+            var numeroAleatorioBrincadeira : Int
             var afinidade = (caracteristicas.idade/100) + 1
             if (emocao!!.emocaoString == listaDeTipoDeEmocoes[1]){
                 numeroAleatorioBrincadeira = Random.nextInt(1, ((caracteristicas.seed+1)*1.5).toInt())
@@ -1790,7 +1793,7 @@ processodinamico =Thread{
 
             when (resp) {
                 "7" -> {
-                    println( g!!.caracteristicas.janela!!.icon())}
+                    println( g!!.emocao())}
                 "6" -> {passaardia(); tocador.mudar(musicasJogo[1])}
                 "5" -> {loja(); tocador.mudar(musicasJogo[1])}
                 "4" -> {darComida();tocador.mudar(musicasJogo[1])}

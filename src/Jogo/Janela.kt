@@ -44,12 +44,14 @@ val velocidade = velocidade
 
     fun tamanho(){
         add(blocoDeTexto)
-SwingUtilities.invokeAndWait {
+SwingUtilities.invokeLater {
+    var document = DefaultStyledDocument()
+    blocoDeTexto.document = document
     blocoDeTexto.text = framesAscii[0]
 this.pack()
 }
-        execucaoDaAnimacao()
-        if(!processoDaAnimacao!!.isAlive){
+        if(processoDaAnimacao != null && !processoDaAnimacao!!.isAlive){
+            execucaoDaAnimacao()
             processoDaAnimacao?.start()
         }
 
@@ -118,10 +120,14 @@ this.pack()
     fun terminando() {
         if (init){
             init = false
-        this.remove(iniciar)}else{
-        if(processoDaAnimacao!!.isAlive){
+        this.remove(iniciar)
+            execucaoDaAnimacao()
+
+        }else{
+        if(processoDaAnimacao != null && processoDaAnimacao!!.isAlive){
             mudar = false
-            processoDaAnimacao!!.join()
+            processoDaAnimacao!!.join(500)
+
         }}
         blocoDeTexto.isVisible = true
         tamanho()
@@ -182,7 +188,8 @@ this.pack()
         cores = mutableListOf()
         framesAscii = mutableListOf()
         var caminhoPastasDeImagem = File(g)
-        var listimage = caminhoPastasDeImagem.listFiles().filter {it.isDirectory}
+       var listimage = caminhoPastasDeImagem.listFiles().filter {it.isDirectory}
+
         isResizable = false
         listimage.forEach { pastas ->
             var listadeimagem = pastas.listFiles()
@@ -522,24 +529,22 @@ this.pack()
         listframes = mutableListOf()
         criascii(framesAscii)
         blocoDeTexto.isVisible = true
-
-        var apontadorDoFrame = 0
-
         mudar = true
         processoDaAnimacao = Thread {
+        var apontadorDoFrame = 0
             while (mudar) {
-if(apontadorDoFrame in listframes.indices){
-                    SwingUtilities.invokeAndWait{
-
-                            blocoDeTexto.document = listframes[apontadorDoFrame]}
-
-                }
                 if (apontadorDoFrame == listframes.size - 1) {
                     apontadorDoFrame = 0
                 } else {
                     apontadorDoFrame++
                 }
+if(apontadorDoFrame in listframes.indices){
+                    SwingUtilities.invokeLater{
+                        blocoDeTexto.document = listframes[apontadorDoFrame]}
                 Thread.sleep(velocidade)
+
+                }
+
 
 
 
@@ -550,9 +555,10 @@ if(apontadorDoFrame in listframes.indices){
 
     fun mdg(gq: String = gif) {
 
-mudar = false
-        processoDaAnimacao!!.join()
-mudar = true
+        if (processoDaAnimacao != null && processoDaAnimacao!!.isAlive) {
+            mudar = false
+            processoDaAnimacao!!.join(500)
+        }
         processamentoDasImagens(g = gq)
         terminando()
 
